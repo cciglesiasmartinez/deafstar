@@ -19,3 +19,27 @@
  */
 
 const ws = require('ws');
+const https = require ('https');
+const fs = require('fs');
+
+// Set SSL parameters 
+const sslFiles = {
+    cert: fs.readFileSync(__dirname + '/ssl/snakeoil.crt'),
+    key: fs.readFileSync(__dirname + '/ssl/snakeoil.key'),
+}
+const secureHttpd = https.createServer(sslFiles);
+
+// Init websocket server through https
+const wsServer = new ws.Server({secureHttpd});
+
+// WS functions
+wsServer.on('connection', (ws) => {
+    wsServer.send("Connected!");
+    wsServer.on('message', (msg) => {
+        console.log("[WEBSOCKET] Data received: " + msg);
+    });
+});
+
+secureHttpd.listen(9009, () => {
+    console.log("[WEBSOCKET] Listening on port 9009");
+});

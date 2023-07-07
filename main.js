@@ -5,7 +5,16 @@
 
 const express = require('express');
 const ejs = require('ejs');
+const fs = require('fs');
+const https = require('https');
 const app = express();
+
+// Retrieve SSL key + cert
+const sslFiles = {
+    cert: fs.readFileSync(__dirname + '/ssl/snakeoil.crt'),
+    key: fs.readFileSync(__dirname + '/ssl/snakeoil.key'),
+}
+const secureHttpd = https.createServer(sslFiles, app);
 
 // Setting template engine
 app.set('view engine', 'ejs');
@@ -66,7 +75,6 @@ app.get('/:username', (req, res) => {
         if ( user instanceof User ) {
             console.log("Right class!");
         }
-
         res.render('user', { user });
     } else {
         // Sending error
@@ -75,7 +83,7 @@ app.get('/:username', (req, res) => {
 });
 
 // Init the http server
-app.listen(8008, () => {
+secureHttpd.listen(8008, () => {
     const port = 8008;
     console.log('[HTTPd] Running on port ' + port);
 });
