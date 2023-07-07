@@ -1,72 +1,80 @@
 /*
- * Okay, some things to do:
- * 
- * First would be to create the main http/express functions, that is, the core engine
- * able to create several instances on demand, each one corresponding to a dinamically
- * generated handler in the form of https://url/my_handler with its correspont instance
- * of chatgpt.
- * 
- * Second, to create a very simple chatgpt interface attached to each one of the
- * instances. This interface would be a mere placeholder until the final ReactJS 
- * interface is ready to deploy.
- * 
- * Thirdly, creating functionality to train each instance from its dashboard panel
- * (remember url.com/my_handler) trough Pinecone API. As for starters functionalty, I'd
- * suggest going with a function that will enable the client to pass its URL, scrap
- * it, and then build a custom vector db with it, much like in the form that's 
- * explained in <url here needed>.
- * 
- * Lastly, a secure and robust login system and an admin panel.
- * 
- * Stack of technologies suggested will be like:
- * 
- *  Backend:
- *      NodeJS
- *          EJS (dinamically HTML generation)
- *          ExpressJS (HTTP server functionality)
- *          OpenAI API (chatbot service)
- *          Pinecone API (embedding for chatbot)
- *          TikToken (utility for tracking tokens for chat I/O)
- *          WS (websockets library, used for communicating backend with frontend)
- *      MariaDB (SQL database)
- * 
- *  Frontend:
- *      ReactJS (cool, scalable, single application chat and dashboard user interface)
- *      Webpack (related to ReactJS)
- * 
- *  Languages used will be: JavaScript, CSS3, HTML5, SQL
+ * Application entry point.
  * 
  */
 
 const express = require('express');
+const ejs = require('ejs');
 const app = express();
 
-const users = {
-    client1: {
-        name: 'Client #1',
-        token: 1234,
-    },
-    client2: {
-        name: 'Client #2',
-        token: 5678,
-    },
-};
-  
+// Setting template engine
+app.set('view engine', 'ejs');
+app.set('views', __dirname + '/views');
+
+// Main class (this name *has to* be changed)
+class Main {
+    constructor() {
+        this.users = [];
+    }
+    // @param is object instantiated from class Users
+    addUser(user) {
+        this.users.push(user);
+    }
+    // Search for an object given handler attr
+    getUser(handler) {
+        for (let i=0; i<this.users.length; i++) {
+            if ( this.users[i].handler == handler ) {
+                return this.users[i];
+            }
+        }
+    }
+}
+
+// User class
+class User {
+    constructor(handler, name, token) {
+        this.handler = handler;
+        this.name = name;
+        this.token = token;
+    }
+    // Returning client info
+    getInfo() {
+        return `Name: ${this.name}, Token: ${this.token}`;
+    }
+}
+
+// Init main class and test users (this is dirty, just temp)
+const mainClass = new Main();
+const testUser1 = new User("client1", "Client #1", 12345);
+const testUser2 = new User("client2", "Client #2", 67890);
+mainClass.addUser(testUser1);
+mainClass.addUser(testUser2);
+
+// Placeholder for login page
+app.get('/', (req,res) => {
+    const content = "Coming soon."
+    res.render('index', { content });
+});
+
 // Getting users page
 app.get('/:username', (req, res) => {
     const { username } = req.params;
-  
     // Checking if exists
-    if (username in users) {
-        // Serving JSON data
-        res.json(users[username]);
+    if (mainClass.getUser(username)) {
+        const user = mainClass.getUser(username);
+        console.log("[HTTPd]: Obtained user \n", user);
+        if ( user instanceof User ) {
+            console.log("Right class!");
+        }
+
+        res.render('user', { user });
     } else {
         // Sending error
         res.status(404).send('Handler does not exist.');
     }
 });
-  
-// Iniciamos el servidor en el puerto 3000 (puedes cambiarlo si lo deseas)
+
+// Init the http server
 app.listen(8008, () => {
     const port = 8008;
     console.log('[HTTPd] Running on port ' + port);
