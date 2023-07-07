@@ -1,0 +1,27 @@
+{
+  "name": "deafstar",
+  "version": "1.0.0",
+  "description": "description placeholder",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cciglesiasmartinez/deafstar.git"
+  },
+  "keywords": [
+    "application",
+    "chatbot",
+    "saas",
+    "reactjs",
+    "nodejs",
+    "custom"
+  ],
+  "author": "webmancers",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/cciglesiasmartinez/deafstar/issues"
+  },
+  "homepage": "https://github.com/cciglesiasmartinez/deafstar#readme"
+}
