@@ -31,10 +31,43 @@
  *      MariaDB (SQL database)
  * 
  *  Frontend:
- *      ReactJS (cool, scalable, single application format chat user interface)
+ *      ReactJS (cool, scalable, single application chat and dashboard user interface)
  *      Webpack (related to ReactJS)
  * 
  *  Languages used will be: JavaScript, CSS3, HTML5, SQL
  * 
  */
 
+const express = require('express');
+const app = express();
+
+const users = {
+    client1: {
+        name: 'Client #1',
+        token: 1234,
+    },
+    client2: {
+        name: 'Client #2',
+        token: 5678,
+    },
+};
+  
+// Getting users page
+app.get('/:username', (req, res) => {
+    const { username } = req.params;
+  
+    // Checking if exists
+    if (username in users) {
+        // Serving JSON data
+        res.json(users[username]);
+    } else {
+        // Sending error
+        res.status(404).send('Handler does not exist.');
+    }
+});
+  
+// Iniciamos el servidor en el puerto 3000 (puedes cambiarlo si lo deseas)
+app.listen(8008, () => {
+    const port = 8008;
+    console.log('[HTTPd] Running on port ' + port);
+});
