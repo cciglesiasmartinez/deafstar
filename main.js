@@ -7,7 +7,6 @@ const express = require('express');
 const ejs = require('ejs');
 const fs = require('fs');
 const https = require('https');
-const http = require('http');
 const ws = require('ws');
 const app = express();
 
