@@ -8,7 +8,8 @@
   <h1>Client Info</h1>
   <p><%= user.getInfo() %></p>
   <div id="webSocket">
-    <p>Placeholder</p>
+    <div id="webSocketOutput"></div>
+    <input id="webSocketInput" type="text" placeholder="Send..." autofocus> 
   </div>
   <script>
     // Create sock instance
@@ -19,24 +20,42 @@
     // Handle events once conn is established
     ws.onopen = () => {
       console.log('We got a connection');
-
-      // Test msg's t o server
-      ws.send('PING');
-      ws.send('PONG');
-      ws.send(userData.token);
-      console.log(userData);
     };
 
     // Handle received events
     ws.onmessage = (event) => {
-      const message = event.data;
+      let message = event.data;
       console.log('Msg received:', message);
+      console.log(JSON.parse(message));
+      message = JSON.parse(message);
+      webSocketOutput.innerHTML += 'AI: ' + message.data + '<br>';
     };
 
     // Handle close event
     ws.onclose = () => {
       console.log('Connection closed');
     };
+
+    // Showing output
+    const webSocketOutput = document.getElementById('webSocketOutput');
+
+    // Code for capturing input
+    const webSocketInput = document.getElementById('webSocketInput');
+    
+    webSocketInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        const text = webSocketInput.value.trim();
+        if (text !== '') {
+          const msg = {
+            origin: userData.token,
+            data: text,
+          }
+          ws.send(JSON.stringify(msg));
+          webSocketOutput.innerHTML += 'You: ' + msg.data + '<br>';
+          webSocketInput.value = '';
+        }
+      }
+    });
   </script>
 </body>
 </html>

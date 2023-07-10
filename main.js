@@ -95,23 +95,59 @@ secureHttpd.listen(8008, () => {
  * 
  */
 
-// const secureWSd = https.createServer(sslFiles);
-
 // Init websocket server through https
 
 const wsServer = new ws.Server({server: secureHttpd});
 
 // WS functions
 
-wsServer.on('connection', (ws) => {
-    ws.send("Connected!");
-    ws.on('message', (msg) => {
-        console.log("[WEBSOCKET] Data received: " + msg);
+wsServer.on('connection',  (ws) => {
+    console.log("Client connected");
+    const greet = {origin: "server", data:"Connected!"};
+    //ws.send(JSON.stringify(greet));
+    ws.on('message', async (msg) => {
+        try {
+            msg = JSON.parse(msg);
+            console.log("[WEBSOCKET] Data from " + msg.origin + " received: " + msg.data);
+            // Calling OpenAI API
+            
+            const response = await generateText(msg.data);
+            const resMsg = {
+                origin: "server",
+                data: response,
+            }
+            console.log(resMsg);
+            ws.send(JSON.stringify(resMsg));
+            
+        } catch (err) {
+            console.error("[WEBSOCKET] Error in JSON msg: " + err)
+        }
     });
 });
 
+
 /*
-secureWSd.listen(9009, () => {
-    console.log("[WEBSOCKET] Listening on port 9009");
-});
-*/
+ * OpenAI API call
+ *
+ */
+
+require('dotenv').config()
+const { Configuration, OpenAIApi } = require('openai');
+
+const openAiApiKey = process.env.OPENAI_API_KEY;
+const conf = new Configuration({apiKey: openAiApiKey});
+const openai = new OpenAIApi(conf);
+
+console.log("API KEY IS: " + openAiApiKey);
+
+async function generateText(prompt) {
+    console.log("function is being called");
+    const response = await openai.createCompletion({
+        model: 'text-davinci-003',
+        prompt: prompt,
+        max_tokens: 300,
+    });
+    //console.log(response.data.choices[0]);
+    const text = response.data.choices[0].text.replace(/\n/g,"");
+    return text;
+}
