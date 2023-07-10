@@ -7,5 +7,37 @@
 <body>
   <h1>Client Info</h1>
   <p><%= user.getInfo() %></p>
+  <div id="webSocket">
+    <p>Placeholder</p>
+  </div>
+  <script>
+    // Create sock instance
+    const ws = new WebSocket('wss://localhost:8008');
+
+    var userData = <%- JSON.stringify(user) %>;
+
+    // Handle events once conn is established
+    ws.onopen = () => {
+      console.log('We got a connection');
+
+      // Test msg's t o server
+      ws.send('PING');
+      ws.send('PONG');
+      ws.send(userData.token);
+      console.log(userData);
+    };
+
+    // Handle received events
+    ws.onmessage = (event) => {
+      const message = event.data;
+      console.log('Msg received:', message);
+    };
+
+    // Handle close event
+    ws.onclose = () => {
+      console.log('Connection closed');
+    };
+
+  </script>
 </body>
 </html>

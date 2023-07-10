@@ -7,6 +7,8 @@ const express = require('express');
 const ejs = require('ejs');
 const fs = require('fs');
 const https = require('https');
+const http = require('http');
+const ws = require('ws');
 const app = express();
 
 // Retrieve SSL key + cert
@@ -87,3 +89,30 @@ secureHttpd.listen(8008, () => {
     const port = 8008;
     console.log('[HTTPd] Running on port ' + port);
 });
+
+
+/* 
+ * Websocket Server
+ * 
+ */
+
+// const secureWSd = https.createServer(sslFiles);
+
+// Init websocket server through https
+
+const wsServer = new ws.Server({server: secureHttpd});
+
+// WS functions
+
+wsServer.on('connection', (ws) => {
+    ws.send("Connected!");
+    ws.on('message', (msg) => {
+        console.log("[WEBSOCKET] Data received: " + msg);
+    });
+});
+
+/*
+secureWSd.listen(9009, () => {
+    console.log("[WEBSOCKET] Listening on port 9009");
+});
+*/
