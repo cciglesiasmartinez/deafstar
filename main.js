@@ -57,8 +57,8 @@ class User {
 
 // Init main class and test users (this is dirty, just temp)
 const mainClass = new Main();
-const testUser1 = new User("client1", "Client #1", 12345);
-const testUser2 = new User("client2", "Client #2", 67890);
+const testUser1 = new User("01234","client1", "Client #1", "client1@mail.net");
+const testUser2 = new User("56789","client2", "Client #2", "client2@mail.net");
 mainClass.addUser(testUser1);
 mainClass.addUser(testUser2);
 
@@ -81,6 +81,7 @@ app.get('/:username', (req, res) => {
         res.render('user', { user });
     } else {
         // Sending error
+        console.log(mainClass.users, "Requested user " + req.params.username);
         res.status(404).send('Handler does not exist.');
     }
 });
@@ -196,20 +197,21 @@ class DB {
         this.connection.query(query, (error, results) => {
             if (error) throw error;
             const users = results.map((row) => {
-                return new User(row.id, row.name, row.email, row.token, raw.handler);
+                return new User(row.token, row.handler, row.name, row.email);
             });
             callback(users);
+            console.log("[MySQL DEBUG]: " + users + " " + typeof(users));
         });
         this.disconnect();
     }
     createUser(user, callback) {
         this.connect();
-        const query = 'INSERT INTO users (name, email) VALUES (?, ?)';
-        const values = [user.name, user.email];
+        const query = 'INSERT INTO users (token, handler, name, email) VALUES (?, ?, ?, ?)';
+        const values = [user.token, user.handler, user.name, user.email];
         this.connection.query(query, values, (error, results) => {
             if (error) throw error;
 
-            const createdUser = new User(results.insertId, user.name, user.email);
+            const createdUser = new User(user.token, user.handler, user.name, user.email);
             callback(createdUser);
         });
         this.disconnect();
@@ -224,8 +226,10 @@ db.getUsers((users) => {
 });
 
 // Instancing user and creating 
+/*
 const newUser = new User('01234', 'client1', 'Client #1', 'client1@mail.net');
 const newUser2 = new User('56789', 'client2', 'Client #2', 'client2@mail.net');
+
 
 db.createUser(newUser, (createdUser) => {
     console.log('User created:', createdUser);
@@ -234,3 +238,4 @@ db.createUser(newUser, (createdUser) => {
 db.createUser(newUser2, (createdUser) => {
     console.log('User created:', createdUser);
 });
+*/
