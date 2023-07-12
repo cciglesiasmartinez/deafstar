@@ -9,6 +9,7 @@ const fs = require('fs');
 const https = require('https');
 const ws = require('ws');
 const app = express();
+const mysql = require('mysql');
 
 // Retrieve SSL key + cert
 const sslFiles = {
@@ -42,10 +43,11 @@ class Main {
 
 // User class
 class User {
-    constructor(handler, name, token) {
+    constructor(token, handler, name, email) {
+        this.token = token;
         this.handler = handler;
         this.name = name;
-        this.token = token;
+        this.email = email;
     }
     // Returning client info
     getInfo() {
@@ -151,3 +153,84 @@ async function generateText(prompt) {
     const text = response.data.choices[0].text.replace(/\n/g,"");
     return text;
 }
+
+
+/*
+ * MySQL calls
+ *
+ */
+
+class DB {
+    // Constructor call 
+    constructor(host, user, password, database) {
+        this.host = host;
+        this.user = user;
+        this.password = password;
+        this.database = database;
+    }
+    // Connect function
+    connect() {
+        this.connection = mysql.createConnection({
+            host: this.host,
+            user: this.user,
+            password: this.password,
+            database: this.database
+        });
+        // Sending message
+        this.connection.connect((err) => {
+            if (err) throw err;
+            console.log('[MySQL] Connected to MySQL database');
+        });
+    }
+    // Disconnect function
+    disconnect() {
+        this.connection.end((err) => {
+            if (err) throw err;
+            console.log('[MySQL] Disconnected from MySQL database');
+        });
+    }
+    // Checking users fucntion
+    getUsers(callback) {
+        this.connect();
+        const query = 'SELECT handler, name, email, token  FROM users';
+        this.connection.query(query, (error, results) => {
+            if (error) throw error;
+            const users = results.map((row) => {
+                return new User(row.id, row.name, row.email, row.token, raw.handler);
+            });
+            callback(users);
+        });
+        this.disconnect();
+    }
+    createUser(user, callback) {
+        this.connect();
+        const query = 'INSERT INTO users (name, email) VALUES (?, ?)';
+        const values = [user.name, user.email];
+        this.connection.query(query, values, (error, results) => {
+            if (error) throw error;
+
+            const createdUser = new User(results.insertId, user.name, user.email);
+            callback(createdUser);
+        });
+        this.disconnect();
+    }
+} 
+
+// Instancing class and retrieving users
+const db = new DB('localhost', 'root', 'password', 'deafstar');
+
+db.getUsers((users) => {
+    console.log(users);
+});
+
+// Instancing user and creating 
+const newUser = new User('01234', 'client1', 'Client #1', 'client1@mail.net');
+const newUser2 = new User('56789', 'client2', 'Client #2', 'client2@mail.net');
+
+db.createUser(newUser, (createdUser) => {
+    console.log('User created:', createdUser);
+});
+
+db.createUser(newUser2, (createdUser) => {
+    console.log('User created:', createdUser);
+});
