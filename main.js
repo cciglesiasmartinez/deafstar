@@ -128,11 +128,19 @@ app.post('/login', passport.authenticate('local', {
   
 // Logout route
 app.get('/logout', (req, res) => {
-    req.logout();
+    req.logout(() => {console.log("Logged out");});
     res.redirect('/');
 });
 
-app.get('/login', (req, res) => {
+function isAlreadyAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        res.redirect('/profile');
+    } else {
+        return next();
+    }
+}
+
+app.get('/login', isAlreadyAuthenticated, (req, res) => {
     res.render('login');
 });
 
@@ -150,13 +158,13 @@ app.get('/profile', (req, res) => {
     } else {
         res.redirect('/login');
     }
- });
+});
 
 function isAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
         return next(); // Is authenticated
     }
-    res.status(400).send("Page not found"); // Is not auth
+    res.status(400).render('404'); // Is not auth
 }
 
 // Getting users page
@@ -171,8 +179,13 @@ app.get('/:username', isAuthenticated, (req, res) => {
     } else {
         // Sending error
         //console.log(mainClass.users, "Requested user " + req.params.username);
-        res.status(404).send('Page not found');
+        res.status(404).render('404');
     }
+});
+
+// Handling 404 routes
+app.use((req, res, next) => {
+    res.status(404).render('404');
 });
 
 // Init the http server
