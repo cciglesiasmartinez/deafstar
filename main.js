@@ -65,7 +65,8 @@ class User {
     }
     // Returning client info
     getInfo() {
-        return `Name: ${this.name}, Token: ${this.token}`;
+        return `Name: ${this.name}, Token: ${this.token},
+        Email: ${this.email}`;
     }
 }
 
@@ -161,8 +162,9 @@ function isAuthenticated(req, res, next) {
 // Getting users page
 app.get('/:username', isAuthenticated, (req, res) => {
     const { username } = req.params;
+    const { handler } = req.user;
     // Checking if exists
-    if (mainClass.getUser(username)) {
+    if ((mainClass.getUser(username)) && (handler == username)) {
         const user = mainClass.getUser(username);
         console.log("[HTTPd]: Obtained user \n", user);
         res.render('user', { user });
