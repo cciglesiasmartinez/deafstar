@@ -40,7 +40,7 @@ class DB {
         const query = 'SELECT handler, name, email, token  FROM users';
         this.connection.query(query, (error, results) => {
             if (error) throw error;
-            console.log(results);
+            //console.log(results);
             const users = results.map((row) => {
                 const user = new User(row.token, row.handler, row.name, row.email);
                 return user;
@@ -60,6 +60,21 @@ class DB {
         });
         this.disconnect();
     }
-} 
+}
+
+// User class (repeating code, must be deleted later)
+class User {
+    constructor(token, handler, name, email) {
+        this.token = token;
+        this.handler = handler;
+        this.name = name;
+        this.email = email;
+    }
+    // Returning client info
+    getInfo() {
+        return `Name: ${this.name}, Token: ${this.token},
+        Email: ${this.email}`;
+    }
+}
 
 module.exports = { DB };

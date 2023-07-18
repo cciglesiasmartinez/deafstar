@@ -11,6 +11,7 @@ const ws = require('ws');
 const app = express();
 const crawler = require('./crawler.js');
 const database = require('./db.js');
+const chat = require('./chat.js');
 
 // Retrieve SSL key + cert
 const sslFiles = {
@@ -237,7 +238,7 @@ wsServer.on('connection',  (ws) => {
             console.log("[WEBSOCKET] Data from " + msg.origin + " received: " + msg.data);
             // Calling OpenAI API
             
-            const response = await generateText(msg.data);
+            const response = await chat.generateText(msg.data);
             const resMsg = {
                 origin: "server",
                 data: response,
@@ -256,7 +257,10 @@ wsServer.on('connection',  (ws) => {
 const db = new database.DB('localhost', 'root', 'password', 'deafstar');
 
 db.getUsers((users) => {
-    console.log('[MySQL] Users: ' + users);
+    users.forEach((user) => {
+        mainClass.addUser(user);
+    });
+    console.log("[MySQL] Users: ", mainClass.listUsers((users)=>{console.log(users)}));
 });
 
 
