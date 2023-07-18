@@ -10,6 +10,7 @@ const https = require('https');
 const ws = require('ws');
 const app = express();
 const mysql = require('mysql');
+const crawler = require('./crawler.js');
 
 // Retrieve SSL key + cert
 const sslFiles = {
@@ -125,6 +126,26 @@ app.post('/login', passport.authenticate('local', {
     successRedirect: '/profile',
     failureRedirect: '/login'
 }));
+
+// Crawl route
+app.post('/crawl', isAuthenticated, async (req, res) => {
+    //Logic for crawling site
+    try {
+        /*
+        const url = [ req.body.url ];
+        console.log('[HTTPd] Crawling ' + url + ' ...\n');
+        const crawlerInstance = new crawler.Crawler(url,100,200);
+        const pages = await crawlerInstance.start();
+        console.log('[HTTPd] Crawling is done.\n', pages);
+        */
+        const crawlerInstance = new crawler.Crawler(req.body.url);
+        const result = await crawlerInstance.start();
+        console.log(result);
+    } catch (err) {
+        console.error(err);
+    }
+    res.redirect('/profile');
+});
   
 // Logout route
 app.get('/logout', (req, res) => {
@@ -298,9 +319,10 @@ class DB {
         const query = 'SELECT handler, name, email, token  FROM users';
         this.connection.query(query, (error, results) => {
             if (error) throw error;
+            console.log(results);
             const users = results.map((row) => {
                 const user = new User(row.token, row.handler, row.name, row.email);
-                mainClass.addUser(user);
+                mainClass.addUser(user); // Attention to this! 
                 return user;
             });
             callback(users);
