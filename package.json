@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/cciglesiasmartinez/deafstar#readme",
   "dependencies": {
+    "axios": "^1.4.0",
     "cheerio": "^1.0.0-rc.12",
     "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
@@ -32,11 +33,9 @@
     "express-session": "^1.17.3",
     "https": "^1.0.0",
     "mysql": "^2.18.1",
-    "node-spider": "^1.4.1",
     "openai": "^3.3.0",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
-    "turndown": "^7.1.2",
     "url-parse": "^1.5.10",
     "ws": "^8.13.0"
   }
