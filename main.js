@@ -57,21 +57,6 @@ class Main {
     }
 }
 
-// User class
-class User {
-    constructor(token, handler, name, email) {
-        this.token = token;
-        this.handler = handler;
-        this.name = name;
-        this.email = email;
-    }
-    // Returning client info
-    getInfo() {
-        return `Name: ${this.name}, Token: ${this.token},
-        Email: ${this.email}`;
-    }
-}
-
 // Init main class and test users (this is dirty, just temp)
 const mainClass = new Main();
 
@@ -132,15 +117,11 @@ app.post('/login', passport.authenticate('local', {
 app.post('/crawl', isAuthenticated, async (req, res) => {
     //Logic for crawling site
     try {
-        /*
-        const url = [ req.body.url ];
-        console.log('[HTTPd] Crawling ' + url + ' ...\n');
-        const crawlerInstance = new crawler.Crawler(url,100,200);
-        const pages = await crawlerInstance.start();
-        console.log('[HTTPd] Crawling is done.\n', pages);
-        */
         const crawlerInstance = new crawler.Crawler(req.body.url);
         const result = await crawlerInstance.start();
+        const user = mainClass.getUser(req.user.handler);
+        user.url = req.body.url;
+        console.log("USER IS: " + JSON.stringify(req.user));
         console.log(result);
     } catch (err) {
         console.error(err);

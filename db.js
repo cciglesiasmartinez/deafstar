@@ -69,11 +69,12 @@ class User {
         this.handler = handler;
         this.name = name;
         this.email = email;
+        this.url = undefined;
     }
     // Returning client info
     getInfo() {
         return `Name: ${this.name}, Token: ${this.token},
-        Email: ${this.email}`;
+        Email: ${this.email}, URL: ${this.url}`;
     }
 }
 
