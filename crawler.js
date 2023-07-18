@@ -2,8 +2,8 @@
  * Code for the web crawler/scraper
  * 
  * IMPORTANT NOTE: This is a very dirty and minimalistic crawler, so time constraints 
- * and such would be needed in order to bypass scraping countermeasures applied by
- * some hosting vendors. 
+ * and some other tactics would be needed in order to bypass scraping countermeasures 
+ * applied by some hosting vendors. 
  *
  */
 
@@ -15,7 +15,7 @@ const URLParse = require('url-parse');
 class Crawler {
     constructor(url) {
         this.links = [url];
-        this.parsedLinks = [];
+        this.scrapedLinks = [];
         this.content = [];
     }
     async crawl() {
@@ -45,9 +45,9 @@ class Crawler {
                 return parsedLink.hostname === new URL(this.links[0]).hostname;
             });
         
-            // If 
+            // If url its not listed and not has been scraped, add to the list
             filteredUrls.forEach((url) => {
-              if (!this.parsedLinks.includes(url) && !this.links.includes(url)) {
+              if (!this.scrapedLinks.includes(url) && !this.links.includes(url)) {
                 this.links.push(url);
                 console.log('[CRAWLER] Added URL to parse:', url);
               }
@@ -66,20 +66,26 @@ class Crawler {
             paragraphs.forEach((paragraph, index) => {
                 console.log(`[CRAWLER] - Paragraph ${index + 1}: ${paragraph}`);
             });
-            this.parsedLinks.push(this.links[0]);
+
+            // 
+            this.scrapedLinks.push(this.links[0]);
             this.content.push(paragraphs);
             this.links.splice(this.links[0],1);
+            
+            // Finish message
             console.log("[CRAWLER] URLs waiting to be scraped: ", this.links);
         } catch (error) {
             console.error('[CRAWLER] Error: ', error);
         }
     }
     async start() {
-        while (this.links.length > 0 ) {
-            await this.crawl();
-        }
-        console.log("[CRAWLER] Site fully screaped");
-        return this.content;
+        if (this.links[0]) {
+            while (this.links.length > 0 ) {
+                await this.crawl();
+            }
+            console.log("[CRAWLER] Site fully screaped");
+            return this.content;
+        } else { throw console.log("[CRAWLER] Error: Missing argument (initial URL)");} 
     }
 }
 
