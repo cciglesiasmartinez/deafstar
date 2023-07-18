@@ -7,9 +7,20 @@
 <body>
   <h1>Client Info</h1>
   <p><%= user.getInfo() %></p>
+  <div id="chatControl">
+    <p>
+      <form method="POST" action="/crawl">
+        <label for="url">URL:</label>
+        <input id="url" type="text" placeholder="Write URL to crawl." name="url" autofocus>
+        <button type="submit">Crawl!</button>
+      </form>
+    </p>
+  </div>
   <div id="webSocket">
-    <div id="webSocketOutput"></div>
-    <input id="webSocketInput" type="text" placeholder="Send..." autofocus> 
+    <p>
+      <div id="webSocketOutput"></div>
+      <input id="webSocketInput" type="text" placeholder="Send..." autofocus>
+    </p>
   </div>
   <script>
     // Create sock instance
