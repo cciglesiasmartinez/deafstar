@@ -22,6 +22,11 @@
       <input id="webSocketInput" type="text" placeholder="Send..." autofocus>
     </p>
   </div>
+  <div id="logout">
+    <form method="GET" action="/logout">
+      <button type="submit">Logout</button>
+    </form>
+  </div>
   <script>
     // Create sock instance
     const ws = new WebSocket('wss://localhost:8008');
