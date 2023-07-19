@@ -135,6 +135,8 @@ app.get('/logout', (req, res) => {
     res.redirect('/');
 });
 
+
+// Change this func names, they're a bit confusing
 function isAlreadyAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
         res.redirect('/profile');
@@ -143,6 +145,14 @@ function isAlreadyAuthenticated(req, res, next) {
     }
 }
 
+function isAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next(); // Is authenticated
+    }
+    res.status(400).render('404'); // Is not auth
+}
+
+// Login page
 app.get('/login', isAlreadyAuthenticated, (req, res) => {
     res.render('login');
 });
@@ -163,12 +173,7 @@ app.get('/profile', (req, res) => {
     }
 });
 
-function isAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next(); // Is authenticated
-    }
-    res.status(400).render('404'); // Is not auth
-}
+
 
 // Getting users page
 app.get('/:username', isAuthenticated, (req, res) => {
