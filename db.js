@@ -23,7 +23,7 @@ class DB {
         });
         // Sending message
         this.connection.connect((err) => {
-            if (err) throw err;
+            //if (err) throw err;
             console.log('[MySQL] Connected to MySQL database');
         });
     }

@@ -121,8 +121,18 @@ app.post('/crawl', isAuthenticated, async (req, res) => {
         const result = await crawlerInstance.start();
         const user = mainClass.getUser(req.user.handler);
         user.url = req.body.url;
-        console.log("USER IS: " + JSON.stringify(req.user));
-        console.log(result);
+        //console.log("USER IS: " + JSON.stringify(req.user));
+        //console.log(result);
+        let debug = chat.normalizeScrapedData(result);
+        //console.log("[CRAWLER] Debugging normalized data: ",debug);
+        let chunked = await chat.chunkData(debug,500);
+        //console.log(chunked);
+        let v = await chat.generateVectorEmbedding(chunked);
+        console.log(v);
+        let pinecone = await chat.PineconeInit();
+        console.log(pinecone);
+        let final = await chat.upsertEmbeddings(pinecone,v,100);
+        console.log(final);
     } catch (err) {
         console.error(err);
     }

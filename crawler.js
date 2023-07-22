@@ -12,6 +12,14 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const URLParse = require('url-parse');
 
+class Url {
+    constructor(url) {
+        this.url = url;
+        this.title = undefined;
+        this.content = [];
+    }
+}
+
 class Crawler {
     constructor(url) {
         this.links = [url];
@@ -23,6 +31,7 @@ class Crawler {
             console.log("[CRAWLER] Crawling...", this.links[0]);
             // HTTP GET request 
             const response = await axios.get(this.links[0]);
+            const url = new Url(this.links[0]);
         
             // Use cheerio to get the content
             const $ = cheerio.load(response.data);
@@ -55,21 +64,25 @@ class Crawler {
       
             // Extract titles and paragraphs
             const title = $('title').text();
+            url.title = title;
             const paragraphs = [];
                 $('p').each((index, element) => {
                 paragraphs.push($(element).text());
+                url.content.push($(element).text());
             });
       
             // Print results
+            /*
             console.log('[CRAWLER] Title:', title);
             console.log('[CRAWLER] Paragraphs:');
             paragraphs.forEach((paragraph, index) => {
                 console.log(`[CRAWLER] - Paragraph ${index + 1}: ${paragraph}`);
             });
+            */
 
             // 
             this.scrapedLinks.push(this.links[0]);
-            this.content.push(paragraphs);
+            this.content.push(url);
             this.links.splice(this.links[0],1);
             
             // Finish message
@@ -83,10 +96,10 @@ class Crawler {
             while (this.links.length > 0 ) {
                 await this.crawl();
             }
-            console.log("[CRAWLER] Site fully screaped");
+            console.log("[CRAWLER] Site fully scraped");
             return this.content;
         } else { throw console.log("[CRAWLER] Error: Missing argument (initial URL)");} 
     }
 }
 
-module.exports = { Crawler };
+module.exports = { Crawler, Url };
