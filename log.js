@@ -4,7 +4,7 @@
  */
 
 const pino = require('pino');
-const rotate = require('pino-rotate-file');
+const rotate = require('pino-rotating-file');
 
 class Logger {
   constructor(logFilePath, rotateOptions = {}) {
