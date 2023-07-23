@@ -30,12 +30,29 @@ const openai = new OpenAIApi(conf);
 console.log("[CHAT] OpenAI API key: " + openAiApiKey);
 
 async function generateText(prompt) {
+    let res = await openai.createEmbedding({
+        input: prompt,
+        model: "text-embedding-ada-002"
+    });
+    console.log(res.data.data[0].embedding);
+    let embed = res.data.data[0].embedding;
+    let pinecone = await PineconeInit();
+    let index = await checkOrCreateIndex(pinecone);
+    let related = await index.query({queryRequest:{
+        topK: 2,
+        vector: embed,
+        namespace: 'digitalai',
+        includeMetadata: true,
+    }});
+    console.log(related);
     console.log("[CHAT] Generating text for prompt...");
     const response = await openai.createCompletion({
         model: 'text-davinci-003',
-        prompt: prompt,
+        prompt: 'Answer this question in english: ' + prompt + ' With this context: ' 
+        + related.matches[0].metadata.text + ' ' + related.matches[1].metadata.text,
         max_tokens: 300,
     });
+    console.log(prompt);
     const text = response.data.choices[0].text.replace(/\n/g,"");
     return text;
 }
@@ -154,7 +171,7 @@ function createUrlFromPage(url, title, content) {
  */
 
 class VectorEmbed {
-    constructor(id, metadata,embedding) {
+    constructor(id, metadata, embedding) {
         this.id = id,
         this.metadata = metadata,
         this.embedding = embedding
@@ -195,7 +212,7 @@ async function PineconeInit() {
         apiKey: pineconeApiKey, environment: pineconeEnvironment 
     });
     await pinecone.init({apiKey: pineconeApiKey, environment: pineconeEnvironment});
-    const indexes = await pinecone.listIndexes();
+    //const indexes = await pinecone.listIndexes();
     return pinecone;
 }
 
@@ -212,45 +229,30 @@ async function checkOrCreateIndex(pinecone) {
                 metric: 'dotproduct'
             }});
     }
-    index = pinecone.Index(index_name);
+    let index = pinecone.Index(index_name);
     return index;
 }
 
 // Upsert embeddings into Pinecone in batches
 async function upsertEmbeddings(pinecone,data,batchSize) {
     let result;
-    const index = await checkOrCreateIndex(pinecone);
-    //const batchSize = 100;
-    console.log(data);
+    const index = await checkOrCreateIndex(pinecone); 
     for (let i = 0; i < data.length; i += batchSize) {
         const iEnd = Math.min(data.length, i + batchSize);
         const metaBatch = data.slice(i, iEnd);
         const idsBatch = metaBatch.map((x) => x.id);
         const embeds = metaBatch.map((x) => x.embedding);
         const metaBatchForUpsert = metaBatch.map((x) => ({
-            title: x.title,
-            text: x.text,
-            url: x.url,
+            title: x.metadata.title,
+            text: x.metadata.text,
+            url: x.metadata.url,
         }));
         const toUpsert = idsBatch.map((id, idx) => ({
             id,
-            vector: embeds[idx],
-            //metadata: metaBatchForUpsert[idx],
+            values: embeds[idx],
+            metadata: metaBatchForUpsert[idx],
         }));
         console.log(toUpsert);
-        /*
-        let result = await index.upsert({ 
-            upsertRequest: { 
-              vectors: [
-                  { id: '1', values: [0.1, 0.2, 0.3] },
-                  { id: '2', values: [0.4, 0.5, 0.6] }
-              ], 
-              namespace: 'example-namespace'
-            }
-        });
-        console.log(result);
-        */
-        
         result = await index.upsert( {
             upsertRequest: {
                 vectors: toUpsert,

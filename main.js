@@ -249,8 +249,42 @@ wsServer.on('connection',  (ws) => {
 });
 
 
+// New database using mysql2/promises
+/*
+const database = require('./db2.js');
+
+async function initDB() {
+    const dbConfig = {
+        host: '127.0.0.1',
+        user: 'root',
+        password: 'password',
+        database: 'deafstar',
+        port: 3306,
+        waitForConnections: true,
+        connectionLimit: 10,
+        queueLimit: 0
+    };
+
+    const db = new database.AsyncMySQLDB(dbConfig);
+    await db.createPool();
+
+    try {
+        const users = await db.getUsers();
+        users.forEach(user => {
+            console.log(user);
+    }); 
+    } catch (error) {
+        console.error('Error:', error.message);
+    } finally {
+        await db.closePool();
+    }
+}
+initDB();
+*/
+
 // Instancing class and retrieving users
-const db = new database.DB('localhost', 'root', 'password', 'deafstar');
+
+const db = new database.DB('127.0.0.1', 'root', 'password', 'deafstar');
 
 db.getUsers((users) => {
     users.forEach((user) => {
