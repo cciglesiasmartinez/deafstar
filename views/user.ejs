@@ -9,10 +9,10 @@
   <p><%= user.getInfo() %></p>
   <div id="chatControl">
     <p>
-      <form method="POST" action="/crawl">
+      <form id="crawlForm" method="POST" action="/crawl">
         <label for="url">URL:</label>
         <input id="url" type="text" placeholder="Write URL to crawl." name="url" autofocus>
-        <button type="submit">Crawl!</button>
+        <button id="crawlButton" type="submit">Crawl!</button>
       </form>
     </p>
   </div>
@@ -28,6 +28,17 @@
     </form>
   </div>
   <script>
+    // Adding "Loading text"
+    const crawlFrom = document.getElementById('crawlForm');
+
+    crawlFrom.addEventListener('submit', (event) => {
+      console.log("BUTTON PRESSED!!!!!!!!!");
+      const textNode = document.createElement('p');
+      textNode.innerHTML = 'Please wait until we process yourl URL...';
+      const targetNode = document.getElementById('chatControl');
+      targetNode.appendChild(textNode)
+    });
+
     // Create sock instance
     const ws = new WebSocket('wss://localhost:8008');
 
