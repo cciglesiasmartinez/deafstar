@@ -7,10 +7,13 @@
  *
  */
 
-
 const axios = require('axios');
 const cheerio = require('cheerio');
 const URLParse = require('url-parse');
+const { Logger } = require('./log.js');
+
+// Initializing logger
+const logger = new Logger();
 
 class Url {
     constructor(url) {
@@ -28,21 +31,19 @@ class Crawler {
     }
     async crawl() {
         try {
-            console.log("[CRAWLER] Crawling...", this.links[0]);
+            logger.info("[CRAWLER] Crawling...", this.links[0]);
+            // Create an instance for the URL
+            const url = new Url(this.links[0]);
             // HTTP GET request 
             const response = await axios.get(this.links[0]);
-            const url = new Url(this.links[0]);
-        
             // Use cheerio to get the content
             const $ = cheerio.load(response.data);
-        
             // Get the links available
             const links = [];
             $('a').each((index,element) => {
                 const href = $(element).attr('href');
                 links.push(href);
             });
-
             // Select only the links that point to the target site
             const filteredUrls = links.filter((link) => {
                 // Ignore if empty or if #
@@ -53,7 +54,6 @@ class Crawler {
                 const parsedLink = new URLParse(link);
                 return parsedLink.hostname === new URL(this.links[0]).hostname;
             });
-        
             // If url its not listed and not has been scraped, add to the list
             filteredUrls.forEach((url) => {
               if (!this.scrapedLinks.includes(url) && !this.links.includes(url)) {
@@ -61,7 +61,6 @@ class Crawler {
                 console.log('[CRAWLER] Added URL to parse:', url);
               }
             });
-      
             // Extract titles and paragraphs
             const title = $('title').text();
             url.title = title;
@@ -70,25 +69,14 @@ class Crawler {
                 paragraphs.push($(element).text());
                 url.content.push($(element).text());
             });
-      
-            // Print results
-            /*
-            console.log('[CRAWLER] Title:', title);
-            console.log('[CRAWLER] Paragraphs:');
-            paragraphs.forEach((paragraph, index) => {
-                console.log(`[CRAWLER] - Paragraph ${index + 1}: ${paragraph}`);
-            });
-            */
-
-            // 
+            // Updating instance
             this.scrapedLinks.push(this.links[0]);
             this.content.push(url);
             this.links.splice(this.links[0],1);
-            
             // Finish message
-            console.log("[CRAWLER] URLs waiting to be scraped: ", this.links);
+            logger.log("[CRAWLER] URLs waiting to be scraped: ", this.links);
         } catch (error) {
-            console.error('[CRAWLER] Error: ', error);
+            logger.error('[CRAWLER] Error: ', error);
         }
     }
     async start() {
@@ -96,9 +84,9 @@ class Crawler {
             while (this.links.length > 0 ) {
                 await this.crawl();
             }
-            console.log("[CRAWLER] Site fully scraped");
+            logger.log("[CRAWLER] Site fully scraped");
             return this.content;
-        } else { throw console.log("[CRAWLER] Error: Missing argument (initial URL)");} 
+        } else { throw logger.error("[CRAWLER] Error: Missing argument (initial URL)"); } 
     }
 }
 
