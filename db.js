@@ -26,7 +26,7 @@ class DB {
             database: this.database
         });
         // Sending message
-        this.connection.connect((error => {
+        this.connection.connect((error) => {
             if (error) throw logger.error(error);
             logger.info('[MySQL] Connected to database');
         });
