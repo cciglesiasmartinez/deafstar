@@ -4,7 +4,7 @@
  */
 
 const pino = require('pino');
-const rotate = require('pino-rotating-file');
+const rotate = require('@chatsift/pino-rotate-file');
 
 class Logger {
   constructor(logFilePath, rotateOptions = {}) {
