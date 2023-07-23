@@ -13,7 +13,7 @@ class Logger {
             return Logger.instance; // Singleton: Returning instance if created
         }
         // Basic parameters
-        this.logFilePath = 'log/app.log';
+        this.logFilePath = 'app.log';
         this.logFileOptions = {
             flags: 'a',
         }
