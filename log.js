@@ -30,9 +30,6 @@ class Logger {
             timestamp: pino.stdTimeFunctions.isoTime, // TStamp format
         }, pino.multistream(this.streams));
         Logger.instance = this; // Saving instance here
-        process.on('exit', () => {
-            this.logFileStream.end();
-        });
     }
     // Method for info logs
     info(...args) {
