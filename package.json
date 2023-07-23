@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/cciglesiasmartinez/deafstar#readme",
   "dependencies": {
+    "@chatsift/pino-rotate-file": "^0.2.0",
     "@pinecone-database/pinecone": "^0.1.6",
     "axios": "^1.4.0",
     "cheerio": "^1.0.0-rc.12",
@@ -38,6 +39,7 @@
     "openai": "^3.3.0",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
+    "pino": "^8.14.1",
     "tiktoken-node": "^0.0.6",
     "url-parse": "^1.5.10",
     "uuid": "^9.0.0",
