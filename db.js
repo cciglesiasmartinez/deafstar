@@ -4,6 +4,10 @@
  */
 
 const mysql = require('mysql');
+const { Logger } = require('./log.js');
+
+// Initialize logger
+const logger = new Logger();
 
 class DB {
     // Constructor call 
@@ -22,16 +26,16 @@ class DB {
             database: this.database
         });
         // Sending message
-        this.connection.connect((err) => {
-            //if (err) throw err;
-            console.log('[MySQL] Connected to MySQL database');
+        this.connection.connect((error => {
+            if (error) throw logger.error(error);
+            logger.info('[MySQL] Connected to database');
         });
     }
     // Disconnect function
     disconnect() {
-        this.connection.end((err) => {
-            if (err) throw err;
-            console.log('[MySQL] Disconnected from MySQL database');
+        this.connection.end((error) => {
+            if (error) throw logger.error(error);
+            logger.info('[MySQL] Disconnected from database');
         });
     }
     // Checking users fucntion
@@ -39,8 +43,7 @@ class DB {
         this.connect();
         const query = 'SELECT handler, name, email, token  FROM users';
         this.connection.query(query, (error, results) => {
-            if (error) throw error;
-            //console.log(results);
+            if (error) throw logger.error(err);
             const users = results.map((row) => {
                 const user = new User(row.token, row.handler, row.name, row.email);
                 return user;
@@ -49,12 +52,13 @@ class DB {
         });
         this.disconnect();
     }
+    // Create a new user
     createUser(user, callback) {
         this.connect();
         const query = 'INSERT INTO users (token, handler, name, email) VALUES (?, ?, ?, ?)';
         const values = [user.token, user.handler, user.name, user.email];
         this.connection.query(query, values, (error, results) => {
-            if (error) throw error;
+            if (error) throw logger.error(err);
             const createdUser = new User(user.token, user.handler, user.name, user.email);
             callback(createdUser);
         });
