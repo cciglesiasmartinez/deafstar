@@ -39,6 +39,7 @@
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "pino": "^8.14.1",
+    "pino-pretty": "^10.1.0",
     "tiktoken-node": "^0.0.6",
     "url-parse": "^1.5.10",
     "uuid": "^9.0.0",
