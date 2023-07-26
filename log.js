@@ -35,13 +35,13 @@ class Logger {
     info(...args) {
         const message = Array.from(args).slice(0,-1);
         const data = args[args.length - 1];
-        this.logger.info(message,data);
+        this.logger.info(data, message);
     }
     // Method for error logs
     error(...args) {
         const message = Array.from(args).slice(0,-1);
         const data = args[args.length - 1];
-        this.logger.error(message,data);
+        this.logger.error(data, message);
     }
 }
 
