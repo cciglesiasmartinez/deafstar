@@ -210,7 +210,7 @@ class ChatBot {
     }
     // Generate prompt and answer
     async generateText(prompt,user) {
-        console.log("GENERATE TEXT PETITION REC, USER IS " + user);
+        console.log("GENERATE TEXT PETITION REC, USER IS " + JSON.stringify(user));
         const res = await openai.createEmbedding({
             input: prompt,
             model: "text-embedding-ada-002"

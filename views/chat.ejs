@@ -2,43 +2,16 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Client Info</title>
+  <title>ChatBot</title>
 </head>
 <body>
-  <h1>Client Info</h1>
-  <p><%= user.getInfo() %></p>
-  <div id="chatControl">
-    <p>
-      <form id="crawlForm" method="POST" action="/crawl">
-        <label for="url">URL:</label>
-        <input id="url" type="text" placeholder="Write URL to crawl." name="url" autofocus>
-        <button id="crawlButton" type="submit">Crawl!</button>
-      </form>
-    </p>
-  </div>
   <div id="webSocket">
     <p>
       <div id="webSocketOutput"></div>
       <input id="webSocketInput" type="text" placeholder="Send..." autofocus>
     </p>
   </div>
-  <div id="logout">
-    <form method="GET" action="/logout">
-      <button type="submit">Logout</button>
-    </form>
-  </div>
   <script>
-    // Adding "Loading text"
-    const crawlFrom = document.getElementById('crawlForm');
-
-    crawlFrom.addEventListener('submit', (event) => {
-      console.log("BUTTON PRESSED!!!!!!!!!");
-      const textNode = document.createElement('p');
-      textNode.innerHTML = 'Please wait until we process your URL...';
-      const targetNode = document.getElementById('chatControl');
-      targetNode.appendChild(textNode)
-    });
-
     // Create sock instance
     const ws = new WebSocket('wss://localhost:8008');
 

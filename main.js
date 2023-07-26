@@ -57,6 +57,20 @@ class Main {
             }
         }
     }
+    getUserByChatId(id) {
+        console.log("CAlling the getUserByChat func");
+        for (let i=0; i<this.users.length; i++) {
+            console.log("Iterating...")
+            if (this.users[i].chatbot !== undefined ) {
+                if ( this.users[i].chatbot.chatId == id ) {
+                    console.log("Got a result!!");
+                    return this.users[i];
+                }
+            }
+
+        }
+        console.log("Finished func");
+    }
     listUsers(callback) {
         callback(this.users);
     }
@@ -206,6 +220,17 @@ app.get('/profile', (req, res) => {
     } else {
         res.redirect('/login');
     }
+});
+
+// Route for chatbots
+app.get('/chat/:id', (req,res) => {
+    const { id } = req.params;
+    console.log(id);
+    const user = mainClass.getUserByChatId(id);
+    if (mainClass.getUserByChatId(id) !== undefined) {
+        console.log("Got an user");
+        res.render('chat', { user });
+    } else { res.status(404).render('404'); }
 });
 
 // Getting users page
