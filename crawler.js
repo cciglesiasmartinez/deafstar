@@ -58,7 +58,7 @@ class Crawler {
             filteredUrls.forEach((url) => {
               if (!this.scrapedLinks.includes(url) && !this.links.includes(url)) {
                 this.links.push(url);
-                console.log('[CRAWLER] Added URL to parse:', url);
+                console.log('[CRAWLER] Added URL to parse:' + url);
               }
             });
             // Extract titles and paragraphs
@@ -74,9 +74,9 @@ class Crawler {
             this.content.push(url);
             this.links.splice(this.links[0],1);
             // Finish message
-            logger.log("[CRAWLER] URLs waiting to be scraped: ", this.links);
+            logger.info("[CRAWLER] URLs waiting to be scraped: " + this.links);
         } catch (error) {
-            logger.error('[CRAWLER] Error: ', error);
+            logger.error('[CRAWLER] Error: ' + error);
         }
     }
     async start() {
@@ -84,7 +84,7 @@ class Crawler {
             while (this.links.length > 0 ) {
                 await this.crawl();
             }
-            logger.log("[CRAWLER] Site fully scraped");
+            logger.info("[CRAWLER] Site fully scraped");
             return this.content;
         } else { throw logger.error("[CRAWLER] Error: Missing argument (initial URL)"); } 
     }
