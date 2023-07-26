@@ -12,6 +12,10 @@ const app = express();
 const crawler = require('./crawler.js');
 const database = require('./db.js');
 const chat = require('./chat.js');
+const { Logger } = require('./log.js');
+
+// Initializing logger
+const logger = new Logger();
 
 // Retrieve SSL key + cert
 const sslFiles = {
@@ -27,7 +31,11 @@ app.set('views', __dirname + '/views');
 // Main class (this name *has to* be changed)
 class Main {
     constructor() {
+        if (Main.instance) {
+            return Main.instance; // Singleton!
+        }
         this.users = [];
+        Main.instance = this;
     }
     // @param is object instantiated from class Users
     addUser(user) {
@@ -41,11 +49,18 @@ class Main {
             }
         }
     }
+    // Temp method, might be changed later
+    getUserByToken(token) {
+        for (let i=0; i<this.users.length; i++) {
+            if ( this.users[i].token == token ) {
+                return this.users[i];
+            }
+        }
+    }
     listUsers(callback) {
         callback(this.users);
     }
     getPassword(handler) {
-        console.log("Getting pass!");
         let password;
         for (let i=0; i<this.users.length; i++) {
             if (this.users[i].handler == handler) {
@@ -94,7 +109,8 @@ passport.deserializeUser((handler, done) => {
 passport.use(new LocalStrategy(
     (username, password, done) => {
         if (password == mainClass.getPassword(username)) {
-            console.log("[HTTPS] Auth succeeded.");
+            //console.log("[HTTPS] Auth succeeded.");
+            logger.info('[HTTPS] Auth succeeded for user ' + username);
             return done(null, mainClass.getUser(username));
         } else {
             return done(null, false, { message: 'Invalid login' });
@@ -117,22 +133,31 @@ app.post('/login', passport.authenticate('local', {
 app.post('/crawl', isAuthenticated, async (req, res) => {
     //Logic for crawling site
     try {
+        /*
         const crawlerInstance = new crawler.Crawler(req.body.url);
         const result = await crawlerInstance.start();
         const user = mainClass.getUser(req.user.handler);
         user.url = req.body.url;
-        //console.log("USER IS: " + JSON.stringify(req.user));
-        //console.log(result);
         let debug = chat.normalizeScrapedData(result);
-        //console.log("[CRAWLER] Debugging normalized data: ",debug);
         let chunked = await chat.chunkData(debug,500);
-        //console.log(chunked);
         let v = await chat.generateVectorEmbedding(chunked);
         console.log(v);
         let pinecone = await chat.PineconeInit();
         console.log(pinecone);
         let final = await chat.upsertEmbeddings(pinecone,v,100);
         console.log(final);
+        */
+        console.log(req.body.url);
+        const chatBot = new chat.ChatBot(req.body.url);
+        const user = mainClass.getUser(req.user.handler);
+        //console.log(user);
+        //console.log(user.instanceof())
+        //let info = user.getInfo();
+        //console.log(info);
+        await chatBot.initialize(req.body.url,user);
+        console.log(req.body.url, user);
+        console.log(chatBot);
+
     } catch (err) {
         console.error(err);
     }
@@ -183,8 +208,6 @@ app.get('/profile', (req, res) => {
     }
 });
 
-
-
 // Getting users page
 app.get('/:username', isAuthenticated, (req, res) => {
     const { username } = req.params;
@@ -209,7 +232,7 @@ app.use((req, res, next) => {
 // Init the http server
 secureHttpd.listen(8008, () => {
     const port = 8008;
-    console.log('[HTTPd] Running on port ' + port);
+    logger.info('[HTTPd] Running on port ' + port);
 });
 
 
@@ -225,22 +248,34 @@ const wsServer = new ws.Server({server: secureHttpd});
 // WS functions
 
 wsServer.on('connection',  (ws) => {
-    console.log("[WEBSOCKET] Client connected"); 
-    //const greet = {origin: "server", data:"Connected!"};
-    //ws.send(JSON.stringify(greet));
+    logger.info("[WEBSOCKET] Client connected"); 
+    const greet = {origin: "server", data:"Hello, how can I help you?"};
+    ws.send(JSON.stringify(greet));
     ws.on('message', async (msg) => {
         try {
             msg = JSON.parse(msg);
             console.log("[WEBSOCKET] Data from " + msg.origin + " received: " + msg.data);
             // Calling OpenAI API
-            
-            const response = await chat.generateText(msg.data);
-            const resMsg = {
-                origin: "server",
-                data: response,
+            let user = mainClass.getUserByToken(msg.origin);
+            if ( user.chatbot === undefined) {
+                const response = await chat.generateText(msg.data);
+                const resMsg = {
+                    origin: "server",
+                    data: response,
+                }
+                console.log(resMsg);
+                ws.send(JSON.stringify(resMsg));
+            } else {
+                let chatbot = user.chatbot;
+                let text = await chatbot.generateText(msg.data, user);
+                const resMsg = {
+                    origin: "server",
+                    data: text,
+                }
+                console.log(resMsg);
+                ws.send(JSON.stringify(resMsg));
             }
-            console.log(resMsg);
-            ws.send(JSON.stringify(resMsg));
+
             
         } catch (err) {
             console.error("[WEBSOCKET] Error in JSON msg: " + err)
@@ -248,6 +283,37 @@ wsServer.on('connection',  (ws) => {
     });
 });
 
+
+// Instancing class and retrieving users
+
+const db = new database.DB('127.0.0.1', 'root', 'password', 'deafstar');
+
+db.getUsers((users) => {
+    users.forEach((user) => {
+        mainClass.addUser(user);
+    });
+});
+
+
+// Instancing user and creating 
+/*
+const newUser = new User('01234', 'client1', 'Client #1', 'client1@mail.net');
+const newUser2 = new User('56789', 'client2', 'Client #2', 'client2@mail.net');
+
+
+db.createUser(newUser, (createdUser) => {
+    console.log('User created:', createdUser);
+});
+
+db.createUser(newUser2, (createdUser) => {
+    console.log('User created:', createdUser);
+});
+
+const testUser1 = new User("01234","client1", "Client #1", "client1@mail.net");
+const testUser2 = new User("56789","client2", "Client #2", "client2@mail.net");
+mainClass.addUser(testUser1);
+mainClass.addUser(testUser2);
+*/
 
 // New database using mysql2/promises
 /*
@@ -280,36 +346,4 @@ async function initDB() {
     }
 }
 initDB();
-*/
-
-// Instancing class and retrieving users
-
-const db = new database.DB('127.0.0.1', 'root', 'password', 'deafstar');
-
-db.getUsers((users) => {
-    users.forEach((user) => {
-        mainClass.addUser(user);
-    });
-    console.log("[MySQL] Users: ", mainClass.listUsers((users)=>{console.log(users)}));
-});
-
-
-// Instancing user and creating 
-/*
-const newUser = new User('01234', 'client1', 'Client #1', 'client1@mail.net');
-const newUser2 = new User('56789', 'client2', 'Client #2', 'client2@mail.net');
-
-
-db.createUser(newUser, (createdUser) => {
-    console.log('User created:', createdUser);
-});
-
-db.createUser(newUser2, (createdUser) => {
-    console.log('User created:', createdUser);
-});
-
-const testUser1 = new User("01234","client1", "Client #1", "client1@mail.net");
-const testUser2 = new User("56789","client2", "Client #2", "client2@mail.net");
-mainClass.addUser(testUser1);
-mainClass.addUser(testUser2);
 */

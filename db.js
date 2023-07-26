@@ -74,11 +74,15 @@ class User {
         this.name = name;
         this.email = email;
         this.url = undefined;
+        this.chatbot = undefined;
     }
     // Returning client info
     getInfo() {
         return `Name: ${this.name}, Token: ${this.token},
         Email: ${this.email}, URL: ${this.url}`;
+    }
+    addChatBot(chatbot) {
+        this.chatbot = chatbot;
     }
 }
 
