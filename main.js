@@ -67,7 +67,6 @@ class Main {
                     return this.users[i];
                 }
             }
-
         }
         console.log("Finished func");
     }
@@ -147,35 +146,18 @@ app.post('/login', passport.authenticate('local', {
 app.post('/crawl', isAuthenticated, async (req, res) => {
     //Logic for crawling site
     try {
-        /*
-        const crawlerInstance = new crawler.Crawler(req.body.url);
-        const result = await crawlerInstance.start();
-        const user = mainClass.getUser(req.user.handler);
-        user.url = req.body.url;
-        let debug = chat.normalizeScrapedData(result);
-        let chunked = await chat.chunkData(debug,500);
-        let v = await chat.generateVectorEmbedding(chunked);
-        console.log(v);
-        let pinecone = await chat.PineconeInit();
-        console.log(pinecone);
-        let final = await chat.upsertEmbeddings(pinecone,v,100);
-        console.log(final);
-        */
         console.log(req.body.url);
         const chatBot = new chat.ChatBot(req.body.url);
         const user = mainClass.getUser(req.user.handler);
-        //console.log(user);
-        //console.log(user.instanceof())
-        //let info = user.getInfo();
-        //console.log(info);
         await chatBot.initialize(req.body.url,user);
         console.log(req.body.url, user);
         console.log(chatBot);
+        res.redirect('/profile');
 
     } catch (err) {
         console.error(err);
+        res.redirect('/profile?');
     }
-    res.redirect('/profile');
 });
   
 // Logout route

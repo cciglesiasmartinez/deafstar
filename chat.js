@@ -36,7 +36,7 @@ class VectorEmbed {
 class ChatBot {
     constructor() {
         this.chatId = v4();
-        this.namespace = 'digitalai';
+        this.namespace = undefined;
         this.url = undefined;
         this.vectors = [];
         this.indexName = 'digitalai';
@@ -44,6 +44,9 @@ class ChatBot {
     }
     // Init the scraping
     async initialize(url, user) {
+        // Add url to user and set namespace properly
+        this.namespace = user.handler;
+        user.url = url;
         // Create Crawler instance and init the crawling process
         const crawler = new Crawler(url);
         let urlData = await crawler.start();
@@ -210,7 +213,7 @@ class ChatBot {
     }
     // Generate prompt and answer
     async generateText(prompt,user) {
-        console.log("GENERATE TEXT PETITION REC, USER IS " + JSON.stringify(user));
+        //console.log("GENERATE TEXT PETITION REC, USER IS " + JSON.stringify(user));
         const res = await openai.createEmbedding({
             input: prompt,
             model: "text-embedding-ada-002"

@@ -16,6 +16,7 @@
       </form>
     </p>
   </div>
+  <!--
   <div id="webSocket">
     <p>
       <div id="webSocketOutput"></div>
@@ -27,6 +28,10 @@
       <button type="submit">Logout</button>
     </form>
   </div>
+  -->
+  <% if ( user.chatbot !== undefined ) { %> 
+    <p>Your chatbot link is <a href="https://localhost:8008/chat/<%= user.chatbot.chatId %>">https://localhost:8008/chat/<%= user.chatbot.chatId %></a></p>
+  <% } %>
   <script>
     // Adding "Loading text"
     const crawlFrom = document.getElementById('crawlForm');
