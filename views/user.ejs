@@ -23,12 +23,12 @@
       <input id="webSocketInput" type="text" placeholder="Send..." autofocus>
     </p>
   </div>
+  -->
   <div id="logout">
     <form method="GET" action="/logout">
       <button type="submit">Logout</button>
     </form>
   </div>
-  -->
   <% if ( user.chatbot !== undefined ) { %> 
     <p>Your chatbot link is <a href="https://localhost:8008/chat/<%= user.chatbot.chatId %>">https://localhost:8008/chat/<%= user.chatbot.chatId %></a></p>
   <% } %>
