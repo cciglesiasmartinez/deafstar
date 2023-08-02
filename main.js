@@ -348,13 +348,25 @@ db.createUser(newUser3, (createdUser) => {
 });
 */
 
-// First time running
+// For first time running
 
 db.createStructure();
 
+
+// Retrieving users
+
 db.getUsers((users) => {
-    users.forEach((user) => {
-        mainClass.addUser(user);
+    users.forEach(async (user) => {
+        // Add the user
+        try {
+            mainClass.addUser(user);
+            // Check if user has a chatbot and add if yes
+            if (user.url !== undefined) {
+                const chatbot = new chat.ChatBot();
+                await chatbot.initialize(user.url, user);
+            }
+        } catch(err) { throw err; } 
+        console.log(user)
     });
 });
 
