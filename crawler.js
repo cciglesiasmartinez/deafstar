@@ -54,7 +54,7 @@ class Crawler {
             return response;
         } catch (err) {
             console.log("Got error: " + err);
-            console.log("Proceeding to remove and go for next crawl");
+            console.log("Proceeding to remove, then going for the next link.");
             this.links.splice(0, 1);
             return null;
         }
