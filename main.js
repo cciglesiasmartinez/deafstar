@@ -13,6 +13,10 @@ const crawler = require('./crawler.js');
 const database = require('./db.js');
 const chat = require('./chat.js');
 const { Logger } = require('./log.js');
+const { configuration } = require('./conf.js');
+
+// Instancing database
+const db = new database.DB('127.0.0.1', 'root', 'password', 'deafstar');
 
 // Initializing logger
 const logger = new Logger();
@@ -122,10 +126,21 @@ passport.deserializeUser((handler, done) => {
 passport.use(new LocalStrategy(
     (username, password, done) => {
         if (password == mainClass.getPassword(username)) {
-            //console.log("[HTTPS] Auth succeeded.");
             logger.info('[HTTPS] Auth succeeded for user ' + username);
             return done(null, mainClass.getUser(username));
-        } else {
+        }
+        if ( (username == configuration.admin.username) 
+        && (password == configuration.admin.password)) { 
+            logger.info('[HTTPS] Auth succeeded for the administrator');
+            const adminUserObj = new database.User(
+                configuration.admin.password,
+                configuration.admin.username,
+                'Administrator',
+                'admin@email.com');
+            mainClass.addUser(adminUserObj);
+            return done(null,mainClass.getUser(username));
+        } 
+        else {
             return done(null, false, { message: 'Invalid login' });
         }
     }
@@ -180,7 +195,14 @@ function isAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
         return next(); // Is authenticated
     }
-    res.status(400).render('404'); // Is not auth
+    res.status(404).render('404'); // Is not auth
+}
+
+function isAdmin(req, res, next) {
+    if ((req.isAuthenticated()) && (req.user == 'admin')) {
+        return next();
+    }
+    res.status(404).render('404');
 }
 
 // Login page
@@ -198,9 +220,25 @@ app.get('/', (req,res) => {
 app.get('/profile', (req, res) => {
     if (req.isAuthenticated()) {
         const username = req.user.handler;
-        res.redirect(`/${username}`);
+        if ( username == configuration.admin.username) {
+            res.redirect('/admin');
+        } else { 
+            res.redirect(`/${username}`);
+        }
     } else {
         res.redirect('/login');
+    }
+});
+
+// Getting admin panel
+app.get('/admin', isAuthenticated, (req, res) => { 
+    const data = 'testing';
+    console.log(req.user);
+    if ( req.user.handler == configuration.admin.username ) {
+        res.render('admin', { data })
+    }
+    else {
+        res.status(404).render('404');
     }
 });
 
@@ -292,14 +330,36 @@ wsServer.on('connection',  (ws) => {
 
 
 // Instancing class and retrieving users
+/*
+const newUser = new database.User('password', 'volvat', 'Volvat Medisinske', 'mail@volvat.no');
+const newUser2 = new database.User('password', 'digitalai', 'DigitalAi', 'post@digitalai.no');
+const newUser3 = new database.User('password', 'eurofins', 'EuroFins Scientific', 'mail@eurofins.no');
 
-const db = new database.DB('127.0.0.1', 'root', 'password', 'deafstar');
+db.createUser(newUser, (createdUser) => {
+    console.log('User created:', createdUser);
+});
+
+db.createUser(newUser2, (createdUser) => {
+    console.log('User created:', createdUser);
+});
+
+db.createUser(newUser3, (createdUser) => {
+    console.log('User created:', createdUser);
+});
+*/
+
+// First time running
+
+db.createStructure();
 
 db.getUsers((users) => {
     users.forEach((user) => {
         mainClass.addUser(user);
     });
 });
+
+
+// Testing function
 
 
 // Instancing user and creating 
