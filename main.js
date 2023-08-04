@@ -249,6 +249,7 @@ app.get('/chat/:id', (req,res) => {
     const user = mainClass.getUserByChatId(id);
     if (mainClass.getUserByChatId(id) !== undefined) {
         console.log("Got an user");
+        console.log(user);
         res.render('chat', { user });
     } else { res.status(404).render('404'); }
 });
