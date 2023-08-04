@@ -124,7 +124,7 @@ class Crawler {
 
     async start() {
         if (this.links[0]) {
-            const crawlInterval = 1000;
+            const crawlInterval = 300;
             while (this.links.length > 0) {
                 await this.crawl();
                 await new Promise(resolve => setTimeout(resolve, crawlInterval));

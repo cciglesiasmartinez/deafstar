@@ -54,9 +54,9 @@ class Main {
         }
     }
     // Temp method, might be changed later
-    getUserByToken(token) {
+    getUserByHandler(handler) {
         for (let i=0; i<this.users.length; i++) {
-            if ( this.users[i].token == token ) {
+            if ( this.users[i].handler == handler ) {
                 return this.users[i];
             }
         }
@@ -301,7 +301,7 @@ wsServer.on('connection',  (ws) => {
             msg = JSON.parse(msg);
             console.log("[WEBSOCKET] Data from " + msg.origin + " received: " + msg.data);
             // Calling OpenAI API
-            let user = mainClass.getUserByToken(msg.origin);
+            let user = mainClass.getUserByHandler(msg.origin);
             if ( user.chatbot === undefined) {
                 const response = await chat.generateText(msg.data);
                 const resMsg = {
@@ -311,7 +311,11 @@ wsServer.on('connection',  (ws) => {
                 console.log(resMsg);
                 ws.send(JSON.stringify(resMsg));
             } else {
+                console.log("[WEBSOCKET] Data from " + msg.origin + " received: " + msg.data);
                 let chatbot = user.chatbot;
+                //console.log(chatbot);
+                console.log("Got the bot");
+                console.log(user);
                 let text = await chatbot.generateText(msg.data, user);
                 const resMsg = {
                     origin: "server",
@@ -361,9 +365,11 @@ db.getUsers((users) => {
         try {
             mainClass.addUser(user);
             // Check if user has a chatbot and add if yes
-            if (user.url !== undefined) {
+            if (user.url !== null) {
                 const chatbot = new chat.ChatBot();
-                await chatbot.initialize(user.url, user);
+                    let undef;
+                    await chatbot.initialize(undef, user);
+                    console.log("Detected user with chatbot");
             }
         } catch(err) { throw err; } 
         console.log(user)

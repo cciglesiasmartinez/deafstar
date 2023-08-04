@@ -47,7 +47,7 @@
         const text = webSocketInput.value.trim();
         if (text !== '') {
           const msg = {
-            origin: userData.token,
+            origin: userData.handler,
             data: text,
           }
           ws.send(JSON.stringify(msg));

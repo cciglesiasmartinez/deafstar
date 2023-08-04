@@ -60,11 +60,11 @@ class DB {
     // Checking users fucntion
     getUsers(callback) {
         this.connect();
-        const query = 'SELECT handler, name, email, token  FROM users';
+        const query = 'SELECT id, handler, name, email, token, url, chat_id  FROM users';
         this.connection.query(query, (error, results) => {
-            if (error) throw logger.error(err);
+            if (error) throw logger.error(error);
             const users = results.map((row) => {
-                const user = new User(row.token, row.handler, row.name, row.email, row.url, row.chat_id);
+                const user = new User(row.id, row.token, row.handler, row.name, row.email, row.url, row.chat_id);
                 return user;
             });
             callback(users);
@@ -202,7 +202,8 @@ class DB {
 
 // User class (repeating code, must be deleted later)
 class User {
-    constructor(token, handler, name, email, url, chatId) {
+    constructor(id, token, handler, name, email, url, chatId) {
+        this.id = id;
         this.token = token;
         this.handler = handler;
         this.name = name;

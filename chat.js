@@ -46,8 +46,10 @@ class ChatBot {
         this.index = undefined;
     }
     // Helper method to check if user currently has a chatbot
-    hasChatbotId(){
-        if (user.chat_id !== undefined) {
+    hasChatbotId(user){
+        console.log("ESTO SE LLAMA???????????????????????");
+        console.log("")
+        if (user.chatId !== null) {
             return true;
         } else { return false; }
     }
@@ -58,18 +60,36 @@ class ChatBot {
         const values = [ this.url ];
         database.makeQuery(query,values)
     }
+    async updateSQL(id, url, chatId) {
+        try {
+            const query = `
+            UPDATE users SET url = ?,
+            chat_id = ? WHERE id = ?
+            `;
+            const values = [ url, chatId, id ];
+            await database.makeQuery(query,values);
+        } catch(err) { throw (err) }
+    }
     // Init the scraping
     async initialize(url, user) {
+        console.log("INITIALIZE() CALLED");
+        console.log("User is" + user);
         // Look if there's id, if not give one
-        if (this.hasChatbotId()) {
-            // Got it
-            this.chatId = user.chat_id;
+        if (this.hasChatbotId(user)) {
+            console.log('MSG YEAH');
+            // Got user with chatBot!
+            this.chatId = user.chatId;
             this.userId = user.id;
-            this.namespace = user.name;
+            this.namespace = user.handler;
             this.url = user.url;
+            const pinecone = await this.PineconeInit();
+            this.index = pinecone;
             this.vectors = undefined; // getUserVectors(user.id);
-
         } else {
+            // Basic object data
+            this.chatId = v4();
+            this.userId = user.id;
+            this.namespace = user.handler;
             // Create Crawler instance and init the crawling process
             const crawler = new Crawler(url);
             let urlData = await crawler.start();
@@ -88,15 +108,13 @@ class ChatBot {
             // Upsert the vectors into our index
             urlData = await this.upsertEmbeddings(pinecone,urlData,100);
             console.log("ARRIVING AT CRITICAL POINT!!!!");
+            this.url = url;
+            user.url = url;
+            user.chatId = this.chatId;
+            await this.updateSQL(user.id, user.url, user.chatId);
         }
-        // Add url to user and set namespace properly
-        this.namespace = user.handler;
-        this.userId = await database.getUserId(user.handler);
-        user.url = url;
-        user.chat_id = v4();
-
         user.addChatBot(this);
-        console.log(this);
+        console.log(user);
     }
     // Normalize URL data
     async normalizeCrawledData(pages) {
@@ -171,7 +189,7 @@ class ChatBot {
     // Generate vector embeddings 
     async generateVectorEmbedding(data) {
         const result = [];
-        const delay = 1000;
+        const delay = 300;
         let i = 0;
         for ( let page of data ) {
             let id = v4(); // Keep an eye on this, remote possibility of collision
@@ -192,7 +210,7 @@ class ChatBot {
             result.push(v);
             if ( i < data.length - 1) {
                 // Wait for delay before executing next iteration
-                await new Promise(resolve => setTimeout(resolve,delay));
+                //await new Promise(resolve => setTimeout(resolve,delay));
             }
             i++;
             console.log('[OPENAI] Embeddings obtained: ' + i);
@@ -210,6 +228,8 @@ class ChatBot {
     }
     // Check if index already exists, create it if it doesn't
     async checkOrCreateIndex(pinecone) {
+        console.log(pinecone);
+        console.log("CALLING CHECK-OR-CREATE")
         const indexes = await pinecone.listIndexes();
         if (!indexes.includes(this.indexName)) {
             await pinecone.createIndex({
@@ -251,7 +271,7 @@ class ChatBot {
             }});
             // Waiting for the next batch
             if (i + batchSize < data.length) {
-                await new Promise((resolve) => setTimeout(resolve, delay));
+                //await new Promise((resolve) => setTimeout(resolve, delay));
             }
             console.log("[PINECONE] Upserted batches: " + i + batchSize); 
             console.log("[PINECONE] Batches left: "  + (data.length - (i + batchSize)));   
@@ -273,13 +293,19 @@ class ChatBot {
         //const index = this.index;
         //console.log(this.index);
         const index = await this.checkOrCreateIndex(this.index);
-        const related = await index.query({queryRequest:{
-            topK: 2,
-            vector: embed,
-            namespace: this.namespace,
-            includeMetadata: true,
-        }});
-        //console.log(related.matches[0,1].metadata);
+        console.log("GOOOOOOOOOOOOOOOOOT INDEX!!!!!!!!!!!!!!!!!!");
+        console.log(this.index);
+        let related;
+        try { 
+            related = await index.query({queryRequest:{
+                topK: 2,
+                vector: embed,
+                namespace: this.namespace,
+                includeMetadata: true,
+            }});
+            console.log(related);
+        } catch (err) { throw err }
+        console.log(related.matches[0,1].metadata);
         console.log('Answer this question: ' + prompt + '. With this context: ' 
             + related.matches[0].metadata.text + ' ' + related.matches[1].metadata.text);
         //console.log("[CHAT] Generating text for prompt...");
@@ -308,6 +334,75 @@ async function generateText(prompt) {
 }
 
 //==============================================================================
+
+async function upsertEmbeddings(pinecone,data,batchSize) {
+    console.log("[PINECONE] Upserting process...");
+    let result;
+    let namespace = 'volvat';
+    const delay = 1000;
+    const index = await checkOrCreateIndex(pinecone);
+    for (let i = 0; i < data.length; i += batchSize) {
+        console.log("FIRST ITERATION")
+        const iEnd = Math.min(data.length, i + batchSize);
+        const metaBatch = data.slice(i, iEnd);
+        const idsBatch = metaBatch.map((x) => x.id);
+        const embeds = metaBatch.map((x) => x.embedding);
+        const metaBatchForUpsert = metaBatch.map((x) => ({
+            title: x.metadata.title,
+            text: x.metadata.text,
+            url: x.metadata.url,
+        }));
+        const toUpsert = idsBatch.map((id, idx) => ({
+            id,
+            values: embeds[idx],
+            metadata: metaBatchForUpsert[idx],
+        }));
+        console.log(toUpsert);
+        try { 
+            result = await index.upsert( {
+                upsertRequest: {
+                    vectors: toUpsert,
+                    namespace: namespace,
+            }});
+        }
+        catch (err) { throw err; }
+        
+        // Waiting for the next batch
+        if (i + batchSize < data.length) {
+            await new Promise((resolve) => setTimeout(resolve, delay));
+        }
+        console.log("[PINECONE] Upserted batches: " + i); 
+        console.log("[PINECONE] Batches left: "  + + (data.length - i));   
+    }
+    
+    console.log(result);
+    return result;
+}
+
+    // Initialize Pinecone
+    async function PineconeInit() {
+        const pinecone = new PineconeClient({ 
+            apiKey: pineconeApiKey, environment: pineconeEnvironment 
+        });
+        await pinecone.init({apiKey: pineconeApiKey, environment: pineconeEnvironment});
+        return pinecone;
+    }
+    // Check if index already exists, create it if it doesn't
+    async function checkOrCreateIndex(pinecone) {
+        const indexes = await pinecone.listIndexes();
+        if (!indexes.includes('digitalai')) {
+            await pinecone.createIndex({
+                createRequest: {
+                    name: 'digitalai',
+                    dimension: 1536,
+                    metric: 'dotproduct'
+                }});
+        }
+        const index = pinecone.Index(this.indexName);
+        return index;
+    }
+
+
 
 async function normalizeCrawledData(pages) {
     const result = [];
@@ -419,5 +514,7 @@ module.exports = {
     normalizeCrawledData,
     chunkData,
     generateVectorEmbedding,
+    upsertEmbeddings,
+    PineconeInit,
     ChatBot,
 };
