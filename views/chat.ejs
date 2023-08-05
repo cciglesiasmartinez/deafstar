@@ -1,47 +1,66 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <!-- Head element, containing charset, css stylesheets... -->
   <meta charset="UTF-8">
-  <title>ChatBot</title>
+  <link rel="stylesheet" href="/stylesheets/main_stylesheet.css" />
+  <link rel="stylesheet" href="/stylesheets/cassie.css" />
+  <title>ChatBot <%- user.handler %></title>
 </head>
-<body>
-  <div id="webSocket">
-    <p>
-      <div id="webSocketOutput"></div>
-      <input id="webSocketInput" type="text" placeholder="Send..." autofocus>
-    </p>
-  </div>
+<body class="flex flex-auto justify-center items-center font-sans">
+    <!-- Chat block  -->
+    <div id="webSocket" class="w-2/5 flex flex-col justify-start items-start pt-2 mb-5">
+      <div id="webSocketOutput" class="w-full min-w-full"></div>
+      <input class="w-full w-full py-[10px] flex-grow md:py-4 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-xl shadow-xs dark:shadow-xs" id="webSocketInput" class="text-black" type="text" placeholder="Send..." autofocus>
+    </div>
+    <!-- Javascript code for the frontend -->
   <script>
     // Create sock instance
-    const ws = new WebSocket('wss://localhost:8008');
+    const ws = new WebSocket('wss://hiddenvault.ddns.net:8008');
 
+    // Get data through EJS and stringify it
     var userData = <%- JSON.stringify(user) %>;
 
-    // Handle events once conn is established
+    // Handle connections on open. Might be useful later.
     ws.onopen = () => {
       console.log('We got a connection');
     };
 
-    // Handle received events
+    // Get the output element
+    const webSocketOutput = document.getElementById('webSocketOutput');
+
+    // Handling incoming chat messages via websocket
     ws.onmessage = (event) => {
       let message = event.data;
       console.log('Msg received:', message);
       console.log(JSON.parse(message));
       message = JSON.parse(message);
-      webSocketOutput.innerHTML += 'AI: ' + message.data + '<br>';
+      let content = message.data.response.content;
+      content = content.split('\n');
+      content = content.map((line) => { return '<p class="w-full">' + line + '</p>';}).join('');
+      webSocketOutput.innerHTML += '\
+        <div class="rendered_message p-2  py-2 w-full min-w-full flex flex-row justify-start items-start pt-2 \
+        text-gray-900 dark:text-gray-100 border-b border-black/10 dark:border-gray-900/50  dark:text-white dark:bg-gray-700 \
+        ">\
+          <div class="chat__user-icon--wrapper p-0.5 mr-1 w-9 rounded mr-1 flex flex-row justify-center items-center">\
+            <img src="/images/bot_temp_logo2.png">\
+          </div>\
+          <div class="chat__user-text--wrapper p-1 w-full">\
+            <p class=" leading-relaxed w-full">' + content + '</p>\
+            <p class=" leading-relaxed w-full"> Here are some links related that you could find useful: ' +  '<a href="' + message.data.urls[0] + '"  style="color: lightblue" target="_blank">' +  message.data.urls[0] + '</a>, ' + '<a href="' +  message.data.urls[1] + '" style="color: lightblue" target="_blank">' + message.data.urls[1] + '</a>' + '<br>' + '</p>\
+          </div>\
+        </div>';
     };
 
-    // Handle close event
+    // Handle close event. Not useful right now.
     ws.onclose = () => {
       console.log('Connection closed');
     };
 
-    // Showing output
-    const webSocketOutput = document.getElementById('webSocketOutput');
-
-    // Code for capturing input
+    // Get the input element
     const webSocketInput = document.getElementById('webSocketInput');
     
+    // Handle messages sent to chatbot
     webSocketInput.addEventListener('keydown', (event) => {
       if (event.key === 'Enter') {
         const text = webSocketInput.value.trim();
@@ -51,7 +70,18 @@
             data: text,
           }
           ws.send(JSON.stringify(msg));
-          webSocketOutput.innerHTML += 'You: ' + msg.data + '<br>';
+          webSocketOutput.innerHTML += '\
+            <div class="user_message rendered_message p-2 w-full min-w-full flex flex-row justify-start items-start pt-2 \
+            w-full py-[10px] flex-grow md:py-4 md:pl-4 relative border border-black/10 dark:border-gray-900/50 bg-gray-900 shadow-xs dark:shadow-xs \
+            "> \
+              <div class="chat__user-icon--wrapper p-0.5 mr-1 w-9 bg-gray-700 rounded mr-1 flex flex-row justify-center items-center">\
+                <img src="/images/user_tem_icon2.png">\
+              </div>\
+              <div class="chat__user-text--wrapper p-1 w-full">\
+                <p class=" w-full">' + msg.data + '</p>\
+              </div>\
+            </div>';
+
           webSocketInput.value = '';
         }
       }
