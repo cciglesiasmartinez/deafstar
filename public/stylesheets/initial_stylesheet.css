@@ -1,0 +1,75 @@
+body {
+  width: 100vw;
+  height: 100vh;
+  color: #ededf0;
+  background: rgb(68, 70, 84);
+  background: linear-gradient(
+    180deg,
+    rgba(68, 70, 84, 1) 0%,
+    rgba(68, 70, 84, 1) 85%,
+    rgba(53, 55, 64, 1) 100%
+  );
+}
+
+body * {
+  /*border: 1px solid white;*/
+}
+button {
+  /*background-color: #00a17f;*/
+}
+
+#login-container * {
+  /*border: 1px solid white;*/
+}
+
+#login-container__logo {
+  height: 4%;
+  width: 4%;
+}
+
+#client-info__container {
+  /*border: 1px solid purple;*/
+  height: 10%;
+}
+
+#chatControl {
+  /*border: 1px solid purple;*/
+}
+
+#chat_container {
+  /*border: 1px solid green;*/
+}
+
+.chat__user-icon--wrapper {
+  min-width: 3rem;
+}
+
+.chat__user-text--wrapper {
+}
+
+.user_message {
+  background-color: #343541 !important;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#webSocket {
+}
+
+#client-panel__container {
+}
+
+#cleint-panel__data {
+}
+
+#client-panel__controls {
+}
+
+#webSocketOutput {
+  height: 64vh;
+  max-height: 64vh;
+  overflow-y: scroll;
+  padding-right: 0.75rem;
+}
