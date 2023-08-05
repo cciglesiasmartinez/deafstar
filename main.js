@@ -210,7 +210,7 @@ app.get('/login', isAlreadyAuthenticated, (req, res) => {
     res.render('login');
 });
 
-// Placeholder for login page
+// Placeholder for main page
 app.get('/', (req,res) => {
     const content = "Coming soon."
     res.render('index', { content });
