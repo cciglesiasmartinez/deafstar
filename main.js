@@ -32,6 +32,9 @@ const secureHttpd = https.createServer(sslFiles, app);
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 
+// This will allow the template engine to ue stuff (img/css) in the "/public" folder
+app.use(express.static(__dirname + "/public"));
+
 // Main class (this name *has to* be changed)
 class Main {
     constructor() {
@@ -295,7 +298,7 @@ const wsServer = new ws.Server({server: secureHttpd});
 
 wsServer.on('connection',  (ws) => {
     logger.info("[WEBSOCKET] Client connected"); 
-    const greet = {origin: "server", data:"Hello, how can I help you?"};
+    const greet = {origin: "server", data: { response: { content: "Hello, how can I help you?" } } };
     ws.send(JSON.stringify(greet));
     ws.on('message', async (msg) => {
         try {
