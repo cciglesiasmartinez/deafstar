@@ -1,23 +1,59 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <title>Login</title>
-</head>
-<body>
-  <h1>Login</h1>
-  <form method="POST" action="/login">
-    <div>
-      <label for="username">User:</label>
-      <input type="text" id="username" name="username">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/stylesheets/main_stylesheet.css" />
+    <title>Login</title>
+  </head>
+  <body class="flex flex-auto justify-center items-center font-sans">
+    <div
+      id="login-container"
+      class="container sm flex flex-col flex-auto justify-center items-center"
+    >
+      <img
+        id="login-container__logo"
+        src="/images/bot_temp_logo2.png"
+        class="mb-4"
+      />
+
+      <h1 id="login-container__text" class="mb-2">Welcome to DigitalAI.no</h1>
+      <h2 id="login-container__text" class="mb-10">
+        Log in with your DigitalAI account to continue
+      </h2>
+
+      <form
+        method="POST"
+        action="/login"
+        class="flex flex-col flex-auto justify-center items-center"
+      >
+        <div>
+          <label for="username" class="mb-5">User:</label>
+          <input
+            class="container sm border-1 rounded-sm text-black p-0.5"
+            type="text"
+            id="username"
+            name="username"
+            placeholder="user"
+          />
+        </div>
+        <div class="mt-8 mb-5">
+          <label for="password" class="mb-5">Pass:</label>
+          <input
+            class="container sm border-1 rounded-sm text-black p-0.5"
+            type="password"
+            id="password"
+            name="password"
+            placeholder="password"
+          />
+        </div>
+        <button
+          class="bg-green-500 hover:bg-green-900 text-white font-bold py-2 px-4 rounded"
+          type="submit"
+        >
+          Log In
+        </button>
+      </form>
     </div>
-    <div>
-      <label for="password">Pass:</label>
-      <input type="password" id="password" name="password">
-    </div>
-    <div>
-      <button type="submit">Log In</button>
-    </div>
-  </form>
-</body>
+    <!-- END OF LOGIN CONTAINER -->
+  </body>
 </html>
