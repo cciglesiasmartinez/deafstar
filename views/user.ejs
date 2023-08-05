@@ -73,6 +73,12 @@
       console.log('Connection closed');
     };
 
+    // Defining scrolldown functionality
+    const container = document.getElementById("webSocketOutput");
+    function scrollDown() {
+      container.scrollTop = container.scrollHeight;
+    }
+
     // Get ouput
     const webSocketOutput = document.getElementById('webSocketOutput');
 
@@ -88,7 +94,7 @@
         return '<p class="w-full">' + line + '</p>';}).join('');
       webSocketOutput.innerHTML += '\
         <div class="rendered_message p-2  py-2 w-full min-w-full flex flex-row justify-start items-start pt-2 \
-        text-gray-900 dark:text-gray-100 border-b border-black/10 dark:border-gray-900/50  dark:text-white dark:bg-gray-700 \
+        text-gray-900 dark:text-gray-100 border-b border-black/10  dark:text-white dark:bg-gray-700 \
         ">\
           <div class="chat__user-icon--wrapper p-0.5 mr-1 w-9 rounded mr-1 flex flex-row justify-center items-center">\
             <img src="/images/bot_temp_logo2.png">\
@@ -98,6 +104,7 @@
             <p class=" leading-relaxed w-full"> Here are some links related that you could find useful: ' +  '<a href="' + message.data.urls[0] + '"  style="color: lightblue" target="_blank">' +  message.data.urls[0] + '</a>, ' + '<a href="' +  message.data.urls[1] + '" style="color: lightblue" target="_blank">' + message.data.urls[1] + '</a>' + '<br>' + '</p>\
           </div>\
         </div>';
+        scrollDown();
     };
 
     // Handling sent messages via websocket
@@ -128,6 +135,7 @@
               </div>\
             */
           webSocketInput.value = '';
+          scrollDown();
         }
       }
     });
