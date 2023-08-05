@@ -305,18 +305,40 @@ class ChatBot {
             }});
             console.log(related);
         } catch (err) { throw err }
-        console.log(related.matches[0,1].metadata);
-        console.log('Answer this question: ' + prompt + '. With this context: ' 
-            + related.matches[0].metadata.text + ' ' + related.matches[1].metadata.text);
+        let prompty = [
+            {
+                role: "system",
+                content: "You are a chatbot that is an important part of the Eurofins support team, your name is Eurofins-Bot. Everyone who talks to you is a potential customer, and your job is to answer them with messages that are easy to understand. Make sure that you are friendly with everyone who has a conversation with you, and try to help them as best as possible.",
+            }, 
+            {
+                role: "assistant", 
+                content: related.matches[0].metadata.text + ' ' + related.matches[1].metadata.text,
+            },
+            {
+                role: "user",
+                content: prompt,
+            }
+        ];
+        console.log(prompty);
+        //console.log(related.matches[0,1].metadata);
+        //console.log('Answer this question: ' + prompt + '. With this context: ' 
+        //    + related.matches[0].metadata.text + ' ' + related.matches[1].metadata.text);
         //console.log("[CHAT] Generating text for prompt...");
-        const response = await openai.createCompletion({
-            model: 'text-davinci-003',
-            prompt: 'Answer this question: ' + prompt + '. With this context: ' 
-            + related.matches[0].metadata.text + ' ' + related.matches[1].metadata.text,
-            max_tokens: 300,
+        const response = await openai.createChatCompletion({
+            model: 'gpt-3.5-turbo',
+            messages: prompty,
+            temperature: 1,
+            //max_tokens: 300,
+            //temperature: 0,
         });
-        console.log(prompt);
-        const text = response.data.choices[0].text.replace(/\n/g,"");
+        //console.log(prompt);
+        //const text = response.data.choices[0].message;
+        const text = {
+            response: response.data.choices[0].message,
+            urls: [ related.matches[0].metadata.url, related.matches[1].metadata.url ]
+        }
+        console.log(text);
+        //const text = response.data.choices[0].text.replace(/\n/g,"");
         return text;
     }
 }
