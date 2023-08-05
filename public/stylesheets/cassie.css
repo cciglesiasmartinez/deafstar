@@ -1,0 +1,17 @@
+/* Those are my tweaks, please put them in TailwindCSS format <3 */
+
+/* This goes for the question and answers texts */
+.rendered_message > * > p {
+    padding: 0.25rem;
+    line-height: 1.65rem;
+}   
+
+.chat__user-text--wrapper {
+    padding: 0rem 1rem;
+}
+
+/* This for the answer div */
+.rendered_message:not(.user_message) {
+    background-color: inherit !important;
+    padding: 1rem;
+}
