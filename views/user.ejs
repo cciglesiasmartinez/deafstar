@@ -1,43 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <!-- Header content, charsets, title and CSS styles-->
   <meta charset="UTF-8">
+  <link rel="stylesheet" href="/stylesheets/main_stylesheet.css" />
+  <link rel="stylesheet" href="/stylesheets/cassie.css" />
   <title>Client Info</title>
 </head>
-<body>
-  <h1>Client Info</h1>
-  <p><%= user.getInfo() %></p>
-  <div id="chatControl">
-    <p>
-      <form id="crawlForm" method="POST" action="/crawl">
-        <label for="url">URL:</label>
-        <input id="url" type="text" placeholder="Write URL to crawl." name="url" autofocus>
-        <button id="crawlButton" type="submit">Crawl!</button>
-      </form>
-    </p>
+<body class="flex flex-auto flex-col justify-start items-center font-sans h-screen">
+  <!-- Upper panel with client info, crawl options, and logout button -->
+  <div id="upper_panel__container" class="w-2/5 mt-8 flex flex-row justify-start items-start p-2 mb-5 rounded-lg border bg-gray-600">
+    <div id="client-panel__container" class="h-full w-2/4  flex flex-row justify-start items-start ">
+      <!-- Client info -->
+      <div id="client-panel__data" class="flex flex-col justify-start items-start">
+        <h1 class="text-2xl mb-1"  >Client Info</h1>
+        <p ><%= user.getInfo() %></p>
+        <!-- Crawl web controls -->
+        <div id="chatControl">
+          <p>
+            <form id="crawlForm" method="POST" action="/crawl">
+              <label for="url">URL:</label>
+              <input id="url" type="text" placeholder=" Write URL to crawl." name="url" style="background-color: #4B5563; border-radius: 5px">
+              <button id="crawlButton" type="submit">Crawl!</button>
+            </form>
+          </p>
+        </div>
+        <!-- Once website has been crawled, here is the generated link -->
+        <% if ( user.chatbot !== undefined ) { %> 
+          <p>Click <a style="color: lightblue" target="_blank" href="https://localhost:8008/chat/<%= user.chatbot.chatId %>"> here </a> for your chatbot link.</a></p>
+        <% } %>
+      </div>
+    </div>
+    <!-- Logout Button -->
+    <div id="client-panel__controls" class="h-full w-2/4 flex flex-row justify-end items-center">
+      <div id="logout" >
+        <form method="GET" action="/logout">
+          <button type="submit" class="bg-green-500 hover:bg-green-900 text-white font-bold py-2 px-4 rounded" >Logout</button>
+        </form>
+      </div>
+    </div>
   </div>
-  <!--
-  <div id="webSocket">
-    <p>
-      <div id="webSocketOutput"></div>
-      <input id="webSocketInput" type="text" placeholder="Send..." autofocus>
-    </p>
+  <!-- Actual chat -->
+  <div id="webSocket" class="w-2/5 flex flex-col justify-start items-start pt-2 mb-5">
+    <div id="webSocketOutput" class="w-full min-w-full"></div>
+    <input class="w-full w-full py-[10px] flex-grow md:py-4 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-xl shadow-xs dark:shadow-xs" id="webSocketInput" class="text-black" type="text" placeholder="Send..." autofocus>
   </div>
-  -->
-  <div id="logout">
-    <form method="GET" action="/logout">
-      <button type="submit">Logout</button>
-    </form>
-  </div>
-  <% if ( user.chatbot !== undefined ) { %> 
-    <p>Your chatbot link is <a href="https://localhost:8008/chat/<%= user.chatbot.chatId %>">https://localhost:8008/chat/<%= user.chatbot.chatId %></a></p>
-  <% } %>
+  <!-- Javascript code for the frontend -->
   <script>
-    // Adding "Loading text"
+    // FWhile rawling right now it just adds a text, in the future we would need a progress bar
     const crawlFrom = document.getElementById('crawlForm');
-
     crawlFrom.addEventListener('submit', (event) => {
-      console.log("BUTTON PRESSED!!!!!!!!!");
       const textNode = document.createElement('p');
       textNode.innerHTML = 'Please wait until we process your URL...';
       const targetNode = document.getElementById('chatControl');
@@ -47,33 +59,49 @@
     // Create sock instance
     const ws = new WebSocket('wss://localhost:8008');
 
+    // Collect data from backend and put in text format.
     var userData = <%- JSON.stringify(user) %>;
 
     // Handle events once conn is established
+    // Not of any use right now, but let it be
     ws.onopen = () => {
       console.log('We got a connection');
     };
 
-    // Handle received events
+    // Handle close event, not of any use right now.
+    ws.onclose = () => {
+      console.log('Connection closed');
+    };
+
+    // Get ouput
+    const webSocketOutput = document.getElementById('webSocketOutput');
+
+    // Handling received messages via websocket
     ws.onmessage = (event) => {
       let message = event.data;
       console.log('Msg received:', message);
       console.log(JSON.parse(message));
       message = JSON.parse(message);
-      webSocketOutput.innerHTML += 'AI: ' + message.data + '<br>';
+      let content = message.data.response.content;
+      content = content.split('\n');
+      content = content.map((line) => {
+        return '<p class="w-full">' + line + '</p>';}).join('');
+      webSocketOutput.innerHTML += '\
+        <div class="rendered_message p-2  py-2 w-full min-w-full flex flex-row justify-start items-start pt-2 \
+        text-gray-900 dark:text-gray-100 border-b border-black/10 dark:border-gray-900/50  dark:text-white dark:bg-gray-700 \
+        ">\
+          <div class="chat__user-icon--wrapper p-0.5 mr-1 w-9 rounded mr-1 flex flex-row justify-center items-center">\
+            <img src="/images/bot_temp_logo2.png">\
+          </div>\
+          <div class="chat__user-text--wrapper p-1 w-full">\
+            <p class=" leading-relaxed w-full">' + content + '</p>\
+            <p class=" leading-relaxed w-full"> Here are some links related that you could find useful: ' +  '<a href="' + message.data.urls[0] + '"  style="color: lightblue" target="_blank">' +  message.data.urls[0] + '</a>, ' + '<a href="' +  message.data.urls[1] + '" style="color: lightblue" target="_blank">' + message.data.urls[1] + '</a>' + '<br>' + '</p>\
+          </div>\
+        </div>';
     };
 
-    // Handle close event
-    ws.onclose = () => {
-      console.log('Connection closed');
-    };
-
-    // Showing output
-    const webSocketOutput = document.getElementById('webSocketOutput');
-
-    // Code for capturing input
+    // Handling sent messages via websocket
     const webSocketInput = document.getElementById('webSocketInput');
-    
     webSocketInput.addEventListener('keydown', (event) => {
       if (event.key === 'Enter') {
         const text = webSocketInput.value.trim();
@@ -83,7 +111,22 @@
             data: text,
           }
           ws.send(JSON.stringify(msg));
-          webSocketOutput.innerHTML += 'You: ' + msg.data + '<br>';
+          webSocketOutput.innerHTML += '\
+            <div class="user_message rendered_message p-2 w-full min-w-full flex flex-row justify-start items-start pt-2 \
+            w-full py-[10px] flex-grow md:py-4 md:pl-4 relative border border-black/10 dark:border-gray-900/50 bg-gray-900 shadow-xs dark:shadow-xs \
+            "> \
+              <div class="chat__user-icon--wrapper p-0.5 mr-1 w-9 bg-gray-700 rounded mr-1 flex flex-row justify-center items-center">\
+                <img src="/images/user_tem_icon2.png">\
+              </div>\
+              <div class="chat__user-text--wrapper p-1 w-full">\
+                <p class=" w-full">' + msg.data + '</p>\
+              </div>\
+            </div>';
+            /* I'm not happy with the aesthetic result, so I commented it
+              <div class="chat__user-icon--wrapper p-0.5 mr-1 w-9 bg-blue-700 rounded mr-1 flex flex-row justify-center items-center">\
+                <span class="">You </span>\
+              </div>\
+            */
           webSocketInput.value = '';
         }
       }
