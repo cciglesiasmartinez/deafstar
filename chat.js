@@ -280,7 +280,7 @@ class ChatBot {
         return result;
     }
     // Generate prompt and answer
-    async generateText(prompt,user) {
+    async generateText(prompt,user, debug) {
         //console.log("GENERATE TEXT PETITION REC, USER IS " + JSON.stringify(user));
         const res = await openai.createEmbedding({
             input: prompt,
@@ -308,7 +308,7 @@ class ChatBot {
         let prompty = [
             {
                 role: "system",
-                content: "You are a chatbot that is an important part of the Eurofins support team, your name is Eurofins-Bot. Everyone who talks to you is a potential customer, and your job is to answer them with messages that are easy to understand. Make sure that you are friendly with everyone who has a conversation with you, and try to help them as best as possible.",
+                content: user.systemMsg,
             }, 
             {
                 role: "assistant", 
@@ -327,16 +327,32 @@ class ChatBot {
         const response = await openai.createChatCompletion({
             model: 'gpt-3.5-turbo',
             messages: prompty,
-            temperature: 1,
+            temperature: user.temp,
             //max_tokens: 300,
             //temperature: 0,
         });
         //console.log(prompt);
         //const text = response.data.choices[0].message;
-        const text = {
-            response: response.data.choices[0].message,
-            urls: [ related.matches[0].metadata.url, related.matches[1].metadata.url ]
+        let text;
+        if (debug) {
+            let debugText = `DEBUG MODE\n CONTEXT RETRIEVED:\n ${related.matches[0].metadata.text} \n 
+            ${related.matches[1].metadata.text} \n 
+            ANSWER OFFERED: \n
+            `;
+            // Put debug text in its right place
+            response.data.choices[0].message.content = debugText + response.data.choices[0].message.content;
+            text = {
+                response: response.data.choices[0].message,
+                urls: [ related.matches[0].metadata.url, related.matches[1].metadata.url ]
+            };
+
+        } else {
+            text = {
+                response: response.data.choices[0].message,
+                urls: [ related.matches[0].metadata.url, related.matches[1].metadata.url ]
+            };
         }
+
         console.log(text);
         //const text = response.data.choices[0].text.replace(/\n/g,"");
         return text;
