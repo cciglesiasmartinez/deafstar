@@ -6,7 +6,7 @@
 const express = require('express');
 const ejs = require('ejs');
 const fs = require('fs');
-const https = require('https');
+const http = require('http');
 const ws = require('ws');
 const app = express();
 const crawler = require('./crawler.js');
@@ -26,7 +26,7 @@ const sslFiles = {
     cert: fs.readFileSync(__dirname + '/ssl/snakeoil.crt'),
     key: fs.readFileSync(__dirname + '/ssl/snakeoil.key'),
 }
-const secureHttpd = https.createServer(sslFiles, app);
+const secureHttpd = http.createServer(sslFiles, app);
 
 // Setting template engine
 app.set('view engine', 'ejs');
@@ -177,7 +177,49 @@ app.post('/crawl', isAuthenticated, async (req, res) => {
         res.redirect('/profile?');
     }
 });
-  
+
+// These two routes (temp and system) should be merged <3
+ 
+// System route
+app.post('/system', isAuthenticated, async (req, res) => {
+    //Logic for changing the system msg
+    try {
+        console.log(req.body.url);
+        const user = mainClass.getUser(req.user.handler);
+        user.systemMsg = req.body.url;
+        console.log(user)
+        const query = `
+            UPDATE users SET system_msg = ? WHERE id = ?
+        `;
+        const values = [req.body.url, user.id];
+        await db.makeQuery(query,values);
+        res.redirect('/profile');
+    } catch (err) {
+        console.error(err);
+        res.redirect('/profile?');
+    }
+});
+
+// Temperature route
+app.post('/temp', isAuthenticated, async (req, res) => {
+    //Logic for changing the temperature
+    try {
+        console.log(req.body.url);
+        const user = mainClass.getUser(req.user.handler);
+        user.temp = Number(req.body.url);
+        console.log(user)
+        const query = `
+            UPDATE users SET temp = ? WHERE id = ?
+        `;
+        const values = [req.body.url, user.id];
+        await db.makeQuery(query,values);
+        res.redirect('/profile');
+    } catch (err) {
+        console.error(err);
+        res.redirect('/profile?');
+    }
+});
+
 // Logout route
 app.get('/logout', (req, res) => {
     req.logout(() => {console.log("Logged out");});
@@ -298,8 +340,8 @@ const wsServer = new ws.Server({server: secureHttpd});
 
 wsServer.on('connection',  (ws) => {
     logger.info("[WEBSOCKET] Client connected"); 
-    const greet = {origin: "server", data: { response: { content: "Hello, how can I help you?" } } };
-    ws.send(JSON.stringify(greet));
+    //const greet = {origin: "server", data: { response: { content: "Hello, how can I help you?" } } };
+    //ws.send(JSON.stringify(greet));
     ws.on('message', async (msg) => {
         try {
             msg = JSON.parse(msg);
@@ -320,11 +362,22 @@ wsServer.on('connection',  (ws) => {
                 //console.log(chatbot);
                 console.log("Got the bot");
                 console.log(user);
-                let text = await chatbot.generateText(msg.data, user);
-                const resMsg = {
-                    origin: "server",
-                    data: text,
+                let resMsg;
+                if ( msg.debug == true ) {
+                    let text = await chatbot.generateText(msg.data, user, msg.debug);
+                    resMsg = {
+                        origin: "server",
+                        data: text,
+                    }
+                } else {
+                    msg.debug = false;
+                    let text = await chatbot.generateText(msg.data, user, msg.debug);
+                    resMsg = {
+                        origin: "server",
+                        data: text,
+                    }
                 }
+
                 console.log(resMsg);
                 ws.send(JSON.stringify(resMsg));
             }
