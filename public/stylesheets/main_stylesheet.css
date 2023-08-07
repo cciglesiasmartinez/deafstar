@@ -881,7 +881,7 @@ video {
 }
 
 #webSocketOutput {
-  height: 64vh;
+  height: 54vh;
   max-height: 64vh;
   overflow-y: scroll;
   padding-right: 0.75rem;
