@@ -60,11 +60,11 @@ class DB {
     // Checking users fucntion
     getUsers(callback) {
         this.connect();
-        const query = 'SELECT id, handler, name, email, token, url, chat_id  FROM users';
+        const query = 'SELECT id, handler, name, email, token, url, chat_id, system_msg, temp  FROM users';
         this.connection.query(query, (error, results) => {
             if (error) throw logger.error(error);
             const users = results.map((row) => {
-                const user = new User(row.id, row.token, row.handler, row.name, row.email, row.url, row.chat_id);
+                const user = new User(row.id, row.token, row.handler, row.name, row.email, row.url, row.chat_id, row.system_msg, row.temp);
                 return user;
             });
             callback(users);
@@ -94,7 +94,9 @@ class DB {
                 token VARCHAR(255),
                 handler VARCHAR(255),
                 url VARCHAR(255),
-                chat_id VARCHAR(255)
+                chat_id VARCHAR(255),
+                system_msg TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+                temp INT
             )
         `;
         this.connection.query(createUsersTable, (error, results) => {
@@ -117,6 +119,7 @@ class DB {
             if (error) throw logger.error(error);
             else { logger.info("[MySQL] Vectors table successfully created.") }
         });
+        this.disconnect();
     }
     // Add a vector attached to an user ID
     async addVector(vector, userId) {
@@ -202,7 +205,7 @@ class DB {
 
 // User class (repeating code, must be deleted later)
 class User {
-    constructor(id, token, handler, name, email, url, chatId) {
+    constructor(id, token, handler, name, email, url, chatId, systemMsg, temp) {
         this.id = id;
         this.token = token;
         this.handler = handler;
@@ -210,6 +213,8 @@ class User {
         this.email = email;
         this.url = url;
         this.chatId = chatId;
+        this.systemMsg = systemMsg;
+        this.temp = temp;
         this.chatbot = undefined;
     }
     // Returning client info
