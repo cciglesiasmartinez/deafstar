@@ -10,24 +10,38 @@
 <body class="flex flex-auto flex-col justify-start items-center font-sans h-screen">
   <!-- Upper panel with client info, crawl options, and logout button -->
   <div id="upper_panel__container" class="w-2/5 mt-8 flex flex-row justify-start items-start p-2 mb-5 rounded-lg border bg-gray-600">
-    <div id="client-panel__container" class="h-full w-2/4  flex flex-row justify-start items-start ">
+    <div id="client-panel__container" class="h-full w-3/5  flex flex-row justify-start items-start ">
       <!-- Client info -->
       <div id="client-panel__data" class="flex flex-col justify-start items-start">
-        <h1 class="text-2xl mb-1"  >Client Info</h1>
-        <p ><%= user.getInfo() %></p>
+        <!-- <h1 class="text-2xl mb-1"  >Client Info</h1> -->
+        <p class="p-1"><b>Name: </b> <%- user.name %> <b>URL:</b> <%- user.url %></p>
         <!-- Crawl web controls -->
         <div id="chatControl">
-          <p>
-            <form id="crawlForm" method="POST" action="/crawl">
-              <label for="url">URL:</label>
-              <input id="url" type="text" placeholder=" Write URL to crawl." name="url" style="background-color: #4B5563; border-radius: 5px">
-              <button id="crawlButton" type="submit">Crawl!</button>
-            </form>
-          </p>
+          <form id="crawlForm" method="POST" class="p-1" action="/crawl">
+            <label for="url"><b>URL:</b></label>
+            <input id="url" type="text" placeholder=" Write URL..." name="url" style="background-color: #4B5563; border-radius: 5px">
+            <button id="crawlButton" type="submit">Crawl!</button>
+          </form>
         </div>
+        <div id="chatSystem">
+          <form id="chatSystemForm" class="p-1" method="POST" action="/system">
+            <label for="url"><b>System message:</b></label>
+            <input id="url" type="text" placeholder="Write here..." name="url" style="background-color: #4B5563; border-radius: 5px">
+            <button id="chatSystemButton" type="submit">Set!</button>
+          </form>
+        </div>
+        <p class="p-1"><b>Actual message is:</b> <%- user.systemMsg %></p>
+        <div id="chatTemperature">
+          <form id="chatTemperatureForm" class="p-1" method="POST" action="/temp">
+            <label for="url"><b>Temperature:</b></label>
+            <input id="url" type="text" placeholder="Write here..." name="url" style="background-color: #4B5563; border-radius: 5px">
+            <button id="chatTemperatureButton" type="submit">Set!</button>
+          </form>
+        </div>
+        <p class="p-1"><b>Actual temperature is:</b> <%- user.temp %></p>
         <!-- Once website has been crawled, here is the generated link -->
         <% if ( user.chatbot !== undefined ) { %> 
-          <p>Click <a style="color: lightblue" target="_blank" href="https://localhost:8008/chat/<%= user.chatbot.chatId %>"> here </a> for your chatbot link.</a></p>
+          <p class="p-1">Click <a style="color: lightblue" target="_blank" href="http://hiddenvault.ddns.net:8008/chat/<%= user.chatbot.chatId %>"> here </a> for your chatbot link.</a></p>
         <% } %>
       </div>
     </div>
@@ -47,7 +61,7 @@
   </div>
   <!-- Javascript code for the frontend -->
   <script>
-    // FWhile rawling right now it just adds a text, in the future we would need a progress bar
+    // While rawling right now it just adds a text, in the future we would need a progress bar
     const crawlFrom = document.getElementById('crawlForm');
     crawlFrom.addEventListener('submit', (event) => {
       const textNode = document.createElement('p');
@@ -57,7 +71,7 @@
     });
 
     // Create sock instance
-    const ws = new WebSocket('wss://localhost:8008');
+    const ws = new WebSocket('ws://localhost:8008');
 
     // Collect data from backend and put in text format.
     var userData = <%- JSON.stringify(user) %>;
@@ -115,6 +129,7 @@
         if (text !== '') {
           const msg = {
             origin: userData.handler,
+            debug: true,
             data: text,
           }
           ws.send(JSON.stringify(msg));
