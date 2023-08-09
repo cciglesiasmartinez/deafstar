@@ -628,6 +628,9 @@ video {
   margin-bottom: 2.5rem;
 }
 
+.mb-8 {
+  margin-bottom: 2rem;
+}
 .mb-2 {
   margin-bottom: 0.5rem;
 }
@@ -654,6 +657,14 @@ video {
 
 .flex {
   display: flex;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.bottom-0 {
+  bottom: 0;
 }
 
 .h-full {
@@ -830,6 +841,14 @@ video {
   padding-top: 0.5rem;
 }
 
+.pt-4 {
+  padding-top: 1rem;
+}
+
+.pb-4 {
+  padding-bottom:1rem;
+}
+
 .font-sans {
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
@@ -881,8 +900,8 @@ video {
 }
 
 #webSocketOutput {
-  height: 54vh;
-  max-height: 64vh;
+  /* height: 54vh; */
+  /* max-height: 64vh; */
   overflow-y: scroll;
   padding-right: 0.75rem;
 }
