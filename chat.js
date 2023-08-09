@@ -367,7 +367,7 @@ async function generateText(prompt) {
         max_tokens: 300,
     });
     console.log("BASIC GENERATION: " + prompt);
-    const text = response.data.choices[0].text.replace(/\n/g,"");
+    //const text = response.data.choices[0].text.replace(/\n/g,"");
     return text;
 }
 
