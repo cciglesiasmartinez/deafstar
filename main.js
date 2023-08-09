@@ -390,7 +390,38 @@ wsServer.on('connection',  (ws) => {
 });
 
 
-// Instancing class and retrieving users
+// For first time running
+
+db.createStructure();
+
+
+// Retrieving users
+
+db.getUsers((users) => {
+    users.forEach(async (user) => {
+        // Add the user
+        try {
+            mainClass.addUser(user);
+            // Check if user has a chatbot and add if yes
+            if (user.url !== null) {
+                const chatbot = new chat.ChatBot();
+                    /* This is really an ugly way to call initialize() without
+                     * passing an URL. I'd be open to suggestions: a different
+                     * function for this use case, maybe an object @param...
+                     */
+                    let undef; 
+                
+                    await chatbot.initialize(undef, user);
+                    console.log("Detected user with chatbot");
+            }
+        } catch(err) { throw err; } 
+        console.log(user)
+    });
+});
+
+
+
+// Ad hoc code for creating some initial users.
 /*
 const newUser = new database.User('password', 'volvat', 'Volvat Medisinske', 'mail@volvat.no');
 const newUser2 = new database.User('password', 'digitalai', 'DigitalAi', 'post@digitalai.no');
@@ -407,85 +438,4 @@ db.createUser(newUser2, (createdUser) => {
 db.createUser(newUser3, (createdUser) => {
     console.log('User created:', createdUser);
 });
-*/
-
-// For first time running
-
-db.createStructure();
-
-
-// Retrieving users
-
-db.getUsers((users) => {
-    users.forEach(async (user) => {
-        // Add the user
-        try {
-            mainClass.addUser(user);
-            // Check if user has a chatbot and add if yes
-            if (user.url !== null) {
-                const chatbot = new chat.ChatBot();
-                    let undef;
-                    await chatbot.initialize(undef, user);
-                    console.log("Detected user with chatbot");
-            }
-        } catch(err) { throw err; } 
-        console.log(user)
-    });
-});
-
-
-// Testing function
-
-
-// Instancing user and creating 
-/*
-const newUser = new User('01234', 'client1', 'Client #1', 'client1@mail.net');
-const newUser2 = new User('56789', 'client2', 'Client #2', 'client2@mail.net');
-
-
-db.createUser(newUser, (createdUser) => {
-    console.log('User created:', createdUser);
-});
-
-db.createUser(newUser2, (createdUser) => {
-    console.log('User created:', createdUser);
-});
-
-const testUser1 = new User("01234","client1", "Client #1", "client1@mail.net");
-const testUser2 = new User("56789","client2", "Client #2", "client2@mail.net");
-mainClass.addUser(testUser1);
-mainClass.addUser(testUser2);
-*/
-
-// New database using mysql2/promises
-/*
-const database = require('./db2.js');
-
-async function initDB() {
-    const dbConfig = {
-        host: '127.0.0.1',
-        user: 'root',
-        password: 'password',
-        database: 'deafstar',
-        port: 3306,
-        waitForConnections: true,
-        connectionLimit: 10,
-        queueLimit: 0
-    };
-
-    const db = new database.AsyncMySQLDB(dbConfig);
-    await db.createPool();
-
-    try {
-        const users = await db.getUsers();
-        users.forEach(user => {
-            console.log(user);
-    }); 
-    } catch (error) {
-        console.error('Error:', error.message);
-    } finally {
-        await db.closePool();
-    }
-}
-initDB();
 */
