@@ -346,17 +346,27 @@ wsServer.on('connection',  (ws) => {
         try {
             msg = JSON.parse(msg);
             console.log("[WEBSOCKET] Data from " + msg.origin + " received: " + msg.data);
+            console.log("VERSION WITHOUT CIENT")
             // Calling OpenAI API
             let user = mainClass.getUserByHandler(msg.origin);
             if ( user.chatbot === undefined) {
                 const response = await chat.generateText(msg.data);
+                console.log("THIS SHOULD BE SHOWING!!!");
+                const myRes = {
+                    response: { 
+                        role: undefined,
+                        content: response },
+                    urls: ["Unavailable", "Unavailable"]
+                }
+                console.log(response);
                 const resMsg = {
                     origin: "server",
-                    data: response,
+                    data: myRes,
                 }
                 console.log(resMsg);
                 ws.send(JSON.stringify(resMsg));
             } else {
+                console.log("ENTERING HERE WHILE I SHOULDNT");
                 console.log("[WEBSOCKET] Data from " + msg.origin + " received: " + msg.data);
                 let chatbot = user.chatbot;
                 //console.log(chatbot);
@@ -410,7 +420,6 @@ db.getUsers((users) => {
                      * function for this use case, maybe an object @param...
                      */
                     let undef; 
-                
                     await chatbot.initialize(undef, user);
                     console.log("Detected user with chatbot");
             }

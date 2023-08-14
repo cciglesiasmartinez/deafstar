@@ -122,7 +122,9 @@ class ChatBot {
         // Removing line breaks and filtering empty elements
         pages.forEach((page) => {
           const filteredContent = page.content
+            // This takes away tabs and line breaks
             .map(element => element.replace(/[\t\n]/g, ''))
+            // This deals with empty spaces
             .map(element => element.replace(/ {2,}/g, ''))
             .filter(element => element.trim() !== '');
             if (filteredContent.length > 0) {
@@ -132,6 +134,7 @@ class ChatBot {
         return result;
     }
     // Chunk URL data into manageable bits 
+    //RFR -1 
     async chunkData(pages, max_tokens) {
         const result = [];
         const enc = tiktoken.encodingForModel("text-davinci-003");
@@ -145,7 +148,7 @@ class ChatBot {
                 let currentTokensCount = 0;
                 const chunks = [];
                 for (const word of words) {
-                    const wordTokens = enc.encode(' ' + word).length;
+                    const wordTokens = enc.encode(' ' + word).length;njm
                     if (currentTokensCount + wordTokens <= max_tokens) {
                         currentChunk += ' ' + word;
                         currentTokensCount += wordTokens;
@@ -210,7 +213,7 @@ class ChatBot {
             result.push(v);
             if ( i < data.length - 1) {
                 // Wait for delay before executing next iteration
-                //await new Promise(resolve => setTimeout(resolve,delay));
+                await new Promise(resolve => setTimeout(resolve,delay));
             }
             i++;
             console.log('[OPENAI] Embeddings obtained: ' + i);
@@ -280,6 +283,7 @@ class ChatBot {
         return result;
     }
     // Generate prompt and answer
+    // RFR-3
     async generateText(prompt,user, debug) {
         //console.log("GENERATE TEXT PETITION REC, USER IS " + JSON.stringify(user));
         const res = await openai.createEmbedding({
@@ -367,7 +371,7 @@ async function generateText(prompt) {
         max_tokens: 300,
     });
     console.log("BASIC GENERATION: " + prompt);
-    //const text = response.data.choices[0].text.replace(/\n/g,"");
+    const text = response.data.choices[0].text.replace(/\n/g,"");
     return text;
 }
 

@@ -77,6 +77,13 @@ class Crawler {
             // Select only the links that point to the target site
             const filteredUrls = links.filter((link) => {
                 // Ignore if empty or if #
+                /*
+                 * This ugly and lengthy check should be substituted by a nice function
+                 * that actually checks that a link is valid for almost every case possible, 
+                 * this means mailtos, telephones, #, and any kind of document (might be useful
+                 * to set a regexp checking that no legit name would be in the form of *.<three/four-chars>).
+                 * 
+                 */
                 if (!link || link.includes('#') || link.startsWith('tel:') || link.includes('mailto:') || link.includes('.pdf') || link.includes('.docx')) {
                     return false;
                 }
@@ -105,9 +112,9 @@ class Crawler {
             // Extract titles and paragraphs
             const title = $('title').text();
             url.title = title;
-            const paragraphs = [];
+            const paragraphs = []; // This might be wiped out
             $('p').each((index, element) => {
-                paragraphs.push($(element).text());
+                paragraphs.push($(element).text()); // And this
                 url.content.push($(element).text());
             });
             // Updating instance
