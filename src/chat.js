@@ -45,31 +45,40 @@ class ChatBot {
         this.indexName = 'digitalai';
         this.index = undefined;
     }
-    // Helper method to check if user currently has a chatbot
-    /*
-    hasChatbotId(user){
-        if (user.chatId !== null) {
-            return true;
-        } else { return false; }
+    // Get all the vectors for a given chatbot
+    async getVectors(userId) {
+        try {
+            // Query the database to fetch all the vectors
+            const query = `
+            SELECT vector_id, title, text, url 
+            FROM vectors WHERE user_id = ?
+            `;
+            const values = [userId];
+            const response = await database.makeQuery(query,values);
+            // Format them properly to insert in our object
+            const vectorArray = [];
+            response.forEach((v) => {
+                let metadata = {
+                    text: v.text,
+                    url: v.url,
+                    title: v.title,
+                }
+                let vector = new VectorEmbed(v.user_id, metadata, undefined);
+                vectorArray.push(vector);
+            });
+            return vectorArray;
+        } catch(err) { throw (err) }
     }
-    */
-    /*
-    setUserUrl(id) {
-        const query = `
-            UPDATE users SET url = ? WHERE id = ${id}
-        `;
-        const values = [ this.url ];
-        database.makeQuery(query,values)
-    }
-    */
-    async updateSQL(id, url, chatId) {
+    // Update the SQL database with the data
+    async updateSQL(id, url, chatId, systemMsg, temp, vectorsPerAnswer, greetMsg, urlSuggestionsText) {
         try {
             const query = `
             UPDATE users 
-            SET url = ?, chat_id = ? 
+            SET url = ?, chat_id = ?, system_msg = ?, temp = ?,
+            vectors_per_answer = ?, greet_msg = ?, url_suggestions_text = ?
             WHERE id = ?
             `;
-            const values = [ url, chatId, id ];
+            const values = [ url, chatId, systemMsg, temp, vectorsPerAnswer, greetMsg, urlSuggestionsText, id ];
             await database.makeQuery(query,values);
         } catch(err) { throw (err) }
     }
@@ -84,7 +93,7 @@ class ChatBot {
             this.url = user.url;
             const pinecone = await this.PineconeInit();
             this.index = pinecone;
-            this.vectors = undefined; // getUserVectors(user.id);
+            this.vectors = await this.getVectors(user.id);
         } else {
             // Basic object data
             this.url = url;
@@ -111,9 +120,14 @@ class ChatBot {
             // Now update the user object with the information from the chatbot
             user.url = this.url;
             user.chatId = this.chatId;
-            user.systemMsg = "I'm a bot designed to help you."
+            user.systemMsg = "I'm a bot designed to help you.";
             user.temp = 0;
-            await this.updateSQL(user.id, user.url, user.chatId);
+            user.vectorsPerAnswer = 2;
+            user.greetMsg = "Hello, I'm here to help you :)";
+            user.urlSuggestionsText = "Here are some links that you might find useful";
+            await this.updateSQL(
+                user.id, user.url, user.chatId, user.systemMsg, user.temp, 
+                user.vectorsPerAnswer, user.greetMsg, user.urlSuggestionsText);
         }
         // Finally add the whole chatbot object to the user
         user.addChatBot(this);
@@ -151,7 +165,7 @@ class ChatBot {
                 let currentTokensCount = 0;
                 const chunks = [];
                 for (const word of words) {
-                    const wordTokens = enc.encode(' ' + word).length;njm
+                    const wordTokens = enc.encode(' ' + word).length;
                     if (currentTokensCount + wordTokens <= max_tokens) {
                         currentChunk += ' ' + word;
                         currentTokensCount += wordTokens;

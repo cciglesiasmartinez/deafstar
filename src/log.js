@@ -1,5 +1,10 @@
 /*
- * Logging file
+ * Logging Utility
+ *
+ * This file defines the Logger class, which manages application logging. The class
+ * initializes a logging instance with specified configurations, including log file
+ * path, options, and log levels. It provides methods for both logging informational
+ * messages and error messages.
  *
  */
 

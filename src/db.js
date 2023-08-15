@@ -1,8 +1,13 @@
 /*
- * MySQL calls
+ * MySQL Database Management
+ *
+ * This file contains the DB class, which handles MySQL database connectivity 
+ * and operations. The class manages user-related queries such as retrieval, 
+ * structure creation, as well as vector storing operations for chatbots.
  *
  */
 
+// Dependencies
 const mysql = require('mysql');
 const { Logger } = require('./log.js');
 const { User } = require('./struct.js');
@@ -10,6 +15,7 @@ const { User } = require('./struct.js');
 // Initialize logger
 const logger = new Logger();
 
+// Class with all methods needed for management
 class DB {
     // Constructor call 
     constructor(host, user, password, database) {
@@ -56,16 +62,24 @@ class DB {
                 }
             });
         });
-
     }
     // Checking users fucntion
     getUsers(callback) {
         this.connect();
-        const query = 'SELECT id, handler, name, email, token, url, chat_id, system_msg, temp  FROM users';
+        const query = `
+            SELECT 
+            id, handler, name, email, token, url, chat_id, 
+            system_msg, temp, vectors_per_answer, greet_msg, url_suggestions_text 
+            FROM users
+            `;
         this.connection.query(query, (error, results) => {
             if (error) throw logger.error(error);
             const users = results.map((row) => {
-                const user = new User(row.id, row.token, row.handler, row.name, row.email, row.url, row.chat_id, row.system_msg, row.temp);
+                const user = new User(
+                    row.id, row.token, row.handler, row.name, row.email, 
+                    row.url, row.chat_id, row.system_msg, row.temp, 
+                    row.vectors_per_answer, row.greet_msg, row.url_suggestions_text
+                    );
                 return user;
             });
             callback(users);
@@ -102,7 +116,9 @@ class DB {
                 chat_id VARCHAR(255),
                 system_msg TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
                 temp INT,
-                vectors_per_answer INT
+                vectors_per_answer INT,
+                greet_msg TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+                url_suggestions_text TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
             )
         `;
         this.connection.query(createUsersTable, (error, results) => {
@@ -199,16 +215,15 @@ class DB {
                         resolve(results);
                         logger.info("[MySQL] Query '" + query + "' with values '" + values + "' successfully performed!");
                     }
-                    this.disconnect();
                 });
+                this.disconnect();
             });
         } catch (err) {
+            logger.error(error);
             throw (err);
         }
     }
-    // 
 }
-
 
 
 module.exports = { DB };

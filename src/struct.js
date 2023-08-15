@@ -1,10 +1,15 @@
 /*
- * Classes and structures
- * 
+ * Classes and structures for User Management
+ *
+ * This file defines the UserManagement and User classes, which are essential 
+ * components for managing user data and interactions in the application. 
+ * The UserManagement class provides methods for adding, retrieving, and 
+ * listing users, while the User class encapsulates user-specific data 
+ * and attributes.
+ *
  */
 
-
-//This class should manage the users and some quick queries
+// Class for user management
 class UserManagement {
     constructor() {
         if (UserManagement.instance) {
@@ -52,27 +57,26 @@ class UserManagement {
     }
 }
 
-// User class
+// Class for user data
 class User {
-    constructor(id, token, handler, name, email, url, chatId, systemMsg, greetMsg, vectorsPerAnswer, temp) {
+    constructor(
+        id, token, handler, name, email, url, chatId, systemMsg, temp, 
+        greetMsg, vectorsPerAnswer, urlSuggestionsText
+    ) {
+        // Data related to the user
         this.id = id;
         this.token = token;
         this.handler = handler;
         this.name = name;
         this.email = email;
+        // Data related to its chatbot
         this.url = url;
-        /*
-         * It would be interesting to place all the attributes below (except 
-         * chatbot) in a new object of a new class, or maybe in the chatBot 
-         * one. I'm still not sure, suggestions on how to organize and handle 
-         * this are really welcomed. Maybe we'll need another SQL table.
-         */
         this.chatId = chatId;
         this.systemMsg = systemMsg;
         this.temp = temp;
         this.greetMsg = greetMsg;
         this.vectorsPerAnswer = vectorsPerAnswer;
-        this.urlSuggestionsText = undefined ;
+        this.urlSuggestionsText = urlSuggestionsText;
         this.chatbot = undefined;
     }
     // Returning client info
