@@ -26,3 +26,25 @@ Stack of technologies suggested will be like:
   * Webpack (related to ReactJS)
 
 Languages used will be: JavaScript, CSS3, HTML5, SQL
+
+## Code for creating users the first time 
+
+Here goes a little snippet useful to create users the first time you run the application.
+
+```
+const newUser = new database.User('password', 'volvat', 'Volvat Medisinske', 'mail@volvat.no');
+const newUser2 = new database.User('password', 'digitalai', 'DigitalAi', 'post@digitalai.no');
+const newUser3 = new database.User('password', 'eurofins', 'EuroFins Scientific', 'mail@eurofins.no');
+
+db.createUser(newUser, (createdUser) => {
+    console.log('User created:', createdUser);
+});
+
+db.createUser(newUser2, (createdUser) => {
+    console.log('User created:', createdUser);
+});
+
+db.createUser(newUser3, (createdUser) => {
+    console.log('User created:', createdUser);
+});
+```
