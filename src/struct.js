@@ -7,11 +7,11 @@
 //This class should manage the users and some quick queries
 class UserManagement {
     constructor() {
-        if (Server.instance) {
-            return Server.instance; // Singleton!
+        if (UserManagement.instance) {
+            return UserManagement.instance; // Singleton!
         }
         this.users = [];
-        Server.instance = this;
+        UserManagement.instance = this;
     }
     // Add user, @param is object instantiated from class User
     addUser(user) {
