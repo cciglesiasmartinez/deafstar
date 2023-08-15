@@ -61,7 +61,7 @@ class UserManagement {
 class User {
     constructor(
         id, token, handler, name, email, url, chatId, systemMsg, temp, 
-        greetMsg, vectorsPerAnswer, urlSuggestionsText
+        vectorsPerAnswer, greetMsg, urlSuggestionsText
     ) {
         // Data related to the user
         this.id = id;
@@ -74,8 +74,8 @@ class User {
         this.chatId = chatId;
         this.systemMsg = systemMsg;
         this.temp = temp;
-        this.greetMsg = greetMsg;
         this.vectorsPerAnswer = vectorsPerAnswer;
+        this.greetMsg = greetMsg;
         this.urlSuggestionsText = urlSuggestionsText;
         this.chatbot = undefined;
     }
