@@ -154,6 +154,57 @@ const routes = {
             }
         });
 
+        // Greet message setting
+        app.post('/greetMsg', isAuthenticated, async (req, res) => {
+            try {
+                const user = userManagement.getUserByHandler(req.user.handler);
+                user.greetMsg = req.body.url;
+                const query = `
+                    UPDATE users SET greet_msg = ? WHERE id = ?
+                `;
+                const values = [req.body.url, user.id];
+                await db.makeQuery(query, values);
+                res.redirect('/profile');
+            } catch (err) {
+                console.error(err);
+                res.redirect('/profile');
+            }
+        });
+
+        // Url suggestions text setting
+        app.post('/urlSuggestionsText', isAuthenticated, async (req, res) => {
+            try {
+                const user = userManagement.getUserByHandler(req.user.handler);
+                user.urlSuggestionsText = req.body.url;
+                const query = `
+                    UPDATE users SET url_suggestions_text = ? WHERE id = ?
+                `;
+                const values = [req.body.url, user.id];
+                await db.makeQuery(query, values);
+                res.redirect('/profile');
+            } catch (err) {
+                console.error(err);
+                res.redirect('/profile');
+            }
+        });
+
+        // Vectors per answer setting
+        app.post('/vectorsPerAnswer', isAuthenticated, async (req, res) => {
+            try {
+                const user = userManagement.getUserByHandler(req.user.handler);
+                user.vectorsPerAnswer = Number(req.body.url);
+                const query = `
+                    UPDATE users SET vectors_per_answer = ? WHERE id = ?
+                `;
+                const values = [req.body.url, user.id];
+                await db.makeQuery(query, values);
+                res.redirect('/profile');
+            } catch (err) {
+                console.error(err);
+                res.redirect('/profile');
+            }
+        });
+
         // Logout route
         app.get('/logout', (req, res) => {
             req.logout(() => { console.log("Logged out"); });
