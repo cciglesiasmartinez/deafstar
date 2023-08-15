@@ -30,8 +30,8 @@ const routes = {
     setupRoutes: (app) => {
 
         // Set static folder for css, assets and such
-        const publicPath = path.resolve(__dirname, '..');
-        app.use(express.static(publicPath + "/public"));
+        const parentPath = path.resolve(__dirname, '..');
+        app.use(express.static(parentPath + "/public"));
 
         // Session configuration
         app.use(session({
