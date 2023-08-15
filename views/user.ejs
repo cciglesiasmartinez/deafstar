@@ -24,6 +24,7 @@
             <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="crawlButton" type="submit">Crawl!</button>
           </form>
         </div>
+        <!--Chatbot system msg controls-->
         <div id="chatSystem">
           <form id="chatSystemForm" class="p-1" method="POST" action="/system">
             <label for="url"><b>System message:</b></label>
@@ -32,6 +33,7 @@
           </form>
         </div>
         <p class="p-1"><b>Actual message is:</b> <%- data.user.systemMsg %></p>
+        <!-- Chatbot temperature adjustment -->
         <div id="chatTemperature">
           <form id="chatTemperatureForm" class="p-1" method="POST" action="/temp">
             <label for="url"><b>Temperature:</b></label>
@@ -40,6 +42,24 @@
           </form>
         </div>
         <p class="p-1"><b>Actual temperature is:</b> <%- data.user.temp %></p>
+        <!-- Chatbot greet message -->
+        <div id="chatGreetMsg">
+          <form id="chatSystemForm" class="p-1" method="POST" action="/greetMsg">
+            <label for="url"><b>Chatbot greet message:</b></label>
+            <input id="url" type="text" placeholder="Write here..." name="url" style="background-color: #4B5563; border-radius: 5px">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="chatSystemButton" type="submit">Set!</button>
+          </form>
+        </div>
+        <p class="p-1"><b>Actual greet message is:</b> <%- data.user.greetMsg %></p>
+        <!-- Chatobt URL suggestions text -->
+        <div id="chatUrlSuggestionsText">
+          <form id="chatSystemForm" class="p-1" method="POST" action="/urlSuggestionsText">
+            <label for="url"><b>Text for URL suggestions:</b></label>
+            <input id="url" type="text" placeholder="Write here..." name="url" style="background-color: #4B5563; border-radius: 5px">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="chatSystemButton" type="submit">Set!</button>
+          </form>
+        </div>
+        <p class="p-1"><b>Actual text for URL suggestions is:</b> <%- data.user.urlSuggestionsText %></p>
         <!-- Once website has been crawled, here is the generated link -->
         <% if ( data.user.chatbot !== undefined ) { %> 
           <p class="p-1">Click <a style="color: lightblue" target="_blank" href="http://<%= data.hostname %>/chat/<%= data.user.chatbot.chatId %>"> here </a> for your chatbot link.</a></p>
