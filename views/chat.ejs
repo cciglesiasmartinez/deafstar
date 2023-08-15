@@ -1,18 +1,19 @@
+<!-- Page for public chatbot -->
 <!DOCTYPE html>
 <html>
 <head>
   <!-- Head element, containing charset, css stylesheets... -->
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="/stylesheets/main_stylesheet.css" />
-  <link rel="stylesheet" href="/stylesheets/cassie.css" />
-  <title>ChatBot <%- user.handler %></title>
+  <link rel="stylesheet" href="../stylesheets/main_stylesheet.css" />
+  <link rel="stylesheet" href="../stylesheets/cassie.css" />
+  <title>ChatBot for <%- data.user.name %></title>
 </head>
 <body class="flex flex-auto justify-center items-center font-sans">
   <!-- Chat block  -->
   <div id="webSocket" class="w-2/5 h-full flex flex-col justify-start items-start pt-2 mb-5">
     <header class="sticky top-0 flex flex-col justify-center pt-4 pb-4 mb-5 items-center w-full">
       <div class="w-full justify-center items-center flex flex-col">
-        <h1 class="">Chatbot for <b><%- user.name %></b></h1>
+        <h1 class="">Chatbot for <b><%- data.user.name %></b></h1>
       </div>
     </header>
     <div id="webSocketOutput" class="w-full min-w-full"></div>
@@ -27,12 +28,43 @@
     const ws = new WebSocket('ws://hiddenvault.ddns.net:8008');
 
     // Get data through EJS and stringify it
-    var userData = <%- JSON.stringify(user) %>;
+    var userData = <%- JSON.stringify(data.user) %>;
 
     // Handle connections on open. Might be useful later.
-    ws.onopen = () => {
+    ws.onopen = async () => {
       console.log('We got a connection');
+      await showGreetMsg();
     };
+
+    // Function for greet message
+    async function showGreetMsg() {
+      try {
+        if (( userData.greetMsg !== null ) || ( userData.greetMsg !== undefined )) {
+          webSocketInput.blur();
+          webSocketInput.disabled = true;
+          webSocketInput.classList.add('gray-out');
+          startAnimation(webSocketInput);
+          webSocketOutput.innerHTML += '\
+          <div class="rendered_message p-2  py-2 w-full min-w-full flex flex-row justify-start items-start pt-2 \
+          text-gray-900 dark:text-gray-100 border-b border-black/10 dark:text-white dark:bg-gray-700 \
+          ">\
+            <div class="chat__user-icon--wrapper p-0.5 mr-1 w-9 rounded mr-1 flex flex-row justify-center items-center">\
+              <img src="/images/bot_temp_logo2.png">\
+            </div>\
+            <div class="chat__user-text--wrapper p-1 w-full">\
+              <p class=" leading-relaxed w-full"> </p>\
+            </div>\
+          </div>';
+          // Write the text with animation
+          const elementArr = webSocketOutput.lastElementChild.children[1].children;
+          await animateText( elementArr[0], userData.greetMsg);
+          webSocketInput.classList.remove('gray-out');
+          webSocketInput.disabled = false;
+          stopAnimation(webSocketInput);
+          scrollDown();
+        } 
+      } catch (err) { throw (err ) }
+    }
 
     // Defining scrolldown functionality
     const container = document.getElementById("webSocketOutput");
@@ -81,7 +113,7 @@
           </div>\
           <div class="chat__user-text--wrapper p-1 w-full">\
             <p class=" leading-relaxed w-full">' + content + '</p>\
-            <p class=" leading-relaxed w-full"> Here are some links related that you could find useful: ' +  '<a href="' + message.data.urls[0] + '"  style="color: lightblue" target="_blank">' +  message.data.urls[0] + '</a>, ' + '<a href="' +  message.data.urls[1] + '" style="color: lightblue" target="_blank">' + message.data.urls[1] + '</a>' + '<br>' + ' </p>\
+            <p class=" leading-relaxed w-full">' + userData.urlSuggestionsText + ": " +  '<a href="' + message.data.urls[0] + '"  style="color: lightblue" target="_blank">' +  message.data.urls[0] + '</a>, ' + '<a href="' +  message.data.urls[1] + '" style="color: lightblue" target="_blank">' + message.data.urls[1] + '</a>' + '<br>' + ' </p>\
           </div>\
         </div>';
         }
