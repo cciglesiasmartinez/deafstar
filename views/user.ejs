@@ -179,10 +179,62 @@
                           <span class="thrash_icon"><i class="fa-solid fa-trash fa-xl"></i></span>
                         </div>
                       </div><!-- END OF SAVED CHAT EXAMPLE -->
+                      <!-- SAVED CHAT EXAMPLE -->
+                      <div class="saved-chat--example">
+                        <div class="saved-chat--example__title">
+                          <span>Draft of rules for new equipment</span>
+                        </div>
+                        <div class="saved-chat--example__icons">
+                          <span><i class="fa-solid fa-share-nodes fa-xl"></i></span>
+                          <span><i class="fa-solid fa-gear fa-xl"></i></span>
+                          <span class="thrash_icon"><i class="fa-solid fa-trash fa-xl"></i></span>
+                        </div>
+                      </div><!-- END OF SAVED CHAT EXAMPLE -->
                     </div>
                   </div>
                   <div id="tabs-content-3" class="tabs-panel__tabs-content">
-                    <p>TAB CONTENT 3</p>
+                    <div class="tab-content__wrapper tab-3-debug">
+                      <!-- START OF KNOWLEDGE PANEL -->
+                      <div class="accordion knowledge-panel__title">
+                        <span>Chemistry - Monthly subscription</span>
+                        <div class="knowledge--example__icons">
+                          <div class="caret__wrapper"><span><i class="fa-solid fa-caret-down"></i></span></div>
+                        </div>
+                      </div>
+                      <div class="panel">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                      </div><!-- END OF KNOWLEDGE PANEL -->
+                      <!-- START OF KNOWLEDGE PANEL -->
+                      <div class="accordion knowledge-panel__title">
+                        <span>How to use this AI</span>
+                        <div class="knowledge--example__icons">
+                          <div class="caret__wrapper"><span><i class="fa-solid fa-caret-down"></i></span></div>
+                        </div>
+                      </div>
+                      <div class="panel">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                      </div><!-- END OF KNOWLEDGE PANEL -->
+                      <!-- START OF KNOWLEDGE PANEL -->
+                      <div class="accordion knowledge-panel__title">
+                        <span>Lorem - ipsum</span>
+                        <div class="knowledge--example__icons">
+                          <div class="caret__wrapper"><span><i class="fa-solid fa-caret-down"></i></span></div>
+                        </div>
+                      </div>
+                      <div class="panel">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                      </div><!-- END OF KNOWLEDGE PANEL -->
+                      <!-- START OF KNOWLEDGE PANEL -->
+                      <div class="accordion knowledge-panel__title">
+                        <span>Lorem - ipsum</span>
+                        <div class="knowledge--example__icons">
+                          <div class="caret__wrapper"><span><i class="fa-solid fa-caret-down"></i></span></div>
+                        </div>
+                      </div>
+                      <div class="panel">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                      </div><!-- END OF KNOWLEDGE PANEL -->
+                    </div>
                   </div>
                   <div id="tabs-content-4" class="tabs-panel__tabs-content">
                     <p>TAB CONTENT 4</p>
@@ -394,6 +446,23 @@
         unfoldIconContainer.classList.add("unfold__accordion-icon__container--unfolded");
       }
     }
+  </script>
+
+<script>
+  var acc = document.getElementsByClassName("accordion");
+  var i;
+  
+  for (i = 0; i < acc.length; i++) {
+    acc[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var panel = this.nextElementSibling;
+      if (panel.style.display === "block") {
+        panel.style.display = "none";
+      } else {
+        panel.style.display = "block";
+      }
+    });
+  }
   </script>
 </body>
 </html>

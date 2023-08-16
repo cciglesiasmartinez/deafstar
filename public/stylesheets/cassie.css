@@ -259,7 +259,7 @@ body {
 .tabs-panel__tab {
   height: 100%;
   padding: 0.5rem 1rem;
-
+  cursor: pointer;
   border-right: 1px solid white;
   border-bottom: 0px;
 
@@ -538,13 +538,14 @@ body {
 
 .saved-chat--example {
   width: 100%;
+  cursor: pointer;
 
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-start;
   align-items: space-between;
 
-  border: 1px solid var(--brand_color_2);
+  border: 1px solid var(--brand_color_1);
   border-radius: 10px;
   padding: 0rem 0.2rem;
 
@@ -559,7 +560,7 @@ body {
   justify-content: flex-start;
   align-items: space-between;
   width: 83%;
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   padding: 0.6rem 0rem;
 
   padding-left: 1rem;
@@ -576,7 +577,7 @@ body {
 .saved-chat--example:hover {
   background-color: rgba(255, 166, 1, 0.651);
   color: var(--brand_color_1);
-  border: 1px solid var(--brand_color_1);
+  border: 1px solid var(--brand_color_2);
 }
 
 .saved-chat--example:hover .saved-chat--example__title {
@@ -591,4 +592,75 @@ body {
 .saved-chat--example:hover .thrash_icon i:hover {
   color: red !important;
   font-size: 1.8rem;
+}
+
+/* KNOWLEDGE TAB */
+
+.tab-3-debug {
+}
+
+.tab-3-debug * {
+}
+
+.accordion {
+  width: 100%;
+  cursor: pointer;
+
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: space-between;
+
+  border: 1px solid var(--brand_color_1);
+  border-radius: 10px;
+  padding: 0rem 0.2rem;
+
+  -webkit-box-shadow: 1px 1px 5px 4px rgba(194, 190, 194, 0.57);
+  -moz-box-shadow: 1px 1px 5px 4px rgba(194, 190, 194, 0.57);
+  box-shadow: 1px 1px 5px 4px rgba(194, 190, 194, 0.57);
+}
+
+.active,
+.accordion:hover {
+  background-color: rgba(255, 166, 1, 0.651);
+  color: var(--brand_color_1);
+  border: 1px solid var(--brand_color_1);
+}
+
+.panel {
+  display: none;
+  overflow: hidden;
+}
+
+.knowledge-panel__title {
+  font-size: 1.1rem;
+  padding: 0.6rem 0rem;
+
+  padding-left: 1rem;
+}
+
+.knowledge--example__icons {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 15%;
+  margin-left: auto;
+}
+.caret__wrapper {
+  background-color: var(--brand_color_1);
+  color: white;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  width: 2rem;
+  height: 2rem;
+
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.active .caret__wrapper {
+  rotate: 180deg;
 }
