@@ -2,13 +2,13 @@ body {
   width: 100vw;
   height: 100vh;
   color: #ededf0;
-  background: rgb(68, 70, 84);
-  background: linear-gradient(
+  /*background-color: rgb(68, 70, 84);*/
+  /*background: linear-gradient(
     180deg,
     rgba(68, 70, 84, 1) 0%,
     rgba(68, 70, 84, 1) 85%,
     rgba(53, 55, 64, 1) 100%
-  );
+  );*/
 }
 
 body * {
@@ -48,7 +48,7 @@ button {
 }
 
 .user_message {
-  background-color: #343541 !important;
+  /*background-color: #343541 !important;*/
 }
 
 @tailwind base;
@@ -65,11 +65,4 @@ button {
 }
 
 #client-panel__controls {
-}
-
-#webSocketOutput {
-  height: 64vh;
-  max-height: 64vh;
-  overflow-y: scroll;
-  padding-right: 0.75rem;
 }

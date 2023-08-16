@@ -1,218 +1,233 @@
 <!-- Page for public chatbot -->
 <!DOCTYPE html>
 <html>
-<head>
-  <!-- Head element, containing charset, css stylesheets... -->
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="../stylesheets/main_stylesheet.css" />
-  <link rel="stylesheet" href="../stylesheets/cassie.css" />
-  <title>ChatBot for <%- data.user.name %></title>
-</head>
-<body class="flex flex-auto justify-center items-center font-sans">
-  <!-- Chat block  -->
-  <div id="webSocket" class="w-2/5 h-full flex flex-col justify-start items-start pt-2 mb-5">
-    <header class="sticky top-0 flex flex-col justify-center pt-4 pb-4 mb-5 items-center w-full">
-      <div class="w-full justify-center items-center flex flex-col">
-        <h1 class="">Chatbot for <b><%- data.user.name %></b></h1>
+  <head>
+    <!-- Head element, containing charset, css stylesheets... -->
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../stylesheets/main_stylesheet.css" />
+    <link rel="stylesheet" href="../stylesheets/cassie.css" />
+    <title>ChatBot for <%- data.user.name %></title>
+  </head>
+  <body class="flex flex-auto justify-center items-center font-sans">
+    <!-- Chat block  -->
+    <div
+      id="webSocket"
+      class="w-2/5 h-full flex flex-col justify-start items-start pt-2 mb-5"
+    >
+      <header
+        class="sticky top-0 flex flex-col justify-center pt-4 pb-4 mb-5 items-center w-full"
+      >
+        <div class="w-full justify-center items-center flex flex-col">
+          <h1 class="">Chatbot for <b><%- data.user.name %></b></h1>
+        </div>
+      </header>
+      <div id="webSocketOutput" class="w-full min-w-full"></div>
+      <div class="p-4 w-full mb-8 mt-8">
+        <input
+          id="webSocketInput"
+          class="w-full w-full py-[10px] flex-grow md:py-4 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-xl shadow-xs dark:shadow-xs"
+          id="webSocketInput"
+          class="text-black"
+          type="text"
+          placeholder="Send..."
+          autofocus
+        />
       </div>
-    </header>
-    <div id="webSocketOutput" class="w-full min-w-full"></div>
-    <div class="p-4 w-full mb-8 mt-8">
-      <input id="webSocketInput" class="w-full w-full py-[10px] flex-grow md:py-4 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-xl shadow-xs dark:shadow-xs" id="webSocketInput" class="text-black" type="text" placeholder="Send..." autofocus>
     </div>
-  </div>
 
-  <!-- Javascript code for the frontend -->
-  <script>
-    // Create sock instance
-    const ws = new WebSocket('ws://hiddenvault.ddns.net:8008');
+    <!-- Javascript code for the frontend -->
+    <script>
+      const hostname = <%- JSON.stringify(data.hostname) %>
 
-    // Get data through EJS and stringify it
-    var userData = <%- JSON.stringify(data.user) %>;
+      // Create sock instance
+      const ws = new WebSocket(`ws://${hostname}`);
 
-    // Handle connections on open. Might be useful later.
-    ws.onopen = async () => {
-      console.log('We got a connection');
-      await showGreetMsg();
-    };
 
-    // Function for greet message
-    async function showGreetMsg() {
-      try {
-        if (( userData.greetMsg !== null ) || ( userData.greetMsg !== undefined )) {
-          webSocketInput.blur();
-          webSocketInput.disabled = true;
-          webSocketInput.classList.add('gray-out');
-          startAnimation(webSocketInput);
-          webSocketOutput.innerHTML += '\
-          <div class="rendered_message p-2  py-2 w-full min-w-full flex flex-row justify-start items-start pt-2 \
-          text-gray-900 dark:text-gray-100 border-b border-black/10 dark:text-white dark:bg-gray-700 \
-          ">\
-            <div class="chat__user-icon--wrapper p-0.5 mr-1 w-9 rounded mr-1 flex flex-row justify-center items-center">\
-              <img src="/images/bot_temp_logo2.png">\
-            </div>\
-            <div class="chat__user-text--wrapper p-1 w-full">\
-              <p class=" leading-relaxed w-full"> </p>\
-            </div>\
-          </div>';
-          // Write the text with animation
-          const elementArr = webSocketOutput.lastElementChild.children[1].children;
-          await animateText( elementArr[0], userData.greetMsg);
-          webSocketInput.classList.remove('gray-out');
-          webSocketInput.disabled = false;
-          stopAnimation(webSocketInput);
-          scrollDown();
-        } 
-      } catch (err) { throw (err ) }
-    }
+        // Get data through EJS and stringify it
+        var userData = <%- JSON.stringify(data.user) %>;
 
-    // Defining scrolldown functionality
-    const container = document.getElementById("webSocketOutput");
-    function scrollDown() {
-      container.scrollTop = container.scrollHeight;
-    }
+        // Handle connections on open. Might be useful later.
+        ws.onopen = async () => {
+          console.log('We got a connection');
+          await showGreetMsg();
+        };
 
-    // Get the output element
-    const webSocketOutput = document.getElementById('webSocketOutput');
-
-    // Typing animation function
-    async function animateText(textElement, textToAnimate, typingSpeed = 20, index = 0) {
-      return new Promise((resolve) => {
-        if (index < textToAnimate.length) {
-          textElement.innerHTML += textToAnimate.charAt(index);
-          index++;
-          setTimeout(() => {
-            animateText(textElement, textToAnimate, typingSpeed, index).then(resolve);
-          }, typingSpeed);
-        } else {
-          resolve();
-        }
-      });
-    }
-
-    // Handling incoming chat messages via websocket
-    ws.onmessage = async (event) => {
-      let message = event.data;
-      console.log('Msg received:', message);
-      console.log(JSON.parse(message));
-      message = JSON.parse(message);
-      let content = message.data.response.content;
-      const contentArr = [];
-      content = content.split('\n');
-      content = content.map((line) => {
-        contentArr.push(line); 
-        return '<p class="w-full"></p>';}).join('');
-        console.log(contentArr);
-        if (message.data.urls) {
-          webSocketOutput.innerHTML += '\
-        <div class="rendered_message p-2  py-2 w-full min-w-full flex flex-row justify-start items-start pt-2 \
-        text-gray-900 dark:text-gray-100 border-b border-black/10 dark:text-white dark:bg-gray-700 \
-        ">\
-          <div class="chat__user-icon--wrapper p-0.5 mr-1 w-9 rounded mr-1 flex flex-row justify-center items-center">\
-            <img src="/images/bot_temp_logo2.png">\
-          </div>\
-          <div class="chat__user-text--wrapper p-1 w-full">\
-            <p class=" leading-relaxed w-full">' + content + '</p>\
-            <p class=" leading-relaxed w-full">' + userData.urlSuggestionsText + ": " +  '<a href="' + message.data.urls[0] + '"  style="color: lightblue" target="_blank">' +  message.data.urls[0] + '</a>, ' + '<a href="' +  message.data.urls[1] + '" style="color: lightblue" target="_blank">' + message.data.urls[1] + '</a>' + '<br>' + ' </p>\
-          </div>\
-        </div>';
-        }
-        else {
-          webSocketOutput.innerHTML += '\
-        <div class="rendered_message p-2  py-2 w-full min-w-full flex flex-row justify-start items-start pt-2 \
-        text-gray-900 dark:text-gray-100 border-b border-black/10 dark:text-white dark:bg-gray-700 \
-        ">\
-          <div class="chat__user-icon--wrapper p-0.5 mr-1 w-9 rounded mr-1 flex flex-row justify-center items-center">\
-            <img src="/images/bot_temp_logo2.png">\
-          </div>\
-          <div class="chat__user-text--wrapper p-1 w-full">\
-            <p class=" leading-relaxed w-full">' + content + '</p>\
-          </div>\
-        </div>';
+        // Function for greet message
+        async function showGreetMsg() {
+          try {
+            if (( userData.greetMsg !== null ) || ( userData.greetMsg !== undefined )) {
+              webSocketInput.blur();
+              webSocketInput.disabled = true;
+              webSocketInput.classList.add('gray-out');
+              startAnimation(webSocketInput);
+              webSocketOutput.innerHTML += '\
+              <div class="rendered_message p-2  py-2 w-full min-w-full flex flex-row justify-start items-start pt-2 \
+              text-gray-900 dark:text-gray-100 border-b border-black/10 dark:text-white dark:bg-gray-700 \
+              ">\
+                <div class="chat__user-icon--wrapper p-0.5 mr-1 w-9 rounded mr-1 flex flex-row justify-center items-center">\
+                  <img src="/images/bot_temp_logo2.png">\
+                </div>\
+                <div class="chat__user-text--wrapper p-1 w-full">\
+                  <p class=" leading-relaxed w-full"> </p>\
+                </div>\
+              </div>';
+              // Write the text with animation
+              const elementArr = webSocketOutput.lastElementChild.children[1].children;
+              await animateText( elementArr[0], userData.greetMsg);
+              webSocketInput.classList.remove('gray-out');
+              webSocketInput.disabled = false;
+              stopAnimation(webSocketInput);
+              scrollDown();
+            }
+          } catch (err) { throw (err ) }
         }
 
-        // Write the text with animation
-        const elementArr = webSocketOutput.lastElementChild.children[1].children;
-        scrollDown();
-        for ( let i=0; i < elementArr.length; i++ ) {
-          await animateText( elementArr[i],contentArr[i]);
-          scrollDown();
-          webSocketInput.classList.remove('gray-out');
-          webSocketInput.disabled = false;
-          stopAnimation(webSocketInput);
+        // Defining scrolldown functionality
+        const container = document.getElementById("webSocketOutput");
+        function scrollDown() {
+          container.scrollTop = container.scrollHeight;
         }
 
-    };
+        // Get the output element
+        const webSocketOutput = document.getElementById('webSocketOutput');
 
-    // Handle close event. Not useful right now.
-    ws.onclose = () => {
-      console.log('Connection closed');
-    };
+        // Typing animation function
+        async function animateText(textElement, textToAnimate, typingSpeed = 20, index = 0) {
+          return new Promise((resolve) => {
+            if (index < textToAnimate.length) {
+              textElement.innerHTML += textToAnimate.charAt(index);
+              index++;
+              setTimeout(() => {
+                animateText(textElement, textToAnimate, typingSpeed, index).then(resolve);
+              }, typingSpeed);
+            } else {
+              resolve();
+            }
+          });
+        }
 
-    // Get the input element
-    const webSocketInput = document.getElementById('webSocketInput');
-    
-    // Handle messages sent to chatbot
-    webSocketInput.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter') {
-        const text = webSocketInput.value.trim();
-        webSocketInput.blur();
-        webSocketInput.disabled = true;
-        webSocketInput.classList.add('gray-out');
-        startAnimation(webSocketInput);
-        if (text !== '') {
-          const msg = {
-            origin: userData.handler,
-            data: text,
+        // Handling incoming chat messages via websocket
+        ws.onmessage = async (event) => {
+          let message = event.data;
+          console.log('Msg received:', message);
+          console.log(JSON.parse(message));
+          message = JSON.parse(message);
+          let content = message.data.response.content;
+          const contentArr = [];
+          content = content.split('\n');
+          content = content.map((line) => {
+            contentArr.push(line);
+            return '<p class="w-full"></p>';}).join('');
+            console.log(contentArr);
+            if (message.data.urls) {
+              webSocketOutput.innerHTML += '\
+            <div class="rendered_message p-2  py-2 w-full min-w-full flex flex-row justify-start items-start pt-2 \
+            text-gray-900 dark:text-gray-100 border-b border-black/10 dark:text-white dark:bg-gray-700 \
+            ">\
+              <div class="chat__user-icon--wrapper p-0.5 mr-1 w-9 rounded mr-1 flex flex-row justify-center items-center">\
+                <img src="/images/bot_temp_logo2.png">\
+              </div>\
+              <div class="chat__user-text--wrapper p-1 w-full">\
+                <p class=" leading-relaxed w-full">' + content + '</p>\
+                <p class=" leading-relaxed w-full">' + userData.urlSuggestionsText + ": " +  '<a href="' + message.data.urls[0] + '"  style="color: lightblue" target="_blank">' +  message.data.urls[0] + '</a>, ' + '<a href="' +  message.data.urls[1] + '" style="color: lightblue" target="_blank">' + message.data.urls[1] + '</a>' + '<br>' + ' </p>\
+              </div>\
+            </div>';
+            }
+            else {
+              webSocketOutput.innerHTML += '\
+            <div class="rendered_message p-2  py-2 w-full min-w-full flex flex-row justify-start items-start pt-2 \
+            text-gray-900 dark:text-gray-100 border-b border-black/10 dark:text-white dark:bg-gray-700 \
+            ">\
+              <div class="chat__user-icon--wrapper p-0.5 mr-1 w-9 rounded mr-1 flex flex-row justify-center items-center">\
+                <img src="/images/bot_temp_logo2.png">\
+              </div>\
+              <div class="chat__user-text--wrapper p-1 w-full">\
+                <p class=" leading-relaxed w-full">' + content + '</p>\
+              </div>\
+            </div>';
+            }
+
+            // Write the text with animation
+            const elementArr = webSocketOutput.lastElementChild.children[1].children;
+            scrollDown();
+            for ( let i=0; i < elementArr.length; i++ ) {
+              await animateText( elementArr[i],contentArr[i]);
+              scrollDown();
+              webSocketInput.classList.remove('gray-out');
+              webSocketInput.disabled = false;
+              stopAnimation(webSocketInput);
+            }
+
+        };
+
+        // Handle close event. Not useful right now.
+        ws.onclose = () => {
+          console.log('Connection closed');
+        };
+
+        // Get the input element
+        const webSocketInput = document.getElementById('webSocketInput');
+
+        // Handle messages sent to chatbot
+        webSocketInput.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter') {
+            const text = webSocketInput.value.trim();
+            webSocketInput.blur();
+            webSocketInput.disabled = true;
+            webSocketInput.classList.add('gray-out');
+            startAnimation(webSocketInput);
+            if (text !== '') {
+              const msg = {
+                origin: userData.handler,
+                data: text,
+              }
+              ws.send(JSON.stringify(msg));
+              webSocketOutput.innerHTML += '\
+              <div class="user_message rendered_message p-2 w-full min-w-full flex flex-row justify-start items-start pt-2 \
+              w-full py-[10px] flex-grow md:py-4 md:pl-4 relative border border-black/10 dark:border-gray-900/50 bg-gray-900 shadow-xs dark:shadow-xs \
+              "> \
+                <div class="chat__user-icon--wrapper p-0.5 mr-1 w-9 bg-gray-700 rounded mr-1 flex flex-row justify-center items-center">\
+                  <img src="/images/user_tem_icon2.png">\
+                </div>\
+                <div class="chat__user-text--wrapper p-1 w-full">\
+                  <p class=" w-full">' + msg.data + '</p>\
+                </div>\
+              </div>';
+              webSocketInput.value = '';
+              scrollDown();
+            }
+            //
           }
-          ws.send(JSON.stringify(msg));
-          webSocketOutput.innerHTML += '\
-          <div class="user_message rendered_message p-2 w-full min-w-full flex flex-row justify-start items-start pt-2 \
-          w-full py-[10px] flex-grow md:py-4 md:pl-4 relative border border-black/10 dark:border-gray-900/50 bg-gray-900 shadow-xs dark:shadow-xs \
-          "> \
-            <div class="chat__user-icon--wrapper p-0.5 mr-1 w-9 bg-gray-700 rounded mr-1 flex flex-row justify-center items-center">\
-              <img src="/images/user_tem_icon2.png">\
-            </div>\
-            <div class="chat__user-text--wrapper p-1 w-full">\
-              <p class=" w-full">' + msg.data + '</p>\
-            </div>\
-          </div>';
-          webSocketInput.value = '';
-          scrollDown();
+        });
+
+        // Dots animation
+        let animationInterval;
+        function startAnimation(inputField) {
+          let dots = '';
+          let count = 1;
+          animationInterval = setInterval(() => {
+            switch (count) {
+              case 1:
+                dots = '.';
+                count++;
+                break;
+              case 2:
+                dots = '..';
+                count++;
+                break;
+              case 3:
+                dots = '...';
+                count = 1;
+                break;
+            }
+            inputField.value = dots;
+          }, 500);
         }
-        //
-      }
-    });
 
-    // Dots animation
-    let animationInterval;
-    function startAnimation(inputField) {
-      let dots = '';
-      let count = 1;
-      animationInterval = setInterval(() => {
-        switch (count) {
-          case 1:
-            dots = '.';
-            count++;
-            break;
-          case 2:
-            dots = '..';
-            count++;
-            break;
-          case 3:
-            dots = '...';
-            count = 1;
-            break;
+        function stopAnimation(inputField) {
+          clearInterval(animationInterval);
+          inputField.value = '';
         }
-        inputField.value = dots;
-      }, 500);
-    }
-
-    function stopAnimation(inputField) {
-      clearInterval(animationInterval);
-      inputField.value = '';
-    }
-
-  </script>
-</body>
+    </script>
+  </body>
 </html>

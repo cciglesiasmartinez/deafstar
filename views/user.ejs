@@ -6,9 +6,55 @@
   <meta charset="UTF-8">
   <link rel="stylesheet" href="/stylesheets/main_stylesheet.css" />
   <link rel="stylesheet" href="/stylesheets/cassie.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <title>Client Info</title>
 </head>
-<body class="flex flex-auto flex-col justify-start items-center font-sans h-screen">
+<body class="flex flex-auto flex-row justify-start items-center font-sans h-screen">
+
+
+
+  <!-- STARTS LEFT PANEL WITH TAB BASED NAVIGATION -->
+  <!-- STARTS LEFT PANEL WITH TAB BASED NAVIGATION -->
+  <!-- STARTS LEFT PANEL WITH TAB BASED NAVIGATION -->
+  <!-- STARTS LEFT PANEL WITH TAB BASED NAVIGATION -->
+  <div id="unfold__accordion-icon__container" class="unfold__accordion-icon__container--unfolded" >
+    <span id="unfold_accordion_icon--close" onclick="showMenu()"><i class="fa-solid fa-xmark"></i></span>
+    <span id="unfold_accordion_icon--open"  class="hideMenu" onclick="showMenu()"><i class="fa-sharp fa-solid fa-gear fa-xl"></i></span>
+  </div>
+  <div id="chat-screen__left-half" class="flex flex-auto flex-col justify-start items-center font-sans h-screen">
+            <!-- START OF TABS CONTAINER -->
+            <div id="tabs-panel__container">
+              <div id="tabs-panel__outer-wrapper">
+                <!-- START OF TABS ROW WRAPPER -->
+                <div id="tabs-panel__tabs-wrapper">
+                  <!-- START OF A TAB -->
+                  <div class="tabs-panel__tab" id="tab-1" onclick="openTab('tabs-content-1')">
+                    <span class="tabs-panel__tab-text"> 
+                      <span class="tabs-panel__tab-icon"><i class="fa-solid fa-sliders"></i></span>User settings</span>
+                  </div>
+                  <!-- END OF A TAB -->
+                  <!-- START OF A TAB -->
+                  <div class="tabs-panel__tab" id="tab-2" onclick="openTab('tabs-content-2')">
+                    <span class="tabs-panel__tab-text"> 
+                      <span class="tabs-panel__tab-icon"><i class="fa-solid fa-floppy-disk"></i></span>Saved chats</span>
+                  </div>
+                  <!-- END OF A TAB -->
+                  <!-- START OF A TAB -->
+                  <div class="tabs-panel__tab" id="tab-3" onclick="openTab('tabs-content-3')">
+                    <span class="tabs-panel__tab-text"> 
+                      <span class="tabs-panel__tab-icon"><i class="fa-solid fa-book"></i></span>Knowledge</span>
+                  </div>
+                  <!-- END OF A TAB -->
+                  <!-- START OF A TAB -->
+                  <div class="tabs-panel__tab" id="tab-3" onclick="openTab('tabs-content-4')">
+                    <span class="tabs-panel__tab-text"> 
+                      <span class="tabs-panel__tab-icon"><i class="fa-solid fa-screwdriver-wrench"></i></span>Admin</span>
+                  </div>
+                  <!-- END OF A TAB -->
+                </div><!--END OF TABS ROW WRAPPER -->
+                <div id="tabs-panel__tabs-content--wrapper">
+                  <div id="tabs-content-1" class="tabs-panel__tabs-content">
+                    <!-- START OF USER SETTINGS CONTAINER -->
   <!-- Upper panel with client info, crawl options, and logout button -->
   <div id="upper_panel__container" class="w-2/5 mt-8 flex flex-row justify-start items-start p-2 mb-5 rounded-lg border bg-gray-600">
     <div id="client-panel__container" class="h-full w-3/5  flex flex-row justify-start items-start ">
@@ -20,7 +66,7 @@
         <div id="chatControl">
           <form id="crawlForm" method="POST" class="p-1" action="/crawl">
             <label for="url"><b>URL:</b></label>
-            <input id="url" type="text" placeholder=" Write URL..." name="url" style="background-color: #4B5563; border-radius: 5px">
+            <input id="url" type="text" placeholder=" Write URL..." name="url" style="border-radius: 5px">
             <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="crawlButton" type="submit">Crawl!</button>
           </form>
         </div>
@@ -28,7 +74,7 @@
         <div id="chatSystem">
           <form id="chatSystemForm" class="p-1" method="POST" action="/system">
             <label for="url"><b>System message:</b></label>
-            <input id="url" type="text" placeholder="Write here..." name="url" style="background-color: #4B5563; border-radius: 5px">
+            <input id="url" type="text" placeholder="Write here..." name="url" style="border-radius: 5px">
             <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="chatSystemButton" type="submit">Set!</button>
           </form>
         </div>
@@ -37,7 +83,7 @@
         <div id="chatTemperature">
           <form id="chatTemperatureForm" class="p-1" method="POST" action="/temp">
             <label for="url"><b>Temperature:</b></label>
-            <input id="url" type="text" placeholder="Write here..." name="url" style="background-color: #4B5563; border-radius: 5px">
+            <input id="url" type="text" placeholder="Write here..." name="url" style="border-radius: 5px">
             <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="chatTemperatureButton" type="submit">Set!</button>
           </form>
         </div>
@@ -46,7 +92,7 @@
         <div id="chatGreetMsg">
           <form id="chatSystemForm" class="p-1" method="POST" action="/greetMsg">
             <label for="url"><b>Chatbot greet message:</b></label>
-            <input id="url" type="text" placeholder="Write here..." name="url" style="background-color: #4B5563; border-radius: 5px">
+            <input id="url" type="text" placeholder="Write here..." name="url" style="border-radius: 5px">
             <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="chatSystemButton" type="submit">Set!</button>
           </form>
         </div>
@@ -55,7 +101,7 @@
         <div id="chatUrlSuggestionsText">
           <form id="chatSystemForm" class="p-1" method="POST" action="/urlSuggestionsText">
             <label for="url"><b>Text for URL suggestions:</b></label>
-            <input id="url" type="text" placeholder="Write here..." name="url" style="background-color: #4B5563; border-radius: 5px">
+            <input id="url" type="text" placeholder="Write here..." name="url" style="border-radius: 5px">
             <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="chatSystemButton" type="submit">Set!</button>
           </form>
         </div>
@@ -74,12 +120,53 @@
         </form>
       </div>
     </div>
+  </div><!-- END OF USER SETTINGS CONTAINER -->
+                  </div>
+                  <div id="tabs-content-2" class="tabs-panel__tabs-content">
+                    <p>TAB CONTENT 2</p>
+                  </div>
+                  <div id="tabs-content-3" class="tabs-panel__tabs-content">
+                    <p>TAB CONTENT 3</p>
+                  </div>
+                  <div id="tabs-content-4" class="tabs-panel__tabs-content">
+                    <p>TAB CONTENT 4</p>
+                  </div>
+                </div>
+              </div>
+            </div><!-- END OF TABS CONTAINER -->
   </div>
+
+
+  <!-- ENDS LEFT PANEL WITH TAB BASED NAVIGATION -->
+  <!-- ENDS LEFT PANEL WITH TAB BASED NAVIGATION -->
+  <!-- ENDS LEFT PANEL WITH TAB BASED NAVIGATION -->
+  <!-- ENDS LEFT PANEL WITH TAB BASED NAVIGATION -->
+
+
+
+
+  <!-- STARTS RIGHT PANEL WITH CHAT AND CLIENT INFO -->
+  <!-- STARTS RIGHT PANEL WITH CHAT AND CLIENT INFO -->
+  <!-- STARTS RIGHT PANEL WITH CHAT AND CLIENT INFO -->
+  <!-- STARTS RIGHT PANEL WITH CHAT AND CLIENT INFO -->
+  <div id="chat-screen__right-half" class="flex flex-auto flex-col justify-start items-center font-sans h-screen">
+  
   <!-- Actual chat -->
+  <!-- START OF CHAT DIALOGUE / WEBSOCKET CONTAINER -->
   <div id="webSocket" class="w-2/5 flex flex-col justify-start items-start pt-2 mb-5">
+    <!-- DIALOGUE -->
     <div id="webSocketOutput" class="w-full min-w-full"></div>
     <input class="w-full w-full py-[10px] flex-grow md:py-4 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-xl shadow-xs dark:shadow-xs" id="webSocketInput" class="text-black" type="text" placeholder="Send..." autofocus>
+
+    <!-- END OF DIALOGUE WRAPPER -->
+  </div><!--END OF CHAT DIALOGUE /WEBSOCKET CONTAINER -->
+
   </div>
+  <!-- ENDS RIGHT PANEL WITH CHAT AND CLIENT INFO -->
+  <!-- ENDS RIGHT PANEL WITH CHAT AND CLIENT INFO -->
+  <!-- ENDS RIGHT PANEL WITH CHAT AND CLIENT INFO -->
+  <!-- ENDS RIGHT PANEL WITH CHAT AND CLIENT INFO -->
+
   <!-- Javascript code for the frontend -->
   <script>
     // While rawling right now it just adds a text, in the future we would need a progress bar
@@ -91,10 +178,10 @@
       targetNode.appendChild(textNode)
     });
 
-    const hostname = <%- data.hostname %>;
+    const hostname = <%- JSON.stringify(data.hostname) %>
 
     // Create sock instance
-    const ws = new WebSocket(`ws://${data.hostname}`);
+    const ws = new WebSocket(`ws://${hostname}`);
 
     // Collect data from backend and put in text format.
     const userData = <%- JSON.stringify(data.user) %>;
@@ -131,11 +218,11 @@
       content = content.map((line) => {
         return '<p class="w-full">' + line + '</p>';}).join('');
       webSocketOutput.innerHTML += '\
-        <div class="rendered_message p-2  py-2 w-full min-w-full flex flex-row justify-start items-start pt-2 \
+        <div class="machine_message rendered_message p-2  py-2 w-full min-w-full flex flex-row justify-start items-start pt-2 \
         text-gray-900 dark:text-gray-100 border-b border-black/10  dark:text-white dark:bg-gray-700 \
         ">\
           <div class="chat__user-icon--wrapper p-0.5 mr-1 w-9 rounded mr-1 flex flex-row justify-center items-center">\
-            <img src="/images/bot_temp_logo2.png">\
+            <img src="/images/eurofins_logo_2.png">\
           </div>\
           <div class="chat__user-text--wrapper p-1 w-full">\
             <p class=" leading-relaxed w-full">' + content + '</p>\
@@ -178,6 +265,54 @@
         }
       }
     });
+  </script>
+  <!-- this script controls the tabs in the user menu, replace it wherever it fits whenever the frontend gets refactored -->
+  <script>
+    function openTab(tabName) {
+      console.log(tabName);
+      var i;
+      var x = document.getElementsByClassName("tabs-panel__tabs-content");
+      for (i = 0; i < x.length; i++) {
+        x[i].style.display = "none";
+      }
+
+      var selectedTab = document.getElementById(tabName);
+      selectedTab.style.display = "block";
+    }
+  </script>
+  <script>
+    var menuVisible = true;
+
+    function showMenu(){
+      var optionsMenu = document.getElementById("chat-screen__left-half");
+      var unfoldIconContainer = document.getElementById("unfold__accordion-icon__container");
+      var cogIcon = document.getElementById("unfold_accordion_icon--close");
+      var closeIcon = document.getElementById("unfold_accordion_icon--open");
+
+      if (menuVisible === true){
+        console.log("true");
+        menuVisible = false;
+        optionsMenu.classList.add("hideMenu");
+        optionsMenu.classList.remove("showMenu");
+
+        cogIcon.classList.add("hideMenu");
+        closeIcon.classList.remove("hideMenu");
+
+        unfoldIconContainer.classList.remove("unfold__accordion-icon__container--unfolded");
+        unfoldIconContainer.classList.add("unfold__accordion-icon__container--folded");
+      }else{
+        console.log("false");
+        menuVisible = true;
+        optionsMenu.classList.remove("hideMenu");
+        optionsMenu.classList.add("showMenu");
+
+        cogIcon.classList.remove("hideMenu");
+        closeIcon.classList.add("hideMenu");
+
+        unfoldIconContainer.classList.remove("unfold__accordion-icon__container--folded");
+        unfoldIconContainer.classList.add("unfold__accordion-icon__container--unfolded");
+      }
+    }
   </script>
 </body>
 </html>
