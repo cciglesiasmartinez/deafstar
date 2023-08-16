@@ -71,6 +71,10 @@ body {
   flex-flow: row nowrap;
   justify-content: center;
   align-items: center;
+
+  -webkit-box-shadow: 1px 1px 5px 4px rgba(194, 190, 194, 0.57);
+  -moz-box-shadow: 1px 1px 5px 4px rgba(194, 190, 194, 0.57);
+  box-shadow: 1px 1px 5px 4px rgba(194, 190, 194, 0.57);
 }
 
 .unfold__accordion-icon__container--unfolded {
@@ -575,7 +579,7 @@ body {
 }
 
 .saved-chat--example:hover {
-  background-color: rgba(255, 166, 1, 0.651);
+  background-color: rgba(253, 184, 56, 0.596);
   color: var(--brand_color_1);
   border: 1px solid var(--brand_color_2);
 }
@@ -622,9 +626,9 @@ body {
 
 .active,
 .accordion:hover {
-  background-color: rgba(255, 166, 1, 0.651);
+  background-color: rgba(253, 184, 56, 0.596);
   color: var(--brand_color_1);
-  border: 1px solid var(--brand_color_1);
+  border: 1px solid var(--brand_color_2);
 }
 
 .panel {
@@ -632,11 +636,22 @@ body {
   overflow: hidden;
 }
 
+.panel p {
+  width: 93%;
+  margin: 0px auto;
+  position: relative;
+}
+
 .knowledge-panel__title {
   font-size: 1.1rem;
   padding: 0.6rem 0rem;
 
   padding-left: 1rem;
+}
+
+.active.knowledge-panel__title,
+.accordion:hover.knowledge-panel__title {
+  text-decoration: underline;
 }
 
 .knowledge--example__icons {
@@ -647,13 +662,14 @@ body {
   width: 15%;
   margin-left: auto;
 }
+
 .caret__wrapper {
   background-color: var(--brand_color_1);
   color: white;
   border-radius: 50%;
   font-size: 0.8rem;
-  width: 2rem;
-  height: 2rem;
+  width: 1.5rem;
+  height: 1.5rem;
 
   display: flex;
   flex-flow: row nowrap;
