@@ -24,8 +24,11 @@
 
   <!-- Javascript code for the frontend -->
   <script>
+    // Get the hostname
+    const hostname = <%- JSON.stringify(data.hostname) %>;
+
     // Create sock instance
-    const ws = new WebSocket('ws://hiddenvault.ddns.net:8008');
+    const ws = new WebSocket(`ws://${hostname}`);
 
     // Get data through EJS and stringify it
     var userData = <%- JSON.stringify(data.user) %>;

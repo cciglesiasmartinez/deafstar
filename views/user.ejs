@@ -91,10 +91,11 @@
       targetNode.appendChild(textNode)
     });
 
-    const hostname = <%- data.hostname %>;
+    // Get the actual hostname
+    const hostname = <%- JSON.stringify(data.hostname) %>;
 
     // Create sock instance
-    const ws = new WebSocket(`ws://${data.hostname}`);
+    const ws = new WebSocket(`ws://${hostname}`);
 
     // Collect data from backend and put in text format.
     const userData = <%- JSON.stringify(data.user) %>;
