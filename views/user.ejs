@@ -192,11 +192,17 @@
                       </div><!-- END OF SAVED CHAT EXAMPLE -->
                     </div>
                   </div>
+                  <!-- START OF TAB 3 // KNOWLEDGE PANELS -->
                   <div id="tabs-content-3" class="tabs-panel__tabs-content">
-                    <div class="tab-content__wrapper tab-3-debug">
+                    <div class="tab-content__wrapper">
                       <!-- START OF KNOWLEDGE PANEL -->
+                      <div id="knowledge__search--wrapper">
+                          <input id="knowledge-search__input" type="text" placeholder="Search in knowledge base..." name="search">
+                          <div id="knowledge-search__button" type="submit"><i class="fa fa-search"></i></div>
+
+                      </div>
                       <div class="accordion knowledge-panel__title">
-                        <span>Miljøanalyse for PFAS</span>
+                        <span>Miljøanalyser for PFAS</span>
                         <div class="knowledge--example__icons">
                           <div class="caret__wrapper"><span><i class="fa-solid fa-caret-down"></i></span></div>
                         </div>
@@ -235,10 +241,46 @@
                         <p>Vi utfører laboratorieanalyser innen mikrobiologi og kjemi og er akkreditert i henhold til NS EN ISO/IEC 17025. En akkreditering krever at laboratoriet kan dokumentere sporbarhet i alle ledd, fra organisasjon til utførelse av en analyse.</p>
                       </div><!-- END OF KNOWLEDGE PANEL -->
                     </div>
-                  </div>
+                  </div><!-- END OF CONTENT TAB 3 // KNOWLEDGE PANELS -->
+                  <!-- START OF CONTENT TAB 4 // ADMIN PANEL -->
                   <div id="tabs-content-4" class="tabs-panel__tabs-content">
-                    <p>TAB CONTENT 4</p>
-                  </div>
+                    <div class="tab-content__wrapper">
+                      <div id="tab-4__title">
+                        <span>Added Users</span>
+                      </div>
+                      <div id="tab-4__users-number">
+                        <span>2 Users</span>
+                        <div id="tab-4__see-users">
+                          <span>See users</span>
+                        </div>
+                      </div>
+
+                      <div id="tab-4__users-remaining">
+                        <span>8 seats remaining / 10 total seats</span>
+                      </div>
+                      <div id="tab-4__ad-users">
+                        <span>Add New users</span>
+                      </div>
+                      <div id="tab-4__ad-multiple__button">
+                        <input type="radio" id="add_one" name="drone" value="one" />
+                      <label for="dewey">Add one</label>
+                      </div>
+                      <div>
+                      <input type="radio" id="add_multipley" name="drone" value="multiple" />
+                      <label for="dewey">Add multiple</label>
+                      </div>
+                      <div id="tab-4__select-role__wrapper">
+                        <span id="tab-4__chose-title">
+                          Choose user role/capabilities:
+                        </span>
+                        <select>
+                          <option value="See content">See content</option>
+                          <option value="Manage content">Manage content</option>
+                          <option value="Administrator">Administrator</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div><!-- END OF CONTENT TAB 3 // ADMIN PANELS -->
                 </div>
               </div>
             </div><!-- END OF TABS CONTAINER -->

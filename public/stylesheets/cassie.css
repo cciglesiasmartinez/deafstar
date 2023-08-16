@@ -680,3 +680,86 @@ body {
 .active .caret__wrapper {
   rotate: 180deg;
 }
+
+#knowledge__search--wrapper {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: center;
+
+  border-radius: 5px;
+
+  -webkit-box-shadow: 1px 1px 5px 4px rgba(194, 190, 194, 0.57);
+  -moz-box-shadow: 1px 1px 5px 4px rgba(194, 190, 194, 0.57);
+  box-shadow: 1px 1px 5px 4px rgba(194, 190, 194, 0.57);
+}
+
+#knowledge-search__input {
+  border-radius: 5px 0px 0px 5px;
+  border: 1px solid black;
+  border-right: 0px;
+}
+
+#knowledge-search__button {
+  width: 3rem;
+  border-radius: 0px 5px 5px 0px;
+  background-color: grey;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  border: 1px solid black;
+  border-left: 0px;
+}
+
+#knowledge-search__button:hover {
+  background-color: lightgray;
+}
+/* TAB 4 ADMIN */
+
+#tab-4__title {
+  font-size: 2rem;
+}
+
+#tab-4__users-number {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+}
+
+#tab-4__see-users {
+  border-radius: 5px;
+  padding: 0.5rem;
+  background-color: var(--blue_P_light);
+  color: var(--brand_color_1);
+}
+
+#tab-4__see-users:hover {
+  background-color: var(--blue_P_medium);
+  text-decoration: underline;
+}
+
+#tab-4__users-remaining {
+}
+
+#tab-4__ad-users {
+  margin-top: 1rem;
+  width: 100%;
+  border-top: 1px solid grey;
+  font-size: 2rem;
+}
+
+#tab-4__ad-multiple__button {
+}
+
+#tab-4__select-role_wrapper {
+}
+
+#tab-4__chose-title {
+  display: block;
+  font-size: 1.5rem;
+}
