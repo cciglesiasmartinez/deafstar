@@ -11,13 +11,15 @@
       id="login-container"
       class="container sm flex flex-col flex-auto justify-center items-center"
     >
-      <img
-        id="login-container__logo"
-        src="/images/bot_temp_logo2.png"
-        class="mb-4"
-      />
+      <div id="login__logo__outer-container">
+        <img
+          id="login-container__logo"
+          src="/images/eurofins_logo_2.png"
+          class="mb-4"
+        />
+      </div>
 
-      <h1 id="login-container__text" class="mb-2">Welcome to DigitalAI.no</h1>
+      <h1 id="login-container__title" class="mb-2">Welcome to DigitalAI.no</h1>
       <h2 id="login-container__text" class="mb-10">
         Log in with your DigitalAI account to continue
       </h2>
@@ -27,8 +29,10 @@
         action="/login"
         class="flex flex-col flex-auto justify-center items-center"
       >
-        <div>
-          <label for="username" class="mb-5">User:</label>
+        <div class="login-input__container">
+          <label class="login-input__label" for="username" class="mb-5"
+            >User:</label
+          >
           <input
             class="container sm border-1 rounded-sm text-black p-0.5"
             type="text"
@@ -37,8 +41,10 @@
             placeholder="user"
           />
         </div>
-        <div class="mt-8 mb-5">
-          <label for="password" class="mb-5">Pass:</label>
+        <div class="login-input__container">
+          <label class="login-input__label" for="password" class="mb-5"
+            >Pass:</label
+          >
           <input
             class="container sm border-1 rounded-sm text-black p-0.5"
             type="password"
@@ -47,10 +53,7 @@
             placeholder="password"
           />
         </div>
-        <button
-          class="bg-green-500 hover:bg-green-900 text-white font-bold py-2 px-4 rounded"
-          type="submit"
-        >
+        <button id="login__button__container" class="" type="submit">
           Log In
         </button>
       </form>

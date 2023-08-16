@@ -108,7 +108,7 @@
         <p class="p-1"><b>Actual text for URL suggestions is:</b> <%- data.user.urlSuggestionsText %></p>
         <!-- Once website has been crawled, here is the generated link -->
         <% if ( data.user.chatbot !== undefined ) { %> 
-          <p class="p-1">Click <a style="color: lightblue" target="_blank" href="http://<%= data.hostname %>/chat/<%= data.user.chatbot.chatId %>"> here </a> for your chatbot link.</a></p>
+          <p class="p-1">Click <a class="chatbot__link" target="_blank" href="http://<%= data.hostname %>/chat/<%= data.user.chatbot.chatId %>"> here </a> for your chatbot link.</a></p>
         <% } %>
       </div>
     </div>
@@ -123,7 +123,63 @@
   </div><!-- END OF USER SETTINGS CONTAINER -->
                   </div>
                   <div id="tabs-content-2" class="tabs-panel__tabs-content">
-                    <p>TAB CONTENT 2</p>
+                    <div class="tab-content__wrapper">
+                      <!-- SAVED CHAT EXAMPLE -->
+                      <div class="saved-chat--example">
+                        <div class="saved-chat--example__title">
+                          <span>Ideas for new services</span>
+                        </div>
+                        <div class="saved-chat--example__icons">
+                          <span><i class="fa-solid fa-share-nodes fa-xl"></i></span>
+                          <span><i class="fa-solid fa-gear fa-xl"></i></span>
+                          <span class="thrash_icon"><i class="fa-solid fa-trash fa-xl"></i></span>
+                        </div>
+                      </div><!-- END OF SAVED CHAT EXAMPLE -->
+                      <!-- SAVED CHAT EXAMPLE -->
+                      <div class="saved-chat--example">
+                        <div class="saved-chat--example__title">
+                          <span>Pricing questions</span>
+                        </div>
+                        <div class="saved-chat--example__icons">
+                          <span><i class="fa-solid fa-share-nodes fa-xl"></i></span>
+                          <span><i class="fa-solid fa-gear fa-xl"></i></span>
+                          <span class="thrash_icon"><i class="fa-solid fa-trash fa-xl"></i></span>
+                        </div>
+                      </div><!-- END OF SAVED CHAT EXAMPLE -->
+                      <!-- SAVED CHAT EXAMPLE -->
+                      <div class="saved-chat--example">
+                        <div class="saved-chat--example__title">
+                          <span>Possible uses of new tool</span>
+                        </div>
+                        <div class="saved-chat--example__icons">
+                          <span><i class="fa-solid fa-share-nodes fa-xl"></i></span>
+                          <span><i class="fa-solid fa-gear fa-xl"></i></span>
+                          <span class="thrash_icon" ><i class="fa-solid fa-trash fa-xl"></i></span>
+                        </div>
+                      </div><!-- END OF SAVED CHAT EXAMPLE -->
+                      <!-- SAVED CHAT EXAMPLE -->
+                      <div class="saved-chat--example">
+                        <div class="saved-chat--example__title">
+                          <span>Effects of microplastics on fish</span>
+                        </div>
+                        <div class="saved-chat--example__icons">
+                          <span><i class="fa-solid fa-share-nodes fa-xl"></i></span>
+                          <span><i class="fa-solid fa-gear fa-xl"></i></span>
+                          <span class="thrash_icon" ><i class="fa-solid fa-trash fa-xl"></i></span>
+                        </div>
+                      </div><!-- END OF SAVED CHAT EXAMPLE -->
+                      <!-- SAVED CHAT EXAMPLE -->
+                      <div class="saved-chat--example">
+                        <div class="saved-chat--example__title">
+                          <span>How to culture plant cells</span>
+                        </div>
+                        <div class="saved-chat--example__icons">
+                          <span><i class="fa-solid fa-share-nodes fa-xl"></i></span>
+                          <span><i class="fa-solid fa-gear fa-xl"></i></span>
+                          <span class="thrash_icon"><i class="fa-solid fa-trash fa-xl"></i></span>
+                        </div>
+                      </div><!-- END OF SAVED CHAT EXAMPLE -->
+                    </div>
                   </div>
                   <div id="tabs-content-3" class="tabs-panel__tabs-content">
                     <p>TAB CONTENT 3</p>
@@ -270,14 +326,39 @@
   <script>
     function openTab(tabName) {
       console.log(tabName);
+      console.log(event.target);
+      targetTab = event.target;
+      console.log("Event target is");
+      console.log(targetTab);
+
+      if(targetTab.tagName == "SPAN" || targetTab.tagName == "I"){
+        var newTarget = targetTab.parentElement;
+        console.log("new target is");
+        console.log(newTarget);
+        if(newTarget.tagName == "SPAN" || newTarget.tagName == "I"){
+          var newTarget = newTarget.parentElement;
+        }
+
+        targetTab = newTarget;
+        console.log("last target is");
+        console.log(newTarget);
+      }
+
       var i;
       var x = document.getElementsByClassName("tabs-panel__tabs-content");
       for (i = 0; i < x.length; i++) {
         x[i].style.display = "none";
       }
 
+      var y = document.getElementsByClassName("tabs-panel__tab");
+      for (i = 0; i < y.length; i++) {
+        y[i].classList.remove("isSelectedTab");
+      }
+
       var selectedTab = document.getElementById(tabName);
       selectedTab.style.display = "block";
+      targetTab.classList.add("isSelectedTab");
+
     }
   </script>
   <script>
