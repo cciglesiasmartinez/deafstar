@@ -56,67 +56,165 @@
                   <div id="tabs-content-1" class="tabs-panel__tabs-content">
                     <!-- START OF USER SETTINGS CONTAINER -->
   <!-- Upper panel with client info, crawl options, and logout button -->
-  <div id="upper_panel__container" class="w-2/5 mt-8 flex flex-row justify-start items-start p-2 mb-5 rounded-lg border bg-gray-600">
-    <div id="client-panel__container" class="h-full w-3/5  flex flex-row justify-start items-start ">
+  <div id="upper_panel__container" class="">
+    <div id="client-panel__container" class="">
       <!-- Client info -->
-      <div id="client-panel__data" class="flex flex-col justify-start items-start">
+      <div id="client-panel__data" class="">
+        <div class="client-panel__data--section data--section--special">
+
         <!-- <h1 class="text-2xl mb-1"  >Client Info</h1> -->
-        <p class="p-1"><b>Name: </b> <%- data.user.name %> <b>URL:</b> <%- data.user.url %></p>
+          <div class="client-panel__data--subsection__left">
+            <p class=""><b>Name: </b> </p>
+          </div>
+          <div class="client-panel__data--subsection__right">
+            <%- data.user.name %> </p>
+          </div>
+        </div>
+
+        <div class="client-panel__data--section">
+        <div class="client-panel__data--subsection__left">
+          <p><b>Allowed website:</b></p>
+        </div>
+          <div class="client-panel__data--subsection__right">
+            <p><%- data.user.url %></p>
+          </div>
+    
+
+        </div>
+
         <!-- Crawl web controls -->
-        <div id="chatControl">
-          <form id="crawlForm" method="POST" class="p-1" action="/crawl">
-            <label for="url"><b>URL:</b></label>
-            <input id="url" type="text" placeholder=" Write URL..." name="url" style="border-radius: 5px">
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="crawlButton" type="submit">Crawl!</button>
-          </form>
+        <div id="chatControl" class="client-panel__data--section">
+          <div class="client-panel__data--subsection__full">
+            <p class="client-panel__data--subsection__title">Website to crawl:</p>
+          </div>
+
+          <div class="client-panel__data--subsection__full">
+            <form id="crawlForm" class="client-panel__form-flex" method="POST"  action="/crawl">
+              <input id="url" type="text" placeholder=" Write URL..." name="url">
+              <button class="user-panel__form__button" id="crawlButton" type="submit">Crawl!</button>
+            </form>
+          </div>
         </div>
+
+
+
         <!--Chatbot system msg controls-->
-        <div id="chatSystem">
-          <form id="chatSystemForm" class="p-1" method="POST" action="/system">
-            <label for="url"><b>System message:</b></label>
-            <input id="url" type="text" placeholder="Write here..." name="url" style="border-radius: 5px">
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="chatSystemButton" type="submit">Set!</button>
-          </form>
+        <div id="chatSystem" class="client-panel__data--section">
+
+          <div class="client-panel__data--subsection__full">
+            <p class="client-panel__data--subsection__title">System message:</p>
+          </div>
+
+          <div class="client-panel__data--subsection__full">
+            <form id="chatSystemForm" class="client-panel__form-flex" method="POST" action="/system">
+              <input id="url" type="text" placeholder="Write here..." name="url">
+              <button class="user-panel__form__button" id="chatSystemButton" type="submit">Set!</button>
+            </form>
+          </div>
+
+        <div class="client-panel__data--subsection__full">
+          <p class="client-panel__data--subsection__state-message"><b>Actual message is:</b> <%- data.user.systemMsg %></p>
         </div>
-        <p class="p-1"><b>Actual message is:</b> <%- data.user.systemMsg %></p>
+      </div>
+
+
         <!-- Chatbot temperature adjustment -->
-        <div id="chatTemperature">
-          <form id="chatTemperatureForm" class="p-1" method="POST" action="/temp">
-            <label for="url"><b>Temperature:</b></label>
-            <input id="url" type="text" placeholder="Write here..." name="url" style="border-radius: 5px">
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="chatTemperatureButton" type="submit">Set!</button>
-          </form>
+        <div id="chatTemperature" class="client-panel__data--section">
+          <div class="client-panel__data--subsection__full">
+            <p class="client-panel__data--subsection__title">Contextual temperature:</p>
+          </div>
+
+          <div class="client-panel__data--subsection__full">
+            <form id="chatTemperatureForm" class="client-panel__form-flex" method="POST" action="/temp">
+              <input id="url" type="text" placeholder="Write here..." name="url">
+              <button class="" id="chatTemperatureButton" type="submit">Set!</button>
+            </form>
+          </div>
+
+          <div class="client-panel__data--subsection__full">
+            <p class="client-panel__data--subsection__state-message"><b>Actual contextual temperature is:</b> <%- data.user.temp %></p>
+          </div>
+        
         </div>
-        <p class="p-1"><b>Actual temperature is:</b> <%- data.user.temp %></p>
+
+
+        <!-- Chatbot vector density adjustment -->
+        <div id="chatTemperature" class="client-panel__data--section">
+          <div class="client-panel__data--subsection__full">
+            <p class="client-panel__data--subsection__title" >Vector density:</p>
+          </div>
+
+          <div class="client-panel__data--subsection__full">
+            <form id="chatTemperatureForm" class="client-panel__form-flex" method="POST" action="/temp">
+              <input id="url" type="text" placeholder="Write here..." >
+              <button class="" >Set!</button>
+            </form>
+          </div>
+
+          <div class="client-panel__data--subsection__full">
+            <p class="client-panel__data--subsection__state-message"><b>Actual vector density:</b> Still on the works!</p>
+          </div>
+        
+        </div>
+
         <!-- Chatbot greet message -->
-        <div id="chatGreetMsg">
-          <form id="chatSystemForm" class="p-1" method="POST" action="/greetMsg">
-            <label for="url"><b>Chatbot greet message:</b></label>
-            <input id="url" type="text" placeholder="Write here..." name="url" style="border-radius: 5px">
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="chatSystemButton" type="submit">Set!</button>
-          </form>
+        <div id="chatGreetMsg" class="client-panel__data--section">
+
+          <div class="client-panel__data--subsection__full">
+            <p class="client-panel__data--subsection__title">Greeting message</p>
+          </div>
+
+          <div class="client-panel__data--subsection__full">
+            <form id="chatSystemForm"   class="client-panel__form-flex"  method="POST" action="/greetMsg">
+              <input id="url" type="text" placeholder="Write here..." name="url" >
+              <button class="" id="chatSystemButton" type="submit">Set!</button>
+            </form>
+          </div>
+
+          <div class="client-panel__data--subsection__full">
+            <p class="client-panel__data--subsection__state-message"><b>Actual greet message is:</b> <%- data.user.greetMsg %></p>
+          </div>
+
         </div>
-        <p class="p-1"><b>Actual greet message is:</b> <%- data.user.greetMsg %></p>
+
+
         <!-- Chatobt URL suggestions text -->
-        <div id="chatUrlSuggestionsText">
-          <form id="chatSystemForm" class="p-1" method="POST" action="/urlSuggestionsText">
-            <label for="url"><b>Text for URL suggestions:</b></label>
-            <input id="url" type="text" placeholder="Write here..." name="url" style="border-radius: 5px">
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="chatSystemButton" type="submit">Set!</button>
-          </form>
+        <div id="chatUrlSuggestionsText" class="client-panel__data--section">
+
+          <div class="client-panel__data--subsection__full">
+            <p class="client-panel__data--subsection__title">Text for URL suggestions:</p>
+          </div>
+
+          <div class="client-panel__data--subsection__full">
+            <form id="chatSystemForm"  class="client-panel__form-flex" method="POST" action="/urlSuggestionsText">
+              <input id="url" type="text" placeholder="Write here..." name="url" >
+              <button class="" id="chatSystemButton" type="submit">Set!</button>
+            </form>
+          </div>
+
+          <div class="client-panel__data--subsection__full">
+            <p class="client-panel__data--subsection__state-message"><b>Actual text for URL suggestions is:</b> <%- data.user.urlSuggestionsText %></p>
+          </div>
         </div>
-        <p class="p-1"><b>Actual text for URL suggestions is:</b> <%- data.user.urlSuggestionsText %></p>
         <!-- Once website has been crawled, here is the generated link -->
+
         <% if ( data.user.chatbot !== undefined ) { %> 
-          <p class="p-1">Click <a class="chatbot__link" target="_blank" href="http://<%= data.hostname %>/chat/<%= data.user.chatbot.chatId %>"> here </a> for your chatbot link.</a></p>
+          <div id="chatUrlSuggestionsText" class="client-panel__data--section">
+          
+            <div class="client-panel__data--subsection__full">
+              <p class="p-1">Click <a class="chatbot__link" target="_blank" href="http://<%= data.hostname %>/chat/<%= data.user.chatbot.chatId %>"> here </a> for your chatbot link.</a></p>
+            </div>
+          </div>
         <% } %>
       </div>
     </div>
+
+
     <!-- Logout Button -->
-    <div id="client-panel__controls" class="h-full w-2/4 flex flex-row justify-end items-center">
-      <div id="logout" >
-        <form method="GET" action="/logout">
-          <button type="submit" class="bg-green-500 hover:bg-green-900 text-white font-bold py-2 px-4 rounded" >Logout</button>
+    <div id="client-panel__controls" class="client-panel__data--section data--section--last">
+      <div id="logout" class="client-panel__data--subsection__full">
+        <form method="GET" action="/logout" class="client-panel__form-flex">
+          <button id="client-panel__logout-button" type="submit" class="" >Logout</button>
         </form>
       </div>
     </div>

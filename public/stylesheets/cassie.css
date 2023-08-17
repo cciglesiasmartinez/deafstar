@@ -313,7 +313,8 @@ body {
 
 #tabs-panel__tabs-content--wrapper {
   width: 100%;
-  height: 100%;
+  height: 90%;
+  overflow-y: scroll;
 }
 
 .tabs-panel__tabs-content {
@@ -762,4 +763,95 @@ body {
 #tab-4__chose-title {
   display: block;
   font-size: 1.5rem;
+}
+
+/* CLIENT DATA SECTION -- TAB 1 */
+.client-panel__data--section {
+  border-bottom: 1px solid grey;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  width: 95%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.client-panel__data--subsection__full {
+  min-width: 100%;
+}
+
+.client-panel__data--subsection__left {
+  min-width: 30%;
+}
+
+.client-panel__data--subsection__right {
+}
+
+#crawlForm {
+  width: 100%;
+  /*display: flex;
+  flex-flow: column nowrap;*/
+}
+
+.user-panel__form__label {
+  display: block;
+  width: 100%;
+  font-size: 1.2rem;
+}
+
+.user-panel__form__button {
+}
+
+.client-panel__form-flex {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.client-panel__form-flex input {
+  margin-right: 1rem;
+  border-radius: 5px;
+  min-width: 50%;
+}
+
+.client-panel__form-flex button {
+  height: 100%;
+
+  min-width: 5rem;
+  background-color: var(--blue_P_light);
+  color: var(--brand_color_1);
+  padding: 0.5rem;
+  border-radius: 5px;
+
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.client-panel__data--subsection__title {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 0.2rem;
+}
+
+.client-panel__data--subsection__state-message {
+  margin-top: 0.4rem;
+}
+
+.data--section--special {
+  border: 0px !important;
+  margin-bottom: 0px !important;
+}
+
+.data--section--last {
+  border: 0px !important;
+  margin-bottom: 0px !important;
+}
+
+.data--section--last .client-panel__form-flex {
+  justify-content: center !important;
+  align-items: center !important;
 }
