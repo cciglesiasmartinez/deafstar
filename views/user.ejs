@@ -48,7 +48,7 @@
                   <!-- START OF A TAB -->
                   <div class="tabs-panel__tab" id="tab-3" onclick="openTab('tabs-content-4')">
                     <span class="tabs-panel__tab-text"> 
-                      <span class="tabs-panel__tab-icon"><i class="fa-solid fa-screwdriver-wrench"></i></span>Admin</span>
+                      <span class="tabs-panel__tab-icon"><i class="fa-solid fa-screwdriver-wrench"></i></span>Administration</span>
                   </div>
                   <!-- END OF A TAB -->
                 </div><!--END OF TABS ROW WRAPPER -->
@@ -60,9 +60,10 @@
     <div id="client-panel__container" class="">
       <!-- Client info -->
       <div id="client-panel__data" class="">
+        <!--
         <div class="client-panel__data--section data--section--special">
 
-        <!-- <h1 class="text-2xl mb-1"  >Client Info</h1> -->
+        <!-- <h1 class="text-2xl mb-1"  >Client Info</h1> 
           <div class="client-panel__data--subsection__left">
             <p class=""><b>Name: </b> </p>
           </div>
@@ -80,12 +81,12 @@
           </div>
     
 
-        </div>
+        </div>-->
 
         <!-- Crawl web controls -->
         <div id="chatControl" class="client-panel__data--section">
           <div class="client-panel__data--subsection__full">
-            <p class="client-panel__data--subsection__title">Website to crawl:</p>
+            <p class="client-panel__data--subsection__title">Website to crawl</p>
           </div>
 
           <div class="client-panel__data--subsection__full">
@@ -102,7 +103,7 @@
         <div id="chatSystem" class="client-panel__data--section">
 
           <div class="client-panel__data--subsection__full">
-            <p class="client-panel__data--subsection__title">System message:</p>
+            <p class="client-panel__data--subsection__title">System message</p>
           </div>
 
           <div class="client-panel__data--subsection__full">
@@ -121,7 +122,7 @@
         <!-- Chatbot temperature adjustment -->
         <div id="chatTemperature" class="client-panel__data--section">
           <div class="client-panel__data--subsection__full">
-            <p class="client-panel__data--subsection__title">Contextual temperature:</p>
+            <p class="client-panel__data--subsection__title">Contextual temperature</p>
           </div>
 
           <div class="client-panel__data--subsection__full">
@@ -141,12 +142,12 @@
         <!-- Chatbot vector density adjustment -->
         <div id="chatTemperature" class="client-panel__data--section">
           <div class="client-panel__data--subsection__full">
-            <p class="client-panel__data--subsection__title" >Vector density:</p>
+            <p class="client-panel__data--subsection__title" >Vector density</p>
           </div>
 
           <div class="client-panel__data--subsection__full">
-            <form id="chatTemperatureForm" class="client-panel__form-flex" method="POST" action="/temp">
-              <input id="url" type="text" placeholder="Write here..." >
+            <form  class="client-panel__form-flex" method="" action="">
+              <input disabled type="text" placeholder="Disabled / still in development" >
               <button class="" >Set!</button>
             </form>
           </div>
@@ -182,7 +183,7 @@
         <div id="chatUrlSuggestionsText" class="client-panel__data--section">
 
           <div class="client-panel__data--subsection__full">
-            <p class="client-panel__data--subsection__title">Text for URL suggestions:</p>
+            <p class="client-panel__data--subsection__title">Text for URL suggestions</p>
           </div>
 
           <div class="client-panel__data--subsection__full">
@@ -202,7 +203,7 @@
           <div id="chatUrlSuggestionsText" class="client-panel__data--section">
           
             <div class="client-panel__data--subsection__full">
-              <p class="p-1">Click <a class="chatbot__link" target="_blank" href="http://<%= data.hostname %>/chat/<%= data.user.chatbot.chatId %>"> here </a> for your chatbot link.</a></p>
+              <p id="chatbot_link__p" ><i style="color: rgb(65, 65, 236);"class="fa-solid fa-link"></i> Click <a class="chatbot__link" target="_blank" href="http://<%= data.hostname %>/chat/<%= data.user.chatbot.chatId %>"> here </a> for your chatbot link.</a></p>
             </div>
           </div>
         <% } %>
@@ -429,7 +430,7 @@
     const hostname = <%- JSON.stringify(data.hostname) %>
 
     // Create sock instance
-    const ws = new WebSocket(`ws://${hostname}`);
+    const ws = new WebSocket(`wss://eurofins.digitalai.no`);
 
     // Collect data from backend and put in text format.
     const userData = <%- JSON.stringify(data.user) %>;

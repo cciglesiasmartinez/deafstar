@@ -18,11 +18,13 @@
         class="sticky top-0 flex flex-col justify-center pt-4 pb-4 mb-5 items-center w-full"
       >
         <div class="w-full justify-center items-center flex flex-col">
-          <h1 class="">Chatbot for <b><%- data.user.name %></b></h1>
+          <h1 id="chat_view_h1" class="">
+            Chatbot for <b><%- data.user.name %></b>
+          </h1>
         </div>
       </header>
       <div id="webSocketOutput" class="w-full min-w-full"></div>
-      <div class="p-4 w-full mb-8 mt-8">
+      <div id="chat__view" class="p-4 w-full mb-8 mt-8">
         <input
           id="webSocketInput"
           class="w-full w-full py-[10px] flex-grow md:py-4 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-xl shadow-xs dark:shadow-xs"
@@ -40,7 +42,7 @@
       const hostname = <%- JSON.stringify(data.hostname) %>
 
       // Create sock instance
-      const ws = new WebSocket(`ws://${hostname}`);
+      const ws = new WebSocket(`wss://eurofins.digitalai.no`);
 
 
         // Get data through EJS and stringify it
@@ -65,7 +67,7 @@
               text-gray-900 dark:text-gray-100 border-b border-black/10 dark:text-white dark:bg-gray-700 \
               ">\
                 <div class="chat__user-icon--wrapper p-0.5 mr-1 w-9 rounded mr-1 flex flex-row justify-center items-center">\
-                  <img src="/images/bot_temp_logo2.png">\
+                  <img src="/images/eurofins_logo_2.png">\
                 </div>\
                 <div class="chat__user-text--wrapper p-1 w-full">\
                   <p class=" leading-relaxed w-full"> </p>\
@@ -125,7 +127,7 @@
             text-gray-900 dark:text-gray-100 border-b border-black/10 dark:text-white dark:bg-gray-700 \
             ">\
               <div class="chat__user-icon--wrapper p-0.5 mr-1 w-9 rounded mr-1 flex flex-row justify-center items-center">\
-                <img src="/images/bot_temp_logo2.png">\
+                <img src="/images/eurofins_logo_2.png">\
               </div>\
               <div class="chat__user-text--wrapper p-1 w-full">\
                 <p class=" leading-relaxed w-full">' + content + '</p>\
@@ -139,7 +141,7 @@
             text-gray-900 dark:text-gray-100 border-b border-black/10 dark:text-white dark:bg-gray-700 \
             ">\
               <div class="chat__user-icon--wrapper p-0.5 mr-1 w-9 rounded mr-1 flex flex-row justify-center items-center">\
-                <img src="/images/bot_temp_logo2.png">\
+                <img src="/images/eurofins_logo_2.png">\
               </div>\
               <div class="chat__user-text--wrapper p-1 w-full">\
                 <p class=" leading-relaxed w-full">' + content + '</p>\

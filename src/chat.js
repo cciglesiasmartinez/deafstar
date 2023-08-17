@@ -10,13 +10,19 @@ const { PineconeClient } = require("@pinecone-database/pinecone");
 const { Crawler, Url } = require("./crawler.js");
 const { v4 } = require("uuid");
 const { DB } = require("./db.js");
+const { conf } = require("../conf/conf.js");
 
 const pineconeApiKey = process.env.PINECONE_API_KEY;
 const pineconeEnvironment = process.env.PINECONE_ENV;
 const openAiApiKey = process.env.OPENAI_API_KEY;
-const conf = new Configuration({ apiKey: openAiApiKey });
-const openai = new OpenAIApi(conf);
-const database = new DB("127.0.0.1", "deafstar", "t0f7dj35jF", "deafstar");
+const openAiConf = new Configuration({ apiKey: openAiApiKey });
+const openai = new OpenAIApi(openAiConf);
+const database = new DB(
+  conf.db.host,
+  conf.db.user,
+  conf.db.password,
+  conf.db.name
+);
 
 console.log("[CHAT] OpenAI API key: " + openAiApiKey);
 console.log("[CHAT] Pinecone API key; " + pineconeApiKey);
