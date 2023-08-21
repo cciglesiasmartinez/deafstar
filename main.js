@@ -57,6 +57,7 @@ websockets.setupWebsockets(secureHttpd);
 
 // For first time running
 db.createStructure();
+
 /*
 const newUser2 = {
   token: "digitalai",
@@ -70,6 +71,7 @@ db.createUser(newUser2, (createdUser) => {
   console.log("User created:", createdUser);
 });
 */
+
 // Retrieving users
 db.getUsers((users) => {
   users.forEach(async (user) => {

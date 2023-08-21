@@ -39,7 +39,7 @@ const routes = {
             resave: false,
             saveUninitialized: false
         }));
-        
+
         // Dunno?
         app.use(express.urlencoded({ extended: true }));
 
@@ -218,8 +218,7 @@ const routes = {
 
         // Placeholder for main page
         app.get('/', (req, res) => {
-            const content = "Coming soon.";
-            res.render('index', { content });
+            res.redirect('/login');
         });
 
         // Helper method to redirect users to their panel

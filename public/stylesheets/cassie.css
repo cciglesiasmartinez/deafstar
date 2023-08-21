@@ -477,6 +477,7 @@ body {
 
 #login-container__title {
   margin-bottom: 0.5rem;
+  display: none;
 }
 
 #login-container__text {
