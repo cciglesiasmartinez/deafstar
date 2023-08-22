@@ -317,11 +317,28 @@
                   <div id="tabs-content-3" class="tabs-panel__tabs-content">
                     <div class="tab-content__wrapper">
                       <!-- START OF KNOWLEDGE PANEL -->
-                      <div id="knowledge__search--wrapper">
-                          <input id="knowledge-search__input" type="text" placeholder="Search in knowledge base..." name="search">
-                          <div id="knowledge-search__button" type="submit"><i class="fa fa-search"></i></div>
 
-                      </div>
+                        <div id="knowledge__search--wrapper">
+                            <input id="knowledge-search__input" type="text" placeholder="Search in knowledge base..." name="search">
+                            <div id="knowledge-search__button" type="submit"><i class="fa fa-search"></i></div>
+                        </div>
+                      
+                        <!-- Code for inserting programatically the vectors here -->
+                      <% data.user.chatbot.vectors.forEach((element,index) => { %> 
+                        
+                        <div class="accordion knowledge-panel__title">
+                          <span>Title: <%- data.user.chatbot.vectors[index].metadata.title %></span>
+                          <div class="knowledge--example__icons">
+                            <div class="caret__wrapper"><span><i class="fa-solid fa-caret-down"></i></span></div>
+                          </div>
+                        </div>
+                        <div class="panel">
+                          <p> TEXT HERE! </p>
+                          <p><%= data.user.chatbot.vectors[index].metadata.text %></p>
+                        </div>
+
+                      <% }); %>
+                      
                       <div class="accordion knowledge-panel__title">
                         <span>Miljøanalyser for PFAS</span>
                         <div class="knowledge--example__icons">
