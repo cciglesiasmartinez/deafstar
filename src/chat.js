@@ -374,10 +374,11 @@ class ChatBot {
 			console.log('THIS IS THE RELATED', related);
 			// Do things this way!! 
 			// related.matches.forEach( () => {  });
-			for (let i = 1; i < this.vectorsPerAnswer; i++) {
-				console.log('Iterating...', i-1);
-				result.texts.push(related.matches[i-1].metadata.text);
-				result.urls.push(related.matches[i-1].metadata.url);
+			console.log("Entering FOR LOOP, nuber of iterations:", this.vectorsPerAnswer);
+			for (let i = 0; i < this.vectorsPerAnswer; i++) {
+				console.log('Iterating...', i);
+				result.texts.push(related.matches[i].metadata.text);
+				result.urls.push(related.matches[i].metadata.url);
 			}
 			console.log('THIS IS THE RESULT',result);
 			return result;
@@ -398,7 +399,7 @@ class ChatBot {
 		console.log("[PINECONE] Got index again!");
 		// Get the  Related vectors from pinecone
 		const relatedVectors = await this.getRelatedVectors(questionVector);
-		const relatedTexts = relatedVectors.texts.join('\n');
+		const relatedTexts = relatedVectors.texts.join('\n [SEPARATOR] \n');
 		const messages = [
 			{
 				role: "system",
@@ -414,7 +415,7 @@ class ChatBot {
 			},
 		];
 		// Check it on screen (delete later)
-		console.log(messages);
+		console.log('THIS IS HOW MSGS LOOK', messages);
 		// Get the right answer (context provided) from the AI model
 		const response = await openai.createChatCompletion({
 			model: this.aiModel,
@@ -426,7 +427,7 @@ class ChatBot {
 		if (debug) {
 			// ** This should be redone in a cleaner way
 			let debugText = `Debug mode\nContext retrieved:\n 
-			${relatedVectors}\nAnswer offered: \n `;
+			${relatedTexts}\nAnswer offered: \n `;
 			// Put debug text in its right place
 			response.data.choices[0].message.content =
 				debugText + response.data.choices[0].message.content;

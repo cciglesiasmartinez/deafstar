@@ -8,7 +8,7 @@
  */
 
 // Dependencies
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const { Logger } = require('./log.js');
 const { User } = require('./struct.js');
 
@@ -58,7 +58,7 @@ class DB {
                     reject(error);
                 } else {
                     logger.info('[MySQL] Disconnected from database');
-                    resolve();
+                    resolve(); 
                 }
             });
         });
@@ -69,7 +69,7 @@ class DB {
         const query = `
             SELECT 
             id, handler, name, email, token, url, chat_id, 
-            system_msg, temp, vectors_per_answer, greet_msg, url_suggestions_text 
+            system_msg, temp, vectors_per_answer, greet_msg, url_suggestions_text, ai_model
             FROM users
             `;
         this.connection.query(query, (error, results) => {
@@ -78,7 +78,7 @@ class DB {
                 const user = new User(
                     row.id, row.token, row.handler, row.name, row.email, 
                     row.url, row.chat_id, row.system_msg, row.temp, 
-                    row.vectors_per_answer, row.greet_msg, row.url_suggestions_text
+                    row.vectors_per_answer, row.greet_msg, row.url_suggestions_text, row.ai_model,
                     );
                 return user;
             });

@@ -155,7 +155,7 @@
           </div>
 
           <div class="client-panel__data--subsection__full">
-            <p class="client-panel__data--subsection__state-message"><b>Actual contextual temperature is:</b> <%- data.user.temp %></p>
+            <p class="client-panel__data--subsection__state-message"><b>Actual model is:</b> <%- data.user.aiModel %></p>
           </div>
         
         </div>
@@ -168,14 +168,14 @@
           </div>
 
           <div class="client-panel__data--subsection__full">
-            <form  class="client-panel__form-flex" method="" action="">
-              <input disabled type="text" placeholder="Disabled / still in development" >
-              <button class="" >Set!</button>
+            <form  class="client-panel__form-flex" method="POST" action="/vectorsPerAnswer">
+              <input type="text" placeholder="Write..." >
+              <button class="" id="chatVectorsPerAnswerButton" type="submit" >Set!</button>
             </form>
           </div>
 
           <div class="client-panel__data--subsection__full">
-            <p class="client-panel__data--subsection__state-message"><b>Actual vector density:</b> Still on the works!</p>
+            <p class="client-panel__data--subsection__state-message"><b>Actual vector density:</b> <%- data.user.vectorsPerAnswer %></p>
           </div>
         
         </div>

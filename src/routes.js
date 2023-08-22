@@ -200,7 +200,7 @@ const routes = {
                 const query = `
                     UPDATE users SET vectors_per_answer = ? WHERE id = ?
                 `;
-                const values = [req.body.url, user.id];
+                const values = [user.vectorsPerAnswer, user.id];
                 await db.makeQuery(query, values);
                 res.redirect('/profile');
             } catch (err) {
@@ -215,6 +215,7 @@ const routes = {
                 const user = userManagement.getUserByHandler(req.user.handler);
                 const aiModel = req.body.selectAiModel;
                 user.aiModel = aiModel;
+                user.chatbot.aiModel = aiModel;
                 const query = `
                     UPDATE users SET ai_model = ? WHERE id = ?
                 `;
