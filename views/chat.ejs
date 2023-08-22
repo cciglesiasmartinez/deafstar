@@ -42,7 +42,8 @@
       const hostname = <%- JSON.stringify(data.hostname) %>
 
       // Create sock instance
-      const ws = new WebSocket(`wss://eurofins.digitalai.no`);
+      //const ws = new WebSocket(`wss://eurofins.digitalai.no`);
+      const ws = new WebSocket('ws://localhost:8008');
 
 
         // Get data through EJS and stringify it

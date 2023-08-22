@@ -11,7 +11,7 @@ const conf = {
   },
   db: {
     name: "deafstar",
-    user: "deafstar",
+    user: "root",
     password: "password",
     host: "127.0.0.1",
   },

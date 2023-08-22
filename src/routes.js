@@ -25,13 +25,17 @@ const db = new DB(conf.db.host, conf.db.user, conf.db.password, conf.db.name );
 // Initialize our User Management class
 const userManagement = new UserManagement();
 
-// Object contains a method to initialize all the routes
+// Here is a method to initialize all the routes
 const routes = {
     setupRoutes: (app) => {
 
         // Set static folder for css, assets and such
         const parentPath = path.resolve(__dirname, '..');
         app.use(express.static(parentPath + "/public"));
+
+        // Middleware for JSON data handling
+        // ** Might be good idea to later use body-parser
+        app.use(express.json());
 
         // Session configuration
         app.use(session({
@@ -40,7 +44,7 @@ const routes = {
             saveUninitialized: false
         }));
 
-        // Dunno?
+        // Middleware for URL encoded data
         app.use(express.urlencoded({ extended: true }));
 
         // Serialize user
@@ -198,6 +202,25 @@ const routes = {
                 `;
                 const values = [req.body.url, user.id];
                 await db.makeQuery(query, values);
+                res.redirect('/profile');
+            } catch (err) {
+                console.error(err);
+                res.redirect('/profile');
+            }
+        });
+
+        // AI model setting
+        app.post('/aiModel', isAuthenticated, async (req, res) => {
+            try {
+                const user = userManagement.getUserByHandler(req.user.handler);
+                const aiModel = req.body.selectAiModel;
+                user.aiModel = aiModel;
+                const query = `
+                    UPDATE users SET ai_model = ? WHERE id = ?
+                `;
+                const values = [aiModel, user.id];
+                await db.makeQuery(query, values);
+                console.log("[WEB] AI MODEL SETTING!!!!!!!", aiModel);
                 res.redirect('/profile');
             } catch (err) {
                 console.error(err);
