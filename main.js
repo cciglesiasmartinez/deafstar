@@ -33,8 +33,8 @@ const userManagement = new UserManagement();
 
 // Retrieve SSL key + cert
 const sslFiles = {
-  cert: fs.readFileSync(__dirname + "/ssl/snakeoil.crt"),
-  key: fs.readFileSync(__dirname + "/ssl/snakeoil.key"),
+    cert: fs.readFileSync(__dirname + "/ssl/snakeoil.crt"),
+    key: fs.readFileSync(__dirname + "/ssl/snakeoil.key"),
 };
 
 // Create the instance
@@ -46,7 +46,7 @@ app.set("views", __dirname + "/views");
 
 // Initialize and put listening the http server
 secureHttpd.listen(conf.server.port, () => {
-  logger.info("[HTTPd] Running on port " + conf.server.port);
+    logger.info("[HTTPd] Running on port " + conf.server.port);
 });
 
 // Serving all the routes needed
@@ -74,24 +74,24 @@ db.createUser(newUser2, (createdUser) => {
 
 // Retrieving users
 db.getUsers((users) => {
-  users.forEach(async (user) => {
-    // Add the user
-    try {
-      userManagement.addUser(user);
-      // Check if user has a chatbot and add if yes
-      if (user.url !== null) {
-        const chatbot = new chat.ChatBot();
-        /* This is really an ugly way to call initialize() without
-         * passing an URL. I'd be open to suggestions: a different
-         * function for this use case, maybe an object @param...
-         */
-        let undef;
-        await chatbot.initialize(undef, user);
-        console.log("Detected user with chatbot");
-      }
-    } catch (err) {
-      throw err;
-    }
-    console.log(user);
-  });
+    users.forEach(async (user) => {
+        // Add the user
+        try {
+        userManagement.addUser(user);
+        // Check if user has a chatbot and add if yes
+        if (user.url !== null) {
+            const chatbot = new chat.ChatBot();
+            /* This is really an ugly way to call initialize() without
+            * passing an URL. I'd be open to suggestions: a different
+            * function for this use case, maybe an object @param...
+            */
+            let undef;
+            await chatbot.initialize(undef, user);
+            console.log("Detected user with chatbot");
+        }
+        } catch (err) {
+            throw err;
+        }
+        console.log(user);
+    });
 });
