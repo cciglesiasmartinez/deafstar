@@ -327,14 +327,15 @@
                       <% data.user.chatbot.vectors.forEach((element,index) => { %> 
                         
                         <div class="accordion knowledge-panel__title">
-                          <span>Title: <%- data.user.chatbot.vectors[index].metadata.title %></span>
+                          <span>ID: <%- data.user.chatbot.vectors[index].metadata.id %></span>
                           <div class="knowledge--example__icons">
                             <div class="caret__wrapper"><span><i class="fa-solid fa-caret-down"></i></span></div>
                           </div>
                         </div>
                         <div class="panel">
-                          <p> TEXT HERE! </p>
-                          <p><%= data.user.chatbot.vectors[index].metadata.text %></p>
+                          <p><b>Title:</b> <%= data.user.chatbot.vectors[index].metadata.title %></p>
+                          <p><b>URL:</b> <%= data.user.chatbot.vectors[index].metadata.url %></p>
+                          <p><b>Content:</b> <%= data.user.chatbot.vectors[index].metadata.text %></p>
                         </div>
 
                       <% }); %>
