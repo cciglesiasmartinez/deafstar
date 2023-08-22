@@ -645,7 +645,7 @@ body {
 
 .panel {
   display: none;
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 
 .panel p {
