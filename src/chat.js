@@ -400,7 +400,7 @@ class ChatBot {
 		console.log("[PINECONE] Got index again!");
 		// Get the  Related vectors from pinecone
 		const relatedVectors = await this.getRelatedVectors(questionVector);
-		const relatedTexts = relatedVectors.texts.join('\n [SEPARATOR] \n');
+		const relatedTexts = relatedVectors.texts.join('\n');
 		const messages = [
 			{
 				role: "system",
@@ -427,7 +427,7 @@ class ChatBot {
 		// Check if debug mode is enabled
 		if (debug) {
 			// ** This should be redone in a cleaner way
-			let debugText = `Debug mode\nContext retrieved:\n 
+			let debugText = `Vectors retrieved:\n 
 			${relatedTexts}\nAnswer offered: \n `;
 			// Put debug text in its right place
 			response.data.choices[0].message.content =
