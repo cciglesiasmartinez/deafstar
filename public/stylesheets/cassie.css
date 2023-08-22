@@ -2,7 +2,7 @@
 
 /* Debug */
 * {
-  border: 1px solid red;
+  /* border: 1px solid red; */
 }
 
 :root {
@@ -101,7 +101,7 @@ body {
 /*  CHAT PANEL */
 
 #chat-screen__right-half {
-  width: 100%;
+  width: 50%;
   height: 100%;
 
   display: flex;
@@ -928,6 +928,6 @@ body {
 }
 
 .webSocket__Header > p {
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   color: white;
 }
