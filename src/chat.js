@@ -67,6 +67,7 @@ class ChatBot {
 			const vectorArray = [];
 			response.forEach((v) => {
 				let metadata = {
+					id: v.vector_id,
 					text: v.text,
 					url: v.url,
 					title: v.title,
