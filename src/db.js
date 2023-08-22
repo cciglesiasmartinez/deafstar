@@ -141,6 +141,20 @@ class DB {
             if (error) throw logger.error(error);
             else { logger.info("[MySQL] Vectors table successfully created.") }
         });
+        const createChatlogsTable = `
+            CREATE TABLE IF NOT EXISTS chat_logs (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                user_id INT,
+                date DATE,
+                question TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+                answer TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        `;
+        this.connection.query(createChatlogsTable, (error, results) => {
+            if (error) throw logger.error(error);
+            else { logger.info("[MySQL] Chat logs table successfully created.") }
+        });
         this.disconnect();
     }
     // Add a vector attached to an user ID
