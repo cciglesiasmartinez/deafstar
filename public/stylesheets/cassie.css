@@ -1,5 +1,10 @@
 /* Those are my tweaks, please put them in TailwindCSS format <3 */
 
+/* Debug */
+* {
+  border: 1px solid red;
+}
+
 :root {
   --blue_M: #1c418a;
   --orange_S: #f58025;
@@ -62,7 +67,7 @@ body {
   position: absolute;
   background-color: white;
 
-  border-radius: 10px;
+  /*border-radius: 10px;*/
   height: 2.5rem;
   width: 2.5rem;
 
@@ -70,15 +75,17 @@ body {
   flex-flow: row nowrap;
   justify-content: center;
   align-items: center;
-
+  /*
   -webkit-box-shadow: 1px 1px 5px 4px rgba(194, 190, 194, 0.57);
   -moz-box-shadow: 1px 1px 5px 4px rgba(194, 190, 194, 0.57);
   box-shadow: 1px 1px 5px 4px rgba(194, 190, 194, 0.57);
+  */
 }
 
 .unfold__accordion-icon__container--unfolded {
-  top: 8.5%;
-  left: 46.5%;
+  top: 10%;
+  /*left: 46.5%;*/
+  right: 2%;
 }
 
 .unfold__accordion-icon__container--folded {
@@ -94,7 +101,7 @@ body {
 /*  CHAT PANEL */
 
 #chat-screen__right-half {
-  width: 50%;
+  width: 100%;
   height: 100%;
 
   display: flex;
@@ -108,7 +115,7 @@ body {
   height: 100vh;
   /* max-height: 85vh; */
 
-  padding: 1.5rem 4rem;
+  /* padding: 1.5rem 4rem; */
   /*
   border: 1px solid var(--brand_color_2);
   border-radius: 50px;
@@ -326,6 +333,7 @@ body {
   width: 100%;
   height: 100%;
   padding: 2.5rem 2.5rem;
+  /* padding-left: 1rem; */
 }
 
 #tabs-content-1 {
@@ -782,7 +790,7 @@ body {
 .client-panel__data--section {
   margin-bottom: 1rem;
   padding-bottom: 1rem;
-  width: 95%;
+  /* width: 95%; */
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
@@ -878,7 +886,8 @@ body {
 }
 
 #client-panel__data {
-  padding: 0rem 2rem 2rem 2rem !important;
+  /* padding: 0rem 2rem 2rem 2rem !important; */
+  padding-left: 1rem;
 }
 
 /* CHAT VIEW */
@@ -903,4 +912,22 @@ body {
 #password {
   border-radius: 5px;
   margin-bottom: 1rem;
+}
+
+/* Cassie's stuff  */
+
+.webSocket__Header {
+  height: 9.4%;
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--blue_M);
+}
+
+.webSocket__Header > p {
+  font-size: 1.3rem;
+  color: white;
 }
