@@ -427,8 +427,8 @@ class ChatBot {
 		// Check if debug mode is enabled
 		if (debug) {
 			// ** This should be redone in a cleaner way
-			let debugText = `Vectors retrieved:\n 
-			${relatedTexts}\nAnswer offered: \n `;
+			let debugText = `<b>Vectors retrieved:</b>\n 
+			${relatedTexts}\n<b>Answer offered:</b> \n `;
 			// Put debug text in its right place
 			response.data.choices[0].message.content =
 				debugText + response.data.choices[0].message.content;
