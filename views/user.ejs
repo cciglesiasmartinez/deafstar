@@ -443,6 +443,10 @@
   <!-- Actual chat -->
   <!-- START OF CHAT DIALOGUE / WEBSOCKET CONTAINER -->
   <div id="webSocket" class="w-2/5 flex flex-col justify-start items-start pt-2 mb-5">
+    <!-- PLACE FOR A HEADER -->
+    <div id="webSocketHeader" class="webSocket__Header">
+      <p><b>Debug</b></p>
+    </div>
     <!-- DIALOGUE -->
     <div id="webSocketOutput" class="w-full min-w-full"></div>
     <input class="w-full w-full py-[10px] flex-grow md:py-4 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-xl shadow-xs dark:shadow-xs" id="webSocketInput" class="text-black" type="text" placeholder="Send..." autofocus>
