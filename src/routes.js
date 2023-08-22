@@ -196,7 +196,8 @@ const routes = {
         app.post('/vectorsPerAnswer', isAuthenticated, async (req, res) => {
             try {
                 const user = userManagement.getUserByHandler(req.user.handler);
-                user.vectorsPerAnswer = Number(req.body.url);
+                user.vectorsPerAnswer = Number(req.body.vectorsPerAnswer);
+                user.chatbot.vectorsPerAnswer = user.vectorsPerAnswer;
                 const query = `
                     UPDATE users SET vectors_per_answer = ? WHERE id = ?
                 `;
