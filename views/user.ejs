@@ -245,6 +245,25 @@
                   </div>
                   <div id="tabs-content-2" class="tabs-panel__tabs-content">
                     <div class="tab-content__wrapper">
+                      <!-- DYNAMIC CODE EXAMPLE-->
+
+                      <% data.user.chatbot.chatLogs.forEach((element, index) => { %>
+
+                        <div class="saved-chat--example">
+                          <div class="saved-chat--example__title">
+                            <span>Date: <%- data.user.chatbot.chatLogs[index].date %></span>
+                            <span>Question: <%- data.user.chatbot.chatLogs[index].question %></span>
+                            <span>Answer:<%- data.user.chatbot.chatLogs[index].answer %></span>
+                          </div>
+                          <div class="saved-chat--example__icons">
+                            <span><i class="fa-solid fa-share-nodes fa-xl"></i></span>
+                            <span><i class="fa-solid fa-gear fa-xl"></i></span>
+                            <span class="thrash_icon"><i class="fa-solid fa-trash fa-xl"></i></span>
+                          </div>
+                        </div>
+
+                      <% } ); %> <!-- END OF DYNAMIC CODE EXAMPLE -->
+
                       <!-- SAVED CHAT EXAMPLE -->
                       <div class="saved-chat--example">
                         <div class="saved-chat--example__title">
@@ -338,7 +357,7 @@
                           <p><b>Content:</b> <%= data.user.chatbot.vectors[index].metadata.text %></p>
                         </div>
 
-                      <% }); %>
+                      <% }); %><!-- End of code for inserting vectors-->
                       
                       <div class="accordion knowledge-panel__title">
                         <span>Miljøanalyser for PFAS</span>

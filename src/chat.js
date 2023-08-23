@@ -52,6 +52,7 @@ class ChatBot {
 		this.index = undefined;
 		this.vectorsPerAnswer = undefined;
 		this.aiModel = "gpt-3.5-turbo";
+		this.chatLogs = undefined;
 	}
 	// Get all the vectors for a given chatbot
 	async getVectors(userId) {
@@ -125,6 +126,7 @@ class ChatBot {
 		this.index = await this.PineconeInit();
 		this.vectors = await this.getVectors(user.id);
 		this.aiModel = user.aiModel;
+		this.chatLogs = await this.getChatLogs(user);
 	}
 	// Initialize the chatbot function.
 	async initialize(url, user) {
@@ -423,8 +425,10 @@ class ChatBot {
 			messages: messages,
 			temperature: user.temp,
 		});
+		// Log answer and question it our database
+		await this.chatLog(user, prompt, response.data.choices[0].message.content);
 		let answerOffered;
-		// Check if debug mode is enabled
+		// Check if debug mode is enabled;
 		if (debug) {
 			// ** This should be redone in a cleaner way
 			let debugText = `<b>Vectors retrieved:</b>\n 
@@ -444,6 +448,33 @@ class ChatBot {
 		}
 		console.log(answerOffered);
 		return answerOffered;
+	}
+	// Chat logging function
+	async chatLog(user, question, answer) {
+		const date = Math.floor(new Date().getTime() / 1000);
+		const query = `
+			INSERT INTO chat_logs (
+				user_id,
+				date,
+				question,
+				answer
+				)
+			VALUES (?,?,?,?)
+		`;
+		const values = [user.id, date, question, answer];
+		database.makeQuery(query,values);
+		console.log('[CHAT] Logged question and answer.');
+	}
+	// Gather all the logs for current chatbot instance
+	async getChatLogs(user) {
+		const query= `
+			SELECT date, question, answer FROM chat_logs
+			WHERE user_id = ?
+		`;
+		const values = [user.id];
+		const result = await database.makeQuery(query,values);
+		console.log('[CHAT] Logs gathered for user', user.handler);
+		return result;
 	}
 }
 
