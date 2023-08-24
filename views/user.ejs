@@ -13,14 +13,16 @@
 
 
 
+  <!-- UPPER PART NAVIGATION -->
+
+
   <!-- STARTS LEFT PANEL WITH TAB BASED NAVIGATION -->
   <!-- STARTS LEFT PANEL WITH TAB BASED NAVIGATION -->
   <!-- STARTS LEFT PANEL WITH TAB BASED NAVIGATION -->
   <!-- STARTS LEFT PANEL WITH TAB BASED NAVIGATION -->
-  <div id="unfold__accordion-icon__container" class="unfold__accordion-icon__container--unfolded" >
-    <span id="unfold_accordion_icon--close" onclick="showMenu()"><i class="fa-solid fa-xmark"></i></span>
-    <span id="unfold_accordion_icon--open"  class="hideMenu" onclick="showMenu()"><i class="fa-sharp fa-solid fa-gear fa-xl"></i></span>
-  </div>
+
+
+  
   <div id="chat-screen__left-half" class="flex flex-auto flex-col justify-start items-center font-sans h-screen">
             <!-- START OF TABS CONTAINER -->
             <div id="tabs-panel__container">
@@ -28,38 +30,61 @@
                 <!-- START OF TABS ROW WRAPPER -->
                 <div id="tabs-panel__tabs-wrapper">
                   <!-- START OF A TAB -->
-                  <div class="tabs-panel__tab" id="tab-1" onclick="openTab('tabs-content-1')">
+                  <div class="tabs-panel__tab" id="tab_logo">
+                    <!-- COMPANY LOGO -->
+                    <div id="settings-menu__company-logo__container" >
+                      <div id="settings-menu__company-logo__wrapper" >
+                      <img id="settings-menu__company-logo__logo" src="/images/eurofins_logo_1.png">
+                    </div>
+                      </div>
+                    <!-- SETTINGS OPEN-CLOSE BUTTON -->
+                  </div>
+                  <!-- END OF A TAB -->
+                  <!-- START OF A TAB -->
+                  <div class="tabs-panel__tab hoverable_tab isSelectedTab" id="tab-1" onclick="openTab('tabs-content-1')">
                     <span class="tabs-panel__tab-text"> 
                       <span class="tabs-panel__tab-icon"><i class="fa-solid fa-sliders"></i></span>User settings</span>
                   </div>
                   <!-- END OF A TAB -->
                   <!-- START OF A TAB -->
-                  <div class="tabs-panel__tab" id="tab-2" onclick="openTab('tabs-content-2')">
+                  <div class="tabs-panel__tab hoverable_tab" id="tab-2" onclick="openTab('tabs-content-2')">
                     <span class="tabs-panel__tab-text"> 
                       <span class="tabs-panel__tab-icon"><i class="fa-solid fa-floppy-disk"></i></span>Saved chats</span>
                   </div>
                   <!-- END OF A TAB -->
                   <!-- START OF A TAB -->
-                  <div class="tabs-panel__tab" id="tab-3" onclick="openTab('tabs-content-3')">
+                  <div class="tabs-panel__tab hoverable_tab" id="tab-3" onclick="openTab('tabs-content-3')">
                     <span class="tabs-panel__tab-text"> 
                       <span class="tabs-panel__tab-icon"><i class="fa-solid fa-book"></i></span>Knowledge</span>
                   </div>
                   <!-- END OF A TAB -->
                   <!-- START OF A TAB -->
-                  <div class="tabs-panel__tab" id="tab-3" onclick="openTab('tabs-content-4')">
+                  <div class="tabs-panel__tab hoverable_tab" id="tab-4" onclick="openTab('tabs-content-4')">
                     <span class="tabs-panel__tab-text"> 
                       <span class="tabs-panel__tab-icon"><i class="fa-solid fa-screwdriver-wrench"></i></span>Administration</span>
+                  </div>
+                  <!-- END OF A TAB -->
+                  <!-- START OF A TAB -->
+                  <div class="tabs-panel__tab" id="tab--close_button" >
+                    <!-- SETTINGS OPEN-CLOSE BUTTON-->
+                    <div id="unfold__accordion-icon__container" class="unfold__accordion-icon__container--unfolded" >
+                      <span id="unfold_accordion_icon--close" onclick="showMenu()"><i class="fa-solid fa-xmark"></i></span>
+                      <span id="unfold_accordion_icon--open"  class="hideMenu" onclick="showMenu()"><i class="fa-sharp fa-solid fa-gear fa-xl"></i></span>
+                    </div>
+                    <!-- SETTINGS OPEN-CLOSE BUTTON -->
                   </div>
                   <!-- END OF A TAB -->
                 </div><!--END OF TABS ROW WRAPPER -->
                 <div id="tabs-panel__tabs-content--wrapper">
                   <div id="tabs-content-1" class="tabs-panel__tabs-content">
                     <!-- START OF USER SETTINGS CONTAINER -->
+
+
   <!-- Upper panel with client info, crawl options, and logout button -->
   <div id="upper_panel__container" class="">
     <div id="client-panel__container" class="">
       <!-- Client info -->
-      <div id="client-panel__data" class="">
+      <div id="client-panel__data" class="first__container__forms">
         <!--
         <div class="client-panel__data--section data--section--special">
 
@@ -476,8 +501,20 @@
   <!-- START OF CHAT DIALOGUE / WEBSOCKET CONTAINER -->
   <div id="webSocket" class="w-2/5 flex flex-col justify-start items-start pt-2 mb-5">
     <!-- PLACE FOR A HEADER -->
+      <!-- START OF A TAB -->
+
+      <!-- END OF A TAB -->
     <div id="webSocketHeader" class="webSocket__Header">
-      <p><i class="fa-solid fa-bug-slash"></i> Debug</p>
+      <div class="tabs-panel__tab" id="tab-debug">
+        <span class="tabs-panel__tab-text"> 
+          <span class="tabs-panel__tab-icon"><i class="fa-solid fa-bug-slash"></i></span>Debug</span>
+      </div>
+        <!-- EXTERNAL MENU BUTTON-->
+      <div id="unfold__accordion-icon__container__external"  class="hideMenu unfold__accordion-icon__container--unfolded" >
+        <span id="external_unfold_accordion_icon--close" ><i onclick="showMenu()" class="fa-solid fa-xmark"></i></span>
+        <span id="external_unfold_accordion_icon--open"  class="hideMenu" onclick="showMenu()"><i class="fa-sharp fa-solid fa-gear fa-xl"></i></span>
+      </div>
+      <!-- EXTERNAL MENU BUTTON -->
     </div>
     <!-- DIALOGUE -->
     <div id="webSocketOutput" class="w-full min-w-full"></div>
@@ -491,6 +528,10 @@
   <!-- ENDS RIGHT PANEL WITH CHAT AND CLIENT INFO -->
   <!-- ENDS RIGHT PANEL WITH CHAT AND CLIENT INFO -->
   <!-- ENDS RIGHT PANEL WITH CHAT AND CLIENT INFO -->
+
+
+  <!-- STARTS BOTTOM PANNEL / INFO -->
+  <div id="bottom-container"></div>
 
   <!-- Javascript code for the frontend -->
   <script>
@@ -633,15 +674,22 @@
   </script>
   <script>
     var menuVisible = true;
+    var unfoldIconContainer = document.getElementById("unfold__accordion-icon__container");
+    var externalUnfoldIconContainer = document.getElementById("unfold__accordion-icon__container__external")
+    console.log(externalUnfoldIconContainer);
 
     function showMenu(){
       var optionsMenu = document.getElementById("chat-screen__left-half");
-      var unfoldIconContainer = document.getElementById("unfold__accordion-icon__container");
-      var cogIcon = document.getElementById("unfold_accordion_icon--close");
-      var closeIcon = document.getElementById("unfold_accordion_icon--open");
+
+      var cogIcon = document.getElementById("unfold_accordion_icon--open");
+      var closeIcon = document.getElementById("unfold_accordion_icon--close");
+
+      var externalCogIcon =document.getElementById("external_unfold_accordion_icon--open");
+      var externalCloseIcon = document.getElementById("external_unfold_accordion_icon--close");
+
 
       if (menuVisible === true){
-        console.log("true");
+        console.log("MenuVisible WAS true. closes menu");
         menuVisible = false;
         optionsMenu.classList.add("hideMenu");
         optionsMenu.classList.remove("showMenu");
@@ -649,19 +697,27 @@
         cogIcon.classList.add("hideMenu");
         closeIcon.classList.remove("hideMenu");
 
-        unfoldIconContainer.classList.remove("unfold__accordion-icon__container--unfolded");
-        unfoldIconContainer.classList.add("unfold__accordion-icon__container--folded");
+
+
+
+        externalUnfoldIconContainer.classList.toggle("hideMenu");
+        externalCogIcon.classList.remove("hideMenu");
+        externalCloseIcon.classList.add("hideMenu");
+
       }else{
-        console.log("false");
+        console.log("menuVisible WAS false. opens menu");
         menuVisible = true;
         optionsMenu.classList.remove("hideMenu");
         optionsMenu.classList.add("showMenu");
 
-        cogIcon.classList.remove("hideMenu");
-        closeIcon.classList.add("hideMenu");
+        cogIcon.classList.add("hideMenu");
+        closeIcon.classList.remove("hideMenu");
 
-        unfoldIconContainer.classList.remove("unfold__accordion-icon__container--folded");
-        unfoldIconContainer.classList.add("unfold__accordion-icon__container--unfolded");
+
+
+        externalUnfoldIconContainer.classList.toggle("hideMenu");
+        externalCogIcon.classList.remove("hideMenu");
+        externalCloseIcon.classList.add("hideMenu");
       }
     }
   </script>
