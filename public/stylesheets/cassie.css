@@ -404,7 +404,7 @@ div.isSelectedTab::after {
 
 .tabs-panel__tab-text {
   position:relative;
-  font-size: 1.1rem;
+  font-size: 1.1vw;
 }
 
 #tabs-panel__content {
@@ -488,6 +488,10 @@ align-items: center;
     justify-content: flex-start;
     align-items: center;
     transition: background 0.2s;
+  }
+
+  .tabs-panel__tab-text{
+    font-size: 1.3rem;
   }
 
   #tab_logo{
