@@ -288,16 +288,26 @@
                         %>
 
                         <div class="saved-chat--example">
-                          <div class="saved-chat--example__title">
-                            <span>Date: <%- date %></span>
-                            <span>Question: <%- data.user.chatbot.chatLogs[index].question %></span>
-                            <span>Answer:<%- data.user.chatbot.chatLogs[index].answer %></span>
+                          
+                          <div class="saved-chat__answer--container">
+                            <div class="saved-chat--example__title">
+                              <div class="saved-chat--example__metadata">
+                                <span class="saved-chat__date" >Date: <%- date %></span>
+                                <span class="saved-chat__question" >Question: <%- data.user.chatbot.chatLogs[index].question %></span>
+                              </div>
+                              <div class="saved-chat--example__icons">
+                                <span><i class="fa-solid fa-share-nodes fa-xl"></i></span>
+                                <span><i class="fa-solid fa-gear fa-xl"></i></span>
+                                <span class="thrash_icon"><i class="fa-solid fa-trash fa-xl"></i></span>
+                              </div>
+                            </div>
+                            
+                            <div class="saved-chat__answer">
+                              <span class="saved-chat__answer--title">Answer:</span>
+                              <span class="saved-chat__answer--text"><%- data.user.chatbot.chatLogs[index].answer %></span>
+                              </div>
                           </div>
-                          <div class="saved-chat--example__icons">
-                            <span><i class="fa-solid fa-share-nodes fa-xl"></i></span>
-                            <span><i class="fa-solid fa-gear fa-xl"></i></span>
-                            <span class="thrash_icon"><i class="fa-solid fa-trash fa-xl"></i></span>
-                          </div>
+                          
                         </div>
 
                       <% } ); } %> <!-- END OF DYNAMIC CODE EXAMPLE -->
@@ -531,7 +541,11 @@
 
 
   <!-- STARTS BOTTOM PANNEL / INFO -->
-  <div id="bottom-container"></div>
+  <div id="bottom-container">
+    <div id="bottom-wrapper">
+      <span>Made by <a href="https://digitalai.no/">DigitalAi.no</a></span>
+    </div>
+  </div>
 
   <!-- Javascript code for the frontend -->
   <script>
