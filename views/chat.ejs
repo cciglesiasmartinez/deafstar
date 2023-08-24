@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../stylesheets/cassie.css" />
     <title>ChatBot for <%- data.user.name %></title>
   </head>
-  <body class="flex flex-auto justify-center items-center font-sans">
+  <body class="flex flex-auto justify-center items-center font-sans chatlink-body">
     <!-- Chat block  -->
     <div
       id="webSocket"
@@ -24,11 +24,11 @@
         </div>
         -->
       </header>
-      <div id="webSocketOutput" class="w-full min-w-full"></div>
+      <div id="webSocketOutput" class="chatlink_ws w-full min-w-full"></div>
       <div id="chat__view" class="p-4 w-full mb-8 mt-8">
         <input
           id="webSocketInput"
-          class="w-full w-full py-[10px] flex-grow md:py-4 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-xl shadow-xs dark:shadow-xs"
+          class="chatlink_ws_in w-full w-full py-[10px] flex-grow md:py-4 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-xl shadow-xs dark:shadow-xs"
           id="webSocketInput"
           class="text-black"
           type="text"

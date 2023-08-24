@@ -521,6 +521,14 @@ align-items: center;
   .saved-chat--example__icons {
     max-width:25% !important;
   }
+
+  .chatlink_ws{
+    width: 90% !important;
+  }
+
+  .chatlink_ws_in{
+    width: 70vw !important;
+  }
 }
 
 /*  END OF TABS PANEL */
@@ -1207,9 +1215,10 @@ margin-bottom: 1rem;
 }
 
 #bottom-container{
+  display: block;
+  position:relative;
   width: 100%;
   padding: 0.25rem;
-  position: absolute;
   bottom: 0%;
   display: flex;
   flex-flow: row nowrap;
@@ -1224,4 +1233,8 @@ margin-bottom: 1rem;
   align-items: flex-start;
 
   color:rgb(96, 129, 192);
+}
+
+.chatlink_ws{
+  width: 70% !important;
 }
