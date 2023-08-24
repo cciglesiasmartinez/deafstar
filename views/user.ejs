@@ -247,7 +247,7 @@
                     <div class="tab-content__wrapper">
                       <!-- DYNAMIC CODE EXAMPLE-->
 
-                      <% data.user.chatbot.chatLogs.forEach((element, index) => {
+                      <% if (data.user.chatbot !== undefined) { data.user.chatbot.chatLogs.forEach((element, index) => {
                         
                           // Proper data formatting from *nix date
 
@@ -275,7 +275,7 @@
                           </div>
                         </div>
 
-                      <% } ); %> <!-- END OF DYNAMIC CODE EXAMPLE -->
+                      <% } ); } %> <!-- END OF DYNAMIC CODE EXAMPLE -->
 
                       <!-- SAVED CHAT EXAMPLE -->
                       <div class="saved-chat--example">
@@ -356,7 +356,7 @@
                         </div>
                       
                         <!-- Code for inserting programatically the vectors here -->
-                      <% data.user.chatbot.vectors.forEach((element,index) => { %> 
+                      <% if (data.user.chatbot !== undefined) { data.user.chatbot.vectors.forEach((element,index) => { %> 
                         
                         <div class="accordion knowledge-panel__title">
                           <span>ID: <%- data.user.chatbot.vectors[index].metadata.id %></span>
@@ -370,7 +370,7 @@
                           <p><b>Content:</b> <%= data.user.chatbot.vectors[index].metadata.text %></p>
                         </div>
 
-                      <% }); %><!-- End of code for inserting vectors-->
+                      <% }); } %><!-- End of code for inserting vectors-->
                       
                       <div class="accordion knowledge-panel__title">
                         <span>Miljøanalyser for PFAS</span>

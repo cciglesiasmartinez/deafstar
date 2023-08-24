@@ -145,7 +145,7 @@ class DB {
             CREATE TABLE IF NOT EXISTS chat_logs (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT,
-                date DATE,
+                date INT,
                 question TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
                 answer TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
                 FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
