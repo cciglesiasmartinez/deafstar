@@ -561,8 +561,8 @@
     const hostname = <%- JSON.stringify(data.hostname) %>
 
     // Create sock instance
-    //const ws = new WebSocket(`wss://eurofins.digitalai.no`);
-    const ws = new WebSocket('ws://localhost:8008');
+    const ws = new WebSocket(`wss://eurofins.digitalai.no`);
+    //const ws = new WebSocket('ws://localhost:8008');
 
     // Collect data from backend and put in text format.
     const userData = <%- JSON.stringify(data.user) %>;
@@ -607,7 +607,7 @@
           </div>\
           <div class="chat__user-text--wrapper p-1 w-full">\
             <p class=" leading-relaxed w-full">' + content + '</p>\
-            <p class=" leading-relaxed w-full"> Here are some links related that you could find useful: ' +  '<a href="' + message.data.urls[0] + '"  style="color: lightblue" target="_blank">' +  message.data.urls[0] + '</a>, ' + '<a href="' +  message.data.urls[1] + '" style="color: lightblue" target="_blank">' + message.data.urls[1] + '</a>' + '<br>' + '</p>\
+            <p class=" leading-relaxed w-full">' + userData.urlSuggestionsText + ' ' +  '<a href="' + message.data.urls[0] + '"  style="color: lightblue" target="_blank">' +  message.data.urls[0] + '</a>, ' + '<a href="' +  message.data.urls[1] + '" style="color: lightblue" target="_blank">' + message.data.urls[1] + '</a>' + '<br>' + '</p>\
           </div>\
         </div>';
         scrollDown();

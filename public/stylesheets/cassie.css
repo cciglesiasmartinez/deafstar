@@ -181,7 +181,7 @@ body {
   align-items: center;
 
   padding: 0.5rem;
-  border-bottom: 1px solid var(--brand_color_1);
+  border-bottom: 1px solid black;
 }
 
 .user_message {
@@ -190,6 +190,7 @@ body {
   justify-items: center;
   align-items: center;
   /*background-color: var(--brand_color_1);*/
+  /*border-bottom: 1px solid var(--brand_color_1);*/
 
   color: var(--brand_color_1);
 }

@@ -52,7 +52,7 @@ class ChatBot {
 		this.index = undefined;
 		this.vectorsPerAnswer = undefined;
 		this.aiModel = "gpt-3.5-turbo";
-		this.chatLogs = undefined;
+		this.chatLogs = [];
 	}
 	// Get all the vectors for a given chatbot
 	async getVectors(userId) {
@@ -464,6 +464,13 @@ class ChatBot {
 		const values = [user.id, date, question, answer];
 		database.makeQuery(query,values);
 		console.log('[CHAT] Logged question and answer.');
+		// Add the log to the actual object
+		const logEntry = {
+			date: date,
+			question: question,
+			answer: answer,
+		};
+		this.chatLogs.push(logEntry);
 	}
 	// Gather all the logs for current chatbot instance
 	async getChatLogs(user) {
