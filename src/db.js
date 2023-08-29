@@ -192,7 +192,6 @@ class DB {
                 );
                 this.disconnect();
             });
-
         } catch (error) {
             throw logger.error("[MySQL] Error in addVector: " + error )
         }
