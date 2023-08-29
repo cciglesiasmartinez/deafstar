@@ -222,7 +222,26 @@ const routes = {
                 `;
                 const values = [aiModel, user.id];
                 await db.makeQuery(query, values);
-                console.log("[WEB] AI MODEL SETTING!!!!!!!", aiModel);
+                res.redirect('/profile');
+            } catch (err) {
+                console.error(err);
+                res.redirect('/profile');
+            }
+        });
+
+        // Add vector functionality
+        app.post('/addVector', isAuthenticated, async (req,res)=> {
+            try {
+                console.log('[ROUTE] Add vector route called!');
+                const user = userManagement.getUserByHandler(req.user.handler);
+                await user.chatbot.createNewVector(user,req.body.url);
+                /*
+                const query = `
+                    UPDATE users SET ai_model = ? WHERE id = ?
+                `;
+                const values = [aiModel, user.id];
+                await db.makeQuery(query, values);
+                */
                 res.redirect('/profile');
             } catch (err) {
                 console.error(err);

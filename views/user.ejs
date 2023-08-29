@@ -225,7 +225,6 @@
 
         </div>
 
-
         <!-- Chatobt URL suggestions text -->
         <div id="chatUrlSuggestionsText" class="client-panel__data--section">
 
@@ -244,6 +243,23 @@
             <p class="client-panel__data--subsection__state-message"><b>Actual text for URL suggestions is:</b> <%- data.user.urlSuggestionsText %></p>
           </div>
         </div>
+
+        <!-- Chatbot add custom vector -->
+        <div id="chatAddVector" class="client-panel__data--section">
+
+          <div class="client-panel__data--subsection__full">
+            <p class="client-panel__data--subsection__title">Add custom vector</p>
+          </div>
+
+          <div class="client-panel__data--subsection__full">
+            <form id="chatAddVector"   class="client-panel__form-flex"  method="POST" action="/addVector">
+              <input id="url" type="text" placeholder="Write here..." name="url" >
+              <button class="" id="chatAddVector" type="submit">Add!</button>
+            </form>
+          </div>
+
+        </div>
+
         <!-- Once website has been crawled, here is the generated link -->
 
         <% if ( data.user.chatbot !== undefined ) { %> 

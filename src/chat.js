@@ -338,6 +338,8 @@ class ChatBot {
 				values: embeds[idx],
 				metadata: metaBatchForUpsert[idx],
 			}));
+			console.log("THIS IS THE VALUEEEE!!!!!!!!!!!!!!!!!!!!!!");
+			console.log('THE NAMESPACE IS:', this.namespace);
 			console.log(toUpsert);
 			result = await index.upsert({
 				upsertRequest: {
@@ -482,6 +484,67 @@ class ChatBot {
 		const result = await database.makeQuery(query,values);
 		console.log('[CHAT] Logs gathered for user', user.handler);
 		return result;
+	}
+	// Create vector function
+	// This is H-E-R-E-T-I-C
+	async createNewVector(user,text) {
+		console.log('ADD VECTOR FUNC CALLED');
+		// Get the new ID 
+		const vectorId = v4();
+		// Get the embedding fof the new stuff
+		const response = await openai.createEmbedding({
+			model: "text-embedding-ada-002",
+			input: text,
+		});
+		const metadata = {
+			title: 'null',
+			text: text,
+			url: 'null',
+		}
+		const vectorObj = {
+			id: vectorId,
+			embeddings: response.data.data[0].embedding,
+			metadata: metadata,
+		}
+		const embedding = response.data.data[0].embedding;
+		//const v = new VectorEmbed(vectorId,metadata,embedding);
+		const v = {
+			id: vectorId,
+			values: response.data.data[0].embedding,
+			metadata: metadata,
+		}
+		const data = [];
+		data.push(v);
+		const pinecone = await this.PineconeInit();
+		const index = await this.checkOrCreateIndex(pinecone);
+		console.log(data);
+		//await this.upsertEmbeddings(pinecone,data,1);
+		const result = await index.upsert({
+			upsertRequest: {
+			vectors: data,
+			namespace: this.namespace,
+			},
+		});
+		console.log(result);
+		//console.log(vectorObj);
+		const query = `
+			INSERT INTO vectors (
+				user_id,
+				vector_id,
+				embeddings,
+				title,
+				text,
+				url
+			)
+			VALUES(?,?,?,?,?,?)
+		`;
+		const values = [
+			user.id, vectorObj.id, JSON.stringify(vectorObj.embeddings), 
+			null, vectorObj.metadata.text, null
+		];
+		await database.makeQuery(query,	values);
+		this.vectors.push(vectorObj);
+		return vectorObj;
 	}
 }
 
