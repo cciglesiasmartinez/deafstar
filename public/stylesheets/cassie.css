@@ -1243,3 +1243,29 @@ margin-bottom: 1rem;
 .chatlink_ws{
   width: 70% !important;
 }
+
+
+
+/* CHAT RESPONSE LINKS */
+
+
+.response-links__container{
+
+}
+
+.response-links__title-wrapper{
+
+}
+
+.response-links__title-text{
+
+}
+
+.response-links__wrapper{
+ position:relative;
+ left: 1rem;
+}
+
+.response-links__link{
+
+}
