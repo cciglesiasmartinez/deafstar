@@ -43,8 +43,8 @@
       const hostname = <%- JSON.stringify(data.hostname) %>
 
       // Create sock instance
-      const ws = new WebSocket(`wss://eurofins.digitalai.no`);
-      //const ws = new WebSocket('ws://localhost:8008');
+      //const ws = new WebSocket(`wss://eurofins.digitalai.no`);
+      const ws = new WebSocket('ws://localhost:8008');
 
 
         // Get data through EJS and stringify it
@@ -96,9 +96,10 @@
         const webSocketOutput = document.getElementById('webSocketOutput');
 
         // Typing animation function
-        async function animateText(textElement, textToAnimate, typingSpeed = 20, index = 0) {
+        async function animateText(textElement, textToAnimate, typingSpeed = 10, index = 0) {
           return new Promise((resolve) => {
             if (index < textToAnimate.length) {
+              //console.log("Now animating...", textToAnimate);
               textElement.innerHTML += textToAnimate.charAt(index);
               index++;
               setTimeout(() => {
@@ -133,7 +134,6 @@
               </div>\
               <div class="chat__user-text--wrapper p-1 w-full">\
                 <p class=" leading-relaxed w-full">' + content + '</p>\
-                <p class=" leading-relaxed w-full">' + userData.urlSuggestionsText + '<a href="' + message.data.urls[0] + '"  style="color: lightblue" target="_blank">' +  message.data.urls[0] + '</a>, ' + '<a href="' +  message.data.urls[1] + '" style="color: lightblue" target="_blank">' + message.data.urls[1] + '</a>' + '<br>' + ' </p>\
               </div>\
             </div>';
             }
@@ -155,13 +155,25 @@
             const elementArr = webSocketOutput.lastElementChild.children[1].children;
             scrollDown();
             for ( let i=0; i < elementArr.length; i++ ) {
-              await animateText( elementArr[i],contentArr[i]);
+              console.log("Trying to animate this element: " + elementArr[i] + "With this text: " + contentArr[i]);
+              if ( contentArr[i] !== undefined ) {
+                await animateText( elementArr[i],contentArr[i]);
+              }
               scrollDown();
-              webSocketInput.classList.remove('gray-out');
-              webSocketInput.disabled = false;
-              stopAnimation(webSocketInput);
             }
 
+            // Create URL suggestions element and attach it
+            const urlSuggestionsElement = document.createElement('p');
+            urlSuggestionsElement.classList.add('leading-relaxed', 'w-full');
+            urlSuggestionsElement.innerHTML = userData.urlSuggestionsText + ': <a href="' + message.data.urls[0] + '"  style="color: lightblue" target="_blank">' +  message.data.urls[0] + '</a>, ' + '<a href="' +  message.data.urls[1] + '" style="color: lightblue" target="_blank">' + message.data.urls[1] + '</a>';
+            console.log("OK APPENDING THIS!!!!!!!!!!!!!!!!!!!");
+            webSocketOutput.lastElementChild.lastElementChild.appendChild(urlSuggestionsElement);
+
+            // Enable Input again and stop animation
+            webSocketInput.classList.remove('gray-out');
+            webSocketInput.disabled = false;
+            stopAnimation(webSocketInput);
+            scrollDown();
         };
 
         // Handle close event. Not useful right now.
