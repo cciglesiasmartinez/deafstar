@@ -162,12 +162,14 @@
               scrollDown();
             }
 
-            // Create URL suggestions element and attach it
+            // Create URL suggestions element 
             const urlSuggestionsElement = document.createElement('p');
             urlSuggestionsElement.classList.add('leading-relaxed', 'w-full');
             urlSuggestionsElement.innerHTML = userData.urlSuggestionsText + ': <a href="' + message.data.urls[0] + '"  style="color: lightblue" target="_blank">' +  message.data.urls[0] + '</a>, ' + '<a href="' +  message.data.urls[1] + '" style="color: lightblue" target="_blank">' + message.data.urls[1] + '</a>';
-            console.log("OK APPENDING THIS!!!!!!!!!!!!!!!!!!!");
-            webSocketOutput.lastElementChild.lastElementChild.appendChild(urlSuggestionsElement);
+            // Attach it with a delay
+            setTimeout(() => {
+              webSocketOutput.lastElementChild.lastElementChild.appendChild(urlSuggestionsElement);
+            }, 200);
 
             // Enable Input again and stop animation
             webSocketInput.classList.remove('gray-out');
