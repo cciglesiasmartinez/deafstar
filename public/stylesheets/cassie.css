@@ -267,9 +267,8 @@ body {
 #tabs-panel__tabs-wrapper {
   height: 4rem;
   width: 100%;
-  background-color: aliceblue;
+  background-color: var(--blue_P_light);
 
-  background-color: white;
   color: var(--brand_color_1);
   display: flex;
   flex-flow: row nowrap;
@@ -311,7 +310,7 @@ body {
   align-items: center;
   box-sizing: border-box;
 
-  background-color: aliceblue;
+  background-color: var(--blue_P_light);
 }
 
 /*.hoverable_tab:hover::before {
@@ -364,7 +363,7 @@ body {
 
 
 div.isSelectedTab {
-  background-color: var(--blue_P_light);
+  background-color: #adc3e4;
   /*color: var(--brand_color_1);*/
   /*transition: color 0.2s, text-decoration 0.2s, text-decoration-color 0.2s*/
 }
@@ -1062,7 +1061,7 @@ color: rgb(63, 63, 255);
   flex-flow: row;
   justify-content: center;
   align-items: center;
-  background-color: aliceblue;
+  background-color: var(--blue_P_light);
 }
 
 .webSocket__Header > p {
@@ -1087,7 +1086,7 @@ color: rgb(63, 63, 255);
   align-items: center;
   flex-grow: 1;
   max-width: 20%;
-  background-color: aliceblue;
+  background-color: var(--blue_P_light);
 }
 
 #settings-menu__company-logo__container{
