@@ -12,7 +12,7 @@ const conf = {
   db: {
     name: "deafstar",
     user: "deafstar",
-    password: "password",
+    password: "t0f7dj35jF",
     host: "127.0.0.1",
   },
   server: {

@@ -6,10 +6,10 @@
 }
 
 :root {
-  --blue_M: #1c418a;
-  --orange_S: #f58025;
-  --blue_P_medium: #a0b6e0;
-  --blue_P_light: #b5ceec;
+  --blue_M: #0d3050;
+  --orange_S: #f28f68;
+  --blue_P_medium: #a2c0e3;
+  --blue_P_light: #f0f4fa;
   --white_F: #ffffff;
   --black_J: #363636;
 
@@ -604,7 +604,6 @@ align-items: center;
   height: 7rem;
   width: 7rem;
   border-radius: 50%;
-  background-color: white;
 
   display: flex;
   flex-flow: column nowrap;
