@@ -91,12 +91,16 @@ class Crawler {
             });
             // Get the links available
             $('a').each((index, element) => {
-                const link = $(element).attr('href');
+                let link = $(element).attr('href');
                 // First we check for link validity
                 if ( link && this.isValidLink(link) ) {
+			// Then, if link is relative, set it to absolute
+                	if ( link.startsWith('/') ) {
+                        	link = new URLParse(link, this.baseUrl).toString();
+                	}
                     // Finally we check if the link it has been listed or scraped
                     if (!this.scrapedLinks.includes(link) && !this.links.includes(link)) {
-                        this.links.push(link);
+                	this.links.push(link);
                         console.log('[CRAWLER] Added URL to parse: ' + link);
                     }
                 }   

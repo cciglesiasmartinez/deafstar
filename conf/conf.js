@@ -17,7 +17,7 @@ const conf = {
   },
   server: {
     hostname: "localhost",
-    port: 8008,
+    port: 8080,
   },
 };
 
